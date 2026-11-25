@@ -52,6 +52,7 @@ const D={
 "card.mk":{zh:"帶來的效益",en:"Impact so far",th:"ผลลัพธ์ที่ได้"},
 "ev.run":{zh:"執行過程",en:"How it runs",th:"ขั้นตอนการทำงาน"},
 "ev.runNote":{zh:"以模擬資料重現一次 Skill 的執行過程；公司、客戶與內部路徑都已移除。畫面文字為中文。",en:"A replay of one skill run on mock data, with company, client and internal path names removed. On-screen text is in Chinese.",th:"การจำลองการทำงานของ Skill หนึ่งรอบด้วยข้อมูลจำลอง ตัดชื่อบริษัท ลูกค้า และพาธภายในออกแล้ว ข้อความบนหน้าจอเป็นภาษาจีน"},
+"hint.drag":{zh:"可拖曳",en:"Drag",th:"ลากได้"},
 "card.k":{zh:"AI 導入 · 資料 · 系統整合",en:"AI adoption · Data · Systems integration",th:"การนำ AI มาใช้ · ข้อมูล · บูรณาการระบบ"},
 "card.role":{zh:"11 年 IT 系統與資料經驗，現在專注把 AI 導入真實工作流程，做成可上線、可治理的 AI Agent。",en:"11+ years in IT systems and data, now focused on bringing AI into real workflows as governed AI agents that actually go live.",th:"ประสบการณ์ระบบไอทีและข้อมูลกว่า 11 ปี ปัจจุบันมุ่งนำ AI เข้าสู่งานจริง เป็น AI Agent ที่ใช้งานได้จริงและกำกับดูแลได้"},
 "card.m1":{zh:"<b>1 天 → 30 分</b>紀錄簡報製作時間縮短約 94%",en:"<b>1 day → 30 min</b>record-deck time cut by about 94%",th:"<b>1 วัน → 30 นาที</b>ลดเวลาทำสไลด์บันทึกลงราว 94%"},

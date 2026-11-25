@@ -278,3 +278,9 @@ body.focused #entryUI:not(.hide) .acts{animation:focusIn 1.1s 1.2s both}
 #cap{width:max-content}
 #cap .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:860px){#cap{width:auto}}
+
+/* drag handle with a visible "可拖曳 / Drag" label */
+#hint .grip{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 10px 4px 0;margin-right:2px;border-right:1px dashed rgba(255,255,255,.18)}
+#hint .grip i{flex:none;width:34px;height:34px}
+#hint .grip em{font-style:normal;font-size:var(--fs-s,14px)!important;letter-spacing:.06em;color:#F0A060;white-space:nowrap}
+#hint:hover .grip i{border-color:#F0A060;color:#F0A060}
