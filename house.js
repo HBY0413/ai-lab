@@ -311,7 +311,7 @@ function enterRoom(fast){
   $("entryUI").classList.add("hide");
   doorOpen=1;flyTo({pos:new T.Vector3(-60,2.6,2.2),look:new T.Vector3(-60,2.6,-4),fov:40},1.1);
   setTimeout(()=>veil.classList.add("on"),650);
-  setTimeout(()=>{const v=views.room();cam.position.copy(v.pos);look.copy(v.look);cam.fov=v.fov;camT=1;camTo=v;mode="room";$("roomUI").classList.remove("hide");veil.classList.remove("on");try{history.replaceState(null,"","#room")}catch(e){}
+  setTimeout(()=>{const v=views.room();cam.position.copy(v.pos);look.copy(v.look);cam.fov=v.fov;camT=1;camTo=v;mode="room";$("roomUI").classList.remove("hide");setStage();veil.classList.remove("on");try{history.replaceState(null,"","#room")}catch(e){}
     {const pd=pending;pending=null;if(pd&&ST.some(s=>s.id===pd))setTimeout(()=>openStation(pd),500)}},1250);
 }
 function toEntrance(){closePanel(false);active=null;setNav(null);veil.classList.add("on");setTimeout(()=>{doorOpen=0;enterP=enterPT=0;namePlane.material.opacity=1;const ui=$("entryUI");ui.style.opacity="";ui.style.transform="";ui.style.filter="";const v=views.entrance();cam.position.copy(v.pos);look.copy(v.look);cam.fov=v.fov;camT=1;camTo=v;mode="entrance";$("roomUI").classList.add("hide");$("entryUI").classList.remove("hide");veil.classList.remove("on");try{history.replaceState(null,"",location.pathname)}catch(e){}},600)}
@@ -479,8 +479,8 @@ function entranceScrub(dt){
 }
 // 3) dust motes drifting in the light
 function dust(n,box,color){const g=new T.BufferGeometry(),p=new Float32Array(n*3),sd=new Float32Array(n);for(let i=0;i<n;i++){p[i*3]=box[0]+Math.random()*box[3];p[i*3+1]=box[1]+Math.random()*box[4];p[i*3+2]=box[2]+Math.random()*box[5];sd[i]=Math.random()*6.28}
-  g.setAttribute("position",new T.BufferAttribute(p,3));const m=new T.Points(g,new T.PointsMaterial({color,size:.035,transparent:true,opacity:.55,depthWrite:false,blending:T.AdditiveBlending}));m.userData={box,sd};scene.add(m);return m}
-const dustRoom=dust(520,[.3,.2,.3,10,5.6,10],0xFFE7C8),dustDoor=dust(260,[-69,.2,.5,18,9,9],0xFFF1DE);
+  g.setAttribute("position",new T.BufferAttribute(p,3));const m=new T.Points(g,new T.PointsMaterial({color,size:.028,transparent:true,opacity:.32,depthWrite:false,blending:T.AdditiveBlending}));m.userData={box,sd};scene.add(m);return m}
+const dustRoom=dust(110,[.3,.2,.3,10,5.6,10],0xFFE7C8),dustDoor=dust(60,[-69,.2,.5,18,9,9],0xFFF1DE);
 function driftDust(d,dt){const a=d.geometry.attributes.position,b=d.userData.box,sd=d.userData.sd;for(let i=0;i<a.count;i++){let y=a.getY(i)+dt*.08,x=a.getX(i)+Math.sin(tm*.3+sd[i])*dt*.05;if(y>b[1]+b[4])y=b[1];a.setXY(i,x,y)}a.needsUpdate=true}
 // 4) signs lift toward the viewer on hover
 const NORM={wallB:new T.Vector3(0,0,1),wallA:new T.Vector3(1,0,0),floor:new T.Vector3(.7071,0,.7071)};
