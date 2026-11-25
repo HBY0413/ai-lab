@@ -253,3 +253,11 @@ body.focused #entryUI:not(.hide) .acts{animation:focusIn 1.1s 1.2s both}
   #cap{left:12px;right:12px;bottom:14px;transform:none;max-width:none;justify-content:space-between}
   #hint{left:12px;right:12px;top:auto;bottom:86px;max-width:none}
 }
+
+/* name card: who I am / what this site is / what it delivered */
+#entryUI .head.card{max-width:min(500px,42vw)}
+#entryUI .cp{margin:10px 0 0;color:#A9B2BA;line-height:1.7}
+#entryUI .mk{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);color:#E2B33B;letter-spacing:.12em}
+#entryUI .head.card .cm{margin-top:8px;border-top:none;padding-top:0}
+@media (max-width:860px){#entryUI .head.card{max-width:none}}
+@media (max-width:520px){#entryUI .head.card .cp{display:none}#entryUI .mk{display:none}}
