@@ -245,6 +245,14 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .blk-look .sub>.label{margin-bottom:10px}
 
 .blk .intro{margin:0 0 14px;font-size:var(--fs-m,18px)!important;line-height:1.55;color:#F7F8F9;font-weight:500}
+
+/* 02 screenshot lab */
+.shotpick{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+.shotpick button,.shotpick .up{width:96px;height:60px;padding:0;border:1px solid rgba(255,255,255,.14);border-radius:6px;overflow:hidden;background:#0B0C0E;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#C2C8CE}
+.shotpick img{width:100%;height:100%;object-fit:cover;display:block}
+.shotpick .on{outline:2px solid #F0A060;outline-offset:1px}
+.shotview{border:1px solid rgba(255,255,255,.1);border-radius:8px;overflow:hidden;background:#fff;margin-bottom:10px}
+.shotview img{display:block;width:100%;height:auto}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -346,38 +354,7 @@ const EXPS_ZH=[
   steps:["讀入現場草稿（截圖＋簡短標註）","依 YAML 檢查清單逐項審稿，列出疑點請人確認","套用公司簡報版型，產出封面、摘要、章節頁與步驟頁"],
   effect:{type:"bar",before:["人工",480,"約 8 小時"],after:["Agent",30,"30 分鐘"],note:"經過 14 版迭代後上線"},
   tech:["Agent Skill","Python 產生 PPTX","YAML 規則","人工確認關卡"],
-  lab:{
-    kind:"ai",hint:"貼上現場草稿的步驟標註，AI 會審稿並整理成正式步驟頁大綱。",
-    input:`01 登入Tablaeu Server管理頁面
-02 停止服務 tsm stop
-03 執行安裝檔 截圖顯示的是 2025.1 版本
-04 安裝完成 確認版本為2025.3
-05 tsm start 啟動服務
-06 檢查背景程式 全部正常`,
-    btn:"審稿並整理",
-    prompt:i=>`你是 IT 系統升級紀錄手冊的審稿 Agent。以下是工程師在現場留下的步驟標註（每行一步，可能有錯字、前後不一致）。
-請用繁體中文輸出兩段，使用 Markdown：
-#### 審稿疑點
-- 逐條列出錯字、前後矛盾（例如版本號不一致）或資訊不足之處，說明理由與建議，用 ==文字== 標出有問題的原文。
-#### 正式步驟頁大綱
-一個表格，欄位：| 步驟 | 標題 | 說明 |，標題精簡、說明一句話，語氣正式。有疑點的步驟在說明後加註「（待確認）」。
-不要加其他段落。
-草稿：
-${i}`,
-    example:`#### 審稿疑點
-- 步驟 01 ==Tablaeu== 應為「Tableau」，屬拼字錯誤。
-- 步驟 03 截圖顯示 ==2025.1==，但步驟 04 寫升級完成為 ==2025.3==，版本號不一致，請確認實際安裝的版本與截圖是否對應。
-- 步驟 06「全部正常」未說明檢查方式，建議補上指令（例如 tsm status -v）或截圖。
-#### 正式步驟頁大綱
-| 步驟 | 標題 | 說明 |
-|---|---|---|
-| 1 | 登入管理頁面 | 以系統管理員身分登入 Tableau Server 管理頁面。 |
-| 2 | 停止服務 | 執行 tsm stop 停止 Tableau Server 服務。 |
-| 3 | 執行安裝程式 | 執行新版安裝檔進行升級。（待確認：截圖版本為 2025.1） |
-| 4 | 確認版本 | 安裝完成後確認版本號。（待確認：與步驟 3 版本不一致） |
-| 5 | 啟動服務 | 執行 tsm start 啟動 Tableau Server 服務。 |
-| 6 | 檢查背景程式 | 確認所有背景程式狀態正常。（待確認：補上檢查方式） |`
-  }
+  lab:{kind:"shots"}
 },
 {
   id:"report",facet:"報告自動產出",title:"月會報告自動產生",
@@ -612,6 +589,51 @@ function renderAll(){EXPS.forEach((x,n)=>{
 document.addEventListener("click",e=>{const j=e.target.closest("[data-jump]");if(!j)return;const t=document.getElementById(j.dataset.jump);if(t)t.scrollIntoView({behavior:"smooth",block:"start"})});
 function labShell(el,title){el.innerHTML=`<div class="lab-bar"><span>${title}</span><span class="live-ind"><i class="led"></i>LIVE LAB</span></div><div class="lab-body"></div>`;return el.querySelector(".lab-body")}
 
+/* 02 live lab: pick (or upload) an on-site screenshot, let AI read it and write the record line */
+const SHOTS=[
+  {src:"ev/shot-cpu.jpg",k:"cpu",ex:{zh:"| 項目 | 內容 |\n|---|---|\n| 畫面 | Windows 工作管理員・效能頁 |\n| 對應檢查項目 | 主機檢查・伺服器資源 |\n| 讀出的數值 | CPU：Intel Xeon Gold，16 cores（32 邏輯處理器），2.90 GHz；記憶體 128 GB（使用中 38 GB）；C 槽 100 GB、D 槽 500 GB；CPU 使用率 12% |\n\n**紀錄說明（標準句型）**\n- C 槽：100 GB\n- D 槽：500 GB\n- CPU：16 cores\n- RAM：128 GB\n\n**需要確認**：無",en:"| Item | Detail |\n|---|---|\n| Screen | Windows Task Manager, Performance tab |\n| Check item | Host check · server resources |\n| Values read | CPU: Intel Xeon Gold, 16 cores (32 logical), 2.90 GHz; memory 128 GB (38 GB in use); C: 100 GB, D: 500 GB; CPU usage 12% |\n\n**Record text (standard wording)**\n- C drive: 100 GB\n- D drive: 500 GB\n- CPU: 16 cores\n- RAM: 128 GB\n\n**To confirm**: none"}},
+  {src:"ev/shot-ver.jpg",k:"ver",ex:{zh:"| 項目 | 內容 |\n|---|---|\n| 畫面 | 「關於 OO Server」視窗 |\n| 對應檢查項目 | 主機檢查・應用程式版本 |\n| 讀出的數值 | 版本 Version 2024.5.0 |\n\n**紀錄說明（標準句型）**\n- 目前安裝程式版本：OO Server 2024.5\n\n**需要確認**：這是升級後的版本；若是升級前檢查，版本應為升級前的舊版，請確認截圖時間點。",en:"| Item | Detail |\n|---|---|\n| Screen | About OO Server dialog |\n| Check item | Host check · application version |\n| Values read | Version 2024.5.0 |\n\n**Record text (standard wording)**\n- Installed version: OO Server 2024.5\n\n**To confirm**: this is the post-upgrade version; if this is meant to be the pre-upgrade check, please confirm when the screenshot was taken."}},
+  {src:"ev/shot-bak.jpg",k:"bak",ex:{zh:"| 項目 | 內容 |\n|---|---|\n| 畫面 | 命令提示字元・執行維護備份指令 |\n| 對應檢查項目 | 升級前・備份 |\n| 讀出的數值 | 進度 7% → 100%，備份檔寫入 D:\\backup\\backup_20260825.tsbak |\n\n**紀錄說明（標準句型）**\n- 以系統管理者身分執行備份指令，備份完成。\n\n**需要確認**：無",en:"| Item | Detail |\n|---|---|\n| Screen | Command prompt running the maintenance backup |\n| Check item | Pre-upgrade · backup |\n| Values read | Progress 7% → 100%, backup written to D:\\backup\\backup_20260825.tsbak |\n\n**Record text (standard wording)**\n- Ran the backup command as administrator; backup completed.\n\n**To confirm**: none"}},
+  {src:"ev/shot-ins.jpg",k:"ins",ex:{zh:"| 項目 | 內容 |\n|---|---|\n| 畫面 | OO Server 2024.5 安裝程式・歡迎頁 |\n| 對應檢查項目 | 升級流程・執行安裝檔 |\n| 讀出的數值 | 安裝目標版本 2024.5 |\n\n**紀錄說明（標準句型）**\n- 以系統管理者身分執行安裝檔。\n\n**需要確認**：無",en:"| Item | Detail |\n|---|---|\n| Screen | OO Server 2024.5 installer, welcome page |\n| Check item | Upgrade · run installer |\n| Values read | Target version 2024.5 |\n\n**Record text (standard wording)**\n- Ran the installer as administrator.\n\n**To confirm**: none"}}
+];
+function buildShots(x,b){
+  let sel=0,upload=null;
+  b.innerHTML=`<div class="hint">${I18N.t("sh.hint")}</div>
+    <div class="label">${I18N.t("sh.pick")}</div>
+    <div class="shotpick">${SHOTS.map((s,i)=>`<button type="button" data-i="${i}" class="${i?"":"on"}"><img src="${s.src}" alt=""></button>`).join("")}
+      <label class="up"><input type="file" accept="image/*" hidden><span>＋ ${I18N.t("sh.upload")}</span></label></div>
+    <div class="shotview"><img alt=""></div>
+    <div class="row"><button type="button" class="primary">${I18N.t("sh.run")}</button><button type="button" class="exb">${I18N.t("lab.example")}</button><span class="hint note"></span></div>
+    <div class="out"></div>`;
+  const view=b.querySelector(".shotview img"),out=b.querySelector(".out"),note=b.querySelector(".note");
+  const show=()=>{view.src=upload?URL.createObjectURL(upload):SHOTS[sel].src;out.innerHTML="";note.textContent=""};
+  const example=()=>{if(upload){note.textContent=I18N.t("sh.noex");return}const e=SHOTS[sel].ex;out.innerHTML=`<span class="tag">${I18N.t("tag.example")}</span>`+md(I18N.lang==="zh"?e.zh:e.en)};
+  b.querySelectorAll(".shotpick button").forEach(bt=>bt.addEventListener("click",()=>{upload=null;sel=+bt.dataset.i;b.querySelectorAll(".shotpick button,.shotpick .up").forEach(z=>z.classList.remove("on"));bt.classList.add("on");show()}));
+  b.querySelector(".up input").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;upload=f;b.querySelectorAll(".shotpick button").forEach(z=>z.classList.remove("on"));b.querySelector(".up").classList.add("on");show()});
+  b.querySelector(".exb").addEventListener("click",example);
+  b.querySelector(".primary").addEventListener("click",async()=>{
+    let canImg=false;try{canImg=!!(sample&&(await sample.limits()).images)}catch(e){}
+    if(!canImg){note.textContent=I18N.t("sh.noai");example();return}
+    note.textContent=I18N.t("sh.reading");out.innerHTML="";
+    try{
+      const blob=upload||await (await fetch(SHOTS[sel].src)).blob();
+      const r=await sample(`你是 IT 系統升級／保養紀錄簡報的 AI Agent。工程師在客戶現場只截圖，沒有寫任何說明。請看這張截圖，用繁體中文、Markdown 輸出：
+| 項目 | 內容 |
+|---|---|
+| 畫面 | 這是什麼畫面 |
+| 對應檢查項目 | 從這些選一個最符合的：主機檢查・伺服器資源／主機檢查・應用程式版本／主機檢查・服務狀態／升級前・備份／升級前・停機／升級流程・執行安裝檔／升級流程・安裝進行中／升級後・服務啟動與檢查；都不符合就寫「規範外項目」 |
+| 讀出的數值 | 只寫畫面上看得到的規格、版本、狀態、時間等數值，不要推測 |
+
+**紀錄說明（標準句型）**
+- 用簡短條列寫成要放進紀錄簡報的說明，只填畫面上讀到的值
+
+**需要確認**
+- 看不清楚、前後矛盾或無法判斷的地方；沒有就寫「無」${I18N.t("out.note")}`,{images:[blob],cache:false});
+      out.innerHTML=`<span class="tag live">${I18N.t("tag.live")}</span>`+md(r.text||"");note.textContent=I18N.t("lab.done");
+    }catch(e){note.textContent=I18N.t("sh.fail");example()}
+  });
+  show();example();
+}
 function buildLab(x,el){
   const L=x.lab;
   if(L.kind==="projects"){
@@ -622,6 +644,7 @@ function buildLab(x,el){
     b.querySelectorAll("[data-goto]").forEach(a=>a.addEventListener("click",ev=>{ev.preventDefault();const id=a.dataset.goto;if(window.__lab&&__lab.openStation)__lab.openStation(id);else location.hash=id}));
     return;
   }
+  if(L.kind==="shots"){buildShots(x,labShell(el,I18N.t("sh.title")));return}
   if(L.kind==="place"){const b=labShell(el,REAL.t("pl.path")==="存放位置"?"檔案歸檔模擬器":(I18N.lang==="th"?"จำลองการจัดเก็บไฟล์":"Filing simulator"));buildPlace(b,L);return}
   if(L.kind==="fuzzy"){
     const b=labShell(el,I18N.t("lab.fuzzy"));
