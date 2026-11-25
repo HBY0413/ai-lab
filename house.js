@@ -85,10 +85,12 @@ box(E,.3,5.4,.5,steel,[-1.9,2.7,.25]);box(E,.3,5.4,.5,steel,[1.9,2.7,.25]);box(E
 const strip=glow(0xF0A060);box(E,3.5,.04,.04,strip,[0,5.08,.52]);
 const glassMat=new T.MeshStandardMaterial({color:0x8FA7B3,metalness:.2,roughness:.1,transparent:true,opacity:.42});
 const doorL=new T.Group(),doorR=new T.Group();E.add(doorL,doorR);
+// sliding leaves run on two tracks so the overlapping glass never z-fights at the centre seam
+glassMat.depthWrite=false;
 add(E,new T.PlaneGeometry(3.5,5.0),new T.MeshBasicMaterial({map:tex(256,512,(x,w,h)=>{const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,"#1A1B1C");g.addColorStop(.35,"#6E6152");g.addColorStop(.8,"#C9A983");g.addColorStop(1,"#E9CFA6");x.fillStyle=g;x.fillRect(0,0,w,h);
   x.fillStyle="rgba(255,240,215,.9)";for(let i=0;i<3;i++)x.fillRect(30+i*80,40,46,5);x.fillStyle="rgba(20,18,16,.55)";x.fillRect(20,300,70,212);x.fillRect(170,330,66,182);x.fillStyle="rgba(240,160,96,.35)";x.fillRect(0,h-10,w,10)})}),[0,2.5,.02],null,false);
 {const pool=new T.Mesh(new T.PlaneGeometry(5,3.2),new T.MeshBasicMaterial({map:tex(256,256,(x,w,h)=>{const g=x.createRadialGradient(w/2,0,4,w/2,0,h);g.addColorStop(0,"rgba(255,214,160,.55)");g.addColorStop(1,"rgba(255,214,160,0)");x.fillStyle=g;x.fillRect(0,0,w,h)}),transparent:true,depthWrite:false,blending:T.AdditiveBlending}));pool.rotation.x=-Math.PI/2;pool.position.set(0,.015,1.6);E.add(pool)}
-[[doorL,-.88],[doorR,.88]].forEach(([d,x0])=>{box(d,1.74,5.0,.05,glassMat,[0,2.5,0]);box(d,1.74,.08,.08,steel,[0,4.96,0]);box(d,1.74,.08,.08,steel,[0,.04,0]);box(d,.07,5.0,.08,steel,[x0>0?.84:-.84,2.5,0]);box(d,.05,1.1,.1,M(0xB9C0C6,{metalness:.8,roughness:.25}),[x0>0?-.72:.72,2.4,.08]);d.position.set(x0,0,.32)});
+[[doorL,-.88],[doorR,.88]].forEach(([d,x0])=>{box(d,1.74,5.0,.05,glassMat,[0,2.5,0]);box(d,1.74,.08,.08,steel,[0,4.96,0]);box(d,1.74,.08,.08,steel,[0,.04,0]);box(d,.07,5.0,.08,steel,[x0>0?.84:-.84,2.5,0]);box(d,.05,1.1,.1,M(0xB9C0C6,{metalness:.8,roughness:.25}),[x0>0?-.72:.72,2.4,.08]);d.position.set(x0,0,x0<0?.37:.29)});
 // access-control reader beside the door
 box(E,.32,.5,.08,M(0x1B1F23,{metalness:.5,roughness:.4}),[2.35,2.3,.06]);box(E,.18,.06,.02,glow(0x5CC58C),[2.35,2.45,.11]);
 const signTex=tex(1024,256,(x,w,h)=>{x.fillStyle="#16191C";x.fillRect(0,0,w,h);x.fillStyle="#E8EAEC";x.font="300 116px Jost";x.textAlign="center";x.textBaseline="middle";x.fillText("A I   L A B",w/2,h/2+6);x.fillStyle="#F0A060";x.fillRect(w/2-60,h-34,120,4)});

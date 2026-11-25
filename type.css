@@ -1,0 +1,57 @@
+/* =========================================================
+   Type system: three sizes only, one font per language.
+   L = titles · M = subtitles · S = body, labels, buttons
+   Title colour is the strongest, subtitle softer, body softest.
+   Orange stays for highlights (impact lines, KPI numbers).
+   ========================================================= */
+:root{
+  --fs-l:clamp(28px,2.4vw,38px);
+  --fs-m:18px;
+  --fs-s:14px;
+  --c-title:#F7F8F9;
+  --c-sub:#C2C8CE;
+}
+@media (max-width:860px){:root{--fs-l:26px;--fs-m:16px;--fs-s:14px}}
+
+/* everything defaults to S (SVG badges keep their own sizing) */
+body :where(:not(svg):not(svg *)){font-size:var(--fs-s)!important}
+body{font-size:var(--fs-s)!important}
+
+/* ---------- L: titles ---------- */
+h1,
+#entryUI .cn,#entryUI h2,
+.bench-head h2,
+#loader .big,
+.step-head h2{
+  font-size:var(--fs-l)!important;line-height:1.2!important;font-weight:600!important;color:var(--c-title)!important;
+}
+#loader .big small{font-size:var(--fs-s)!important}
+
+/* ---------- M: subtitles ---------- */
+#entryUI .cr,
+#hdr .logo,.top .logo,.bar-top .brand,
+.role,
+h2,h3,h4,
+.tile b,.tile strong,
+.demo b,.demos h3,
+.layer .lt b,
+.proj b,
+.tl b,td.case b,
+.arch b,
+#menuOv li button b,
+.kv strong,.metric strong,.kpi strong,
+#entryUI .cm b,
+.impact strong{
+  font-size:var(--fs-m)!important;line-height:1.45!important;
+}
+/* subtitle colour/weight: softer than the title (highlights keep their orange) */
+#entryUI .cr,.role,
+h2,h3,h4,
+.tile b,.demo b,.demos h3,.layer .lt b,.proj b,.tl b,td.case b,.arch b,#menuOv li button b{
+  color:var(--c-sub)!important;font-weight:500!important;
+}
+h2 small,#hdr .logo sup,.top .logo sup{font-size:var(--fs-s)!important}
+.bench-head h2,.step-head h2{color:var(--c-title)!important}
+
+/* children of a title/subtitle take its size (e.g. the orange number inside a KPI) */
+:is(h1,#entryUI .cn,#entryUI h2,.bench-head h2,.step-head h2,#entryUI .cr,.role,h2,h3,h4,.tile b,.tile strong,.demo b,.demos h3,.layer .lt b,.proj b,.tl b,td.case b,.arch b,#menuOv li button b,.kv strong,.metric strong,.kpi strong,#entryUI .cm b,.impact strong) :where(:not(small):not(sup)){font-size:inherit!important}
