@@ -108,15 +108,15 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:20px 0 50px;colo
   <div class="eyebrow">應用情境 · 製造業 AI 視覺／AOI</div>
   <h1>PCB 外觀瑕疵 AI 檢測站</h1>
   <p class="lede">工廠的瑕疵品很少，很難收集到大量「壞的」樣本。這個 Demo 只用良品訓練異常偵測模型，看到跟良品不一樣的地方就標出來。訓練、推論、門檻值調整都在你的瀏覽器裡即時運算，你也可以自己在板子上畫瑕疵來考它。</p>
-  <div class="jd" role="region" aria-label="常見需求對照">
+  <div class="jd" role="region" aria-label="Demo 導覽">
     <table>
-      <thead><tr><th>常見需求</th><th>這個 Demo 怎麼證明</th><th>位置</th></tr></thead>
+      <thead><tr><th>功能</th><th>說明</th><th>位置</th></tr></thead>
       <tbody>
         <tr><td>Anomaly Detection</td><td>只用 40 片良品學習每個位置的正常樣貌，推論時計算偏離程度並畫成熱力圖</td><td><a href="#train">STEP 1–2</a></td></tr>
         <tr><td>模型優化</td><td>用門檻值在「漏放」和「過殺」之間取捨，即時看攔截率與過殺率</td><td><a href="#tune">STEP 3</a></td></tr>
         <tr><td>深度學習模型訓練</td><td>正式版用 anomalib 的 PatchCore 在 Colab GPU 訓練，匯出 ONNX、用 OpenVINO 加速</td><td><a href="#arch">STEP 6</a></td></tr>
         <tr><td>定義標註規範</td><td>5 類瑕疵的定義、判定標準與標註方式</td><td><a href="#spec">STEP 5</a></td></tr>
-        <tr><td>規劃 AI 視覺實驗室</td><td>從取像、訓練、部署到產線回饋的完整架構</td><td><a href="#arch">STEP 6</a></td></tr>
+        <tr><td>整體架構</td><td>從取像、訓練、部署到產線回饋的完整架構</td><td><a href="#arch">STEP 6</a></td></tr>
       </tbody>
     </table>
   </div>
