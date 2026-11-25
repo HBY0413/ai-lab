@@ -264,9 +264,33 @@ const views={
   entrance:()=>({pos:new T.Vector3(narrow()?-60:-63.6,3.0,narrow()?24:17.5),look:new T.Vector3(narrow()?-60:-63.6,3.0,0),fov:narrow()?52:38}),
   room:()=>({pos:narrow()?new T.Vector3(24,13,24):new T.Vector3(15.5,8.6,15.5),look:narrow()?new T.Vector3(4.6,1.2,4.6):new T.Vector3(4.4,1.9,4.4),fov:narrow()?50:34})
 };
-function stationView(id){
+
+/* signs and props that sit between the camera and the focused station fade out, so the target is never blocked */
+const _seg=new T.Line3(),_p=new T.Vector3(),_bc=new T.Vector3();
+function fadeOccluders(id,v){
+  const from=v?v.pos:null,to=v?v.look:null;if(v)_seg.set(from,to);
+  ST.forEach(s=>{if(!stationGroups[s.id])return;[labelMeshes[s.id],stationGroups[s.id]].forEach(g=>{if(!g)return;
+    let fade=false;
+    if(v&&s.id!==id){new T.Box3().setFromObject(g).getCenter(_bc);_seg.closestPointToPoint(_bc,true,_p);
+      const t=_p.distanceTo(from)/from.distanceTo(to);fade=_p.distanceTo(_bc)<1.9&&t>.05&&t<.92}
+    g.traverse(o=>{if(!o.material)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
+      if(m.userData.op0===undefined){m.userData.op0=m.opacity;m.userData.tr0=m.transparent}
+      m.userData.fadeTo=fade?.12:m.userData.op0})})})});
+}
+function tickFade(dt){ST.forEach(s=>[labelMeshes[s.id],stationGroups[s.id]].forEach(g=>g&&g.traverse(o=>{if(!o.material)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
+  const t=m.userData.fadeTo;if(t===undefined)return;m.opacity+=(t-m.opacity)*Math.min(1,dt*7);m.transparent=m.userData.tr0||m.opacity<.99;m.depthWrite=m.opacity>.5})})))}
+function stationView(id,centered){
   const s=ST.find(x=>x.id===id),c=new T.Vector3(),g=stationGroups[id];
   new T.Box3().setFromObject(g).getCenter(c);
+  if(centered){
+    // caption-bar focus: frame the prop AND its sign in the middle of the screen (no panel on the left)
+    const sg=labelMeshes[id],sc=new T.Vector3();if(sg)sg.getWorldPosition(sc);else sc.copy(c);
+    const mid=c.clone().lerp(sc,.45);
+    const n=s.kind==="wallB"?new T.Vector3(0,0,1):s.kind==="wallA"?new T.Vector3(1,0,0):new T.Vector3(1,0,1).normalize();
+    const side=s.kind==="floor"?new T.Vector3(0,0,0):new T.Vector3(n.z,0,n.x);
+    const pos=mid.clone().addScaledVector(n,s.kind==="floor"?7.2:8.2).addScaledVector(side,2.2).add(new T.Vector3(0,2.4,0));
+    return{pos,look:mid,fov:narrow()?54:40};
+  }
   let n=s.kind==="wallB"?new T.Vector3(0,0,1):s.kind==="wallA"?new T.Vector3(1,0,0):new T.Vector3(1,0,1).normalize();
   const d=s.kind==="floor"?6.2:7.0,up=s.kind==="floor"?3.4:2.9;
   const pos=c.clone().addScaledVector(n,d).add(new T.Vector3(0,up,0));
@@ -290,6 +314,7 @@ function showCap(i){focus=(i+ST.length)%ST.length;const s=ST[focus];$("capN").te
 /* every case opens at its first block (01), whatever was scrolled or jumped to before */
 function toTop(){const reset=()=>{pbody.scrollTop=0;pbody.querySelectorAll(".wrap,.slide,.bench").forEach(n=>{n.scrollTop=0})};reset();requestAnimationFrame(reset);setTimeout(reset,120);setTimeout(reset,700)}
 function openStation(id,{fly=true}={}){
+  fadeOccluders(null,null);
   if(mode==="entrance"){$("entryUI").classList.add("hide")}
   const idx=ST.findIndex(s=>s.id===id);if(idx>=0)showCap(idx);
   closePanel(false);active=id;setNav(id);
@@ -304,7 +329,7 @@ function openStation(id,{fly=true}={}){
 function closePanel(back=true){
   if(openSlide){track.insertBefore(openSlide,openHome);openSlide=null}
   panel.classList.remove("on");document.body.classList.remove("popen");setTimeout(setStage,0);
-  if(back&&active){active=null;setNav(null);flyTo(views.room());$("cap").classList.remove("hide");try{history.replaceState(null,"","#room")}catch(e){}}
+  if(back&&active){active=null;setNav(null);flyTo(views.room());fadeOccluders(null,null);$("cap").classList.remove("hide");try{history.replaceState(null,"","#room")}catch(e){}}
 }
 function enterRoom(fast){
   if(mode==="room"||finishing)return;
@@ -323,8 +348,8 @@ $("enterBtn2").addEventListener("click",enterRoom);
 $("doorBadge").addEventListener("click",enterRoom);
 
 $("logo").addEventListener("click",()=>{if(mode==="room")closePanel(true)});
-$("capPrev").addEventListener("click",()=>{showCap(focus-1);flyTo(stationView(ST[focus].id),.9)});
-$("capNext").addEventListener("click",()=>{showCap(focus+1);flyTo(stationView(ST[focus].id),.9)});
+$("capPrev").addEventListener("click",()=>{showCap(focus-1);{const v=stationView(ST[focus].id,true);fadeOccluders(ST[focus].id,v);flyTo(v,.9)}});
+$("capNext").addEventListener("click",()=>{showCap(focus+1);{const v=stationView(ST[focus].id,true);fadeOccluders(ST[focus].id,v);flyTo(v,.9)}});
 $("capGo").addEventListener("click",()=>openStation(ST[focus].id,{fly:false}));
 $("hintX").addEventListener("click",()=>$("hint").remove());
 /* drag the Tips card anywhere; it stays inside the window */
@@ -356,8 +381,8 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape"){if(openSlide||active){closePanel(true);e.preventDefault()}return}
   if(mode==="entrance"&&(e.key==="Enter"||e.key==="ArrowRight")){enterRoom();return}
   if(mode!=="room"||openSlide)return;
-  if(e.key==="ArrowRight"){showCap(focus+1);flyTo(stationView(ST[focus].id),.9);e.stopImmediatePropagation()}
-  else if(e.key==="ArrowLeft"){showCap(focus-1);flyTo(stationView(ST[focus].id),.9);e.stopImmediatePropagation()}
+  if(e.key==="ArrowRight"){showCap(focus+1);{const v=stationView(ST[focus].id,true);fadeOccluders(ST[focus].id,v);flyTo(v,.9)};e.stopImmediatePropagation()}
+  else if(e.key==="ArrowLeft"){showCap(focus-1);{const v=stationView(ST[focus].id,true);fadeOccluders(ST[focus].id,v);flyTo(v,.9)};e.stopImmediatePropagation()}
   else if(e.key==="Enter"&&!(e.target.closest&&e.target.closest("button,a"))){openStation(ST[focus].id,{fly:false})}
   else if(/^[1-9]$/.test(e.key)){openStation(ST[+e.key-1].id)}
 },true);
@@ -425,6 +450,7 @@ function frame(now){
   for(const id in labelMeshes){const on=hover===id||active===id,f=labelMeshes[id].userData.frame;f.material.opacity+=((on?1:0)-f.material.opacity)*Math.min(1,dt*10)}
   if(mode==="entrance"||mode==="loading")placeBadge();
   motionPost(dt);
+  tickFade(dt);
   renderer.render(scene,cam);cam.position.copy(realPos);
   requestAnimationFrame(frame);
 }
@@ -432,7 +458,7 @@ function frame(now){
 
 /* ================= MOTION LAYER ================= */
 // 1) giant outline name painted on the facade, between wall and door (so the door/equipment overlap it)
-const NAME="Scott H.";
+const NAME="HB";
 const nameCv=document.createElement("canvas");nameCv.width=2048;nameCv.height=560;const nameX=nameCv.getContext("2d");
 const nameTex=new T.CanvasTexture(nameCv);nameTex.encoding=T.sRGBEncoding;
 const namePlane=new T.Mesh(new T.PlaneGeometry(8.2,2.25),new T.MeshBasicMaterial({map:nameTex,transparent:true,depthWrite:false}));
