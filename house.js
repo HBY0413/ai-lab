@@ -20,7 +20,7 @@ const ST=[ // order = experiment number. Front row (floor, nearest the viewer) h
   {id:"gov",label:"資料治理",nav:"治理",kind:"wallA",pos:[0,0,2.4],labelAt:[0.03,4.55,2.4]},
   {id:"build",label:"AI 協作",nav:"作品",kind:"wallB",pos:[2.1,0,0],labelAt:[2.1,4.55,0.03]},
   {id:"ocr",label:"OCR 辨識",nav:"OCR",kind:"wallB",pos:[5.6,0,0],labelAt:[5.6,4.75,0.03]},
-  {id:"demos",label:"專屬 DEMO",nav:"專屬 Demo",kind:"wallB",pos:[8.6,0,0],labelAt:[8.6,4.55,0.03]}
+  {id:"demos",label:"AI 檢測 DEMO",nav:"AI Demo",kind:"wallB",pos:[8.6,0,0],labelAt:[8.6,4.55,0.03]}
 ];
 const tt=(k,v)=>window.I18N?I18N.t(k,v):k;
 ST.forEach(s=>{const nm=window.I18N&&I18N.station(s.id);if(nm){s.label=nm[0];s.nav=nm[1]}const LIST=(typeof EXPS!=="undefined")?EXPS:[];const x=LIST.find(e=>e.id===s.id);s.title=x?x.title:tt("demo1.t");s.no=x?"EXP-"+String(LIST.indexOf(x)+1).padStart(2,"0"):"DEMO";s.facet=x?x.facet:tt("demos.eyebrow")});
@@ -143,7 +143,7 @@ function signTexture(s){
     const acc=s.hot?"#F0A060":"#E2B33B";x.fillStyle=acc;x.fillRect(0,0,14,H);x.fillStyle="#2A3036";x.fillRect(280,40,3,H-80);
     const num=s.no==="DEMO"?"DEMO":s.no.replace("EXP-","");
     x.fillStyle=acc;x.textAlign="center";x.textBaseline="middle";
-    x.font=`500 34px ${fam}`;x.globalAlpha=.7;x.fillText(s.no==="DEMO"?"ROLE":"EXP",147,92);x.globalAlpha=1;
+    x.font=`500 34px ${fam}`;x.globalAlpha=.7;x.fillText(s.no==="DEMO"?"AI":"EXP",147,92);x.globalAlpha=1;
     fitFont(x,num,300,s.no==="DEMO"?84:140,230,fam);x.fillText(num,147,210);
     x.textAlign="left";x.fillStyle="#F4F6F8";fitFont(x,s.label,600,108,860,fam);x.fillText(s.label,320,150);
     x.fillStyle="#AEB7BF";let sub=s.title;fitFont(x,sub,500,48,860,fam);

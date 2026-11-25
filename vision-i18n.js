@@ -1,11 +1,11 @@
 /* Translations for vision.html, keyed by the original Chinese text. */
 window.VD={
 "← 回到 AI 實驗室":{en:"← Back to the AI Lab",th:"← กลับห้องแล็บ AI"},
-"/ 專屬 Demo":{en:"/ Role demo",th:"/ เดโมตามตำแหน่ง"},
-"Target role · 製造業 AI 視覺／AOI 應用":{en:"Target role · AI vision / AOI for manufacturing",th:"ตำแหน่งเป้าหมาย · AI Vision / AOI สำหรับงานผลิต"},
+"/ AI 檢測 Demo":{en:"/ AI inspection demo",th:"/ เดโมตรวจจับด้วย AI"},
+"應用情境 · 製造業 AI 視覺／AOI":{en:"Use case · AI vision / AOI in manufacturing",th:"กรณีใช้งาน · AI Vision / AOI ในงานผลิต"},
 "PCB 外觀瑕疵 AI 檢測站":{en:"PCB Defect AI Inspection Station",th:"สถานีตรวจจับตำหนิ PCB ด้วย AI"},
 "工廠的瑕疵品很少，很難收集到大量「壞的」樣本。這個 Demo 只用良品訓練異常偵測模型，看到跟良品不一樣的地方就標出來。訓練、推論、門檻值調整都在你的瀏覽器裡即時運算，你也可以自己在板子上畫瑕疵來考它。":{en:"Factories have few defective parts, so collecting lots of \"bad\" samples is hard. This demo trains an anomaly-detection model on good boards only and flags anything that looks different. Training, inference and threshold tuning all run live in your browser, and you can draw your own defects on a board to test it.",th:"ในโรงงานมีชิ้นงานเสียน้อย จึงเก็บตัวอย่าง \"เสีย\" จำนวนมากได้ยาก เดโมนี้ฝึกโมเดลตรวจจับความผิดปกติด้วยบอร์ดดีเท่านั้น แล้วทำเครื่องหมายจุดที่ต่างจากบอร์ดดี การฝึก การอนุมาน และการปรับเกณฑ์ทำงานแบบเรียลไทม์ในเบราว์เซอร์ และคุณวาดตำหนิบนบอร์ดเพื่อทดสอบได้เอง"},
-"職缺需求":{en:"Job requirement",th:"คุณสมบัติที่ต้องการ"},
+"常見需求":{en:"Typical need",th:"ความต้องการทั่วไป"},
 "這個 Demo 怎麼證明":{en:"How this demo shows it",th:"เดโมนี้แสดงอย่างไร"},
 "位置":{en:"Where",th:"ส่วน"},
 "只用 40 片良品學習每個位置的正常樣貌，推論時計算偏離程度並畫成熱力圖":{en:"Learns what each position normally looks like from 40 good boards, then scores deviations and draws a heatmap",th:"เรียนรู้ลักษณะปกติของแต่ละตำแหน่งจากบอร์ดดี 40 แผ่น แล้วคำนวณความเบี่ยงเบนและวาดเป็นฮีตแมป"},
