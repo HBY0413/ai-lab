@@ -211,6 +211,8 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .replay{margin:4px 0 14px}
 .replay img{display:block;width:100%;max-width:760px;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#0B0C0E}
 .replay figcaption{margin-top:6px;color:#8A939B}
+
+.bench .lab-last{margin-top:22px}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -571,18 +573,16 @@ function renderAll(){EXPS.forEach((x,n)=>{
   <section class="bench" id="${x.id}">
     <div class="bench-head"><span class="no">EXP-${no}</span><h2>${x.title}</h2><span class="facet">${x.facet}</span></div>
     <div class="impact"><span>${I18N.t("sec.impact")}</span><strong>${x.gain}</strong></div>
-    ${x.evidence&&(x.evidence.imgs||x.evidence.layers)?evidenceHTML(x,true):""}
-    <div class="grid2">
-      <div class="notes">
-        <div class="pain"><div class="label">${I18N.t("sec.pain")}</div><p>${x.pain}</p></div>
-        <div><div class="label">${I18N.t("sec.solution")}</div><p>${x.purpose}</p></div>
-        <div><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
-        <div class="effect"><div class="label">${I18N.t("sec.effect")}</div>${eff}</div>
-        <div><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>
-      </div>
-      <div class="lab" id="lab-${x.id}"></div>
+    ${x.evidence?evidenceHTML(x,true):""}
+    <div class="notes">
+      <div class="pain"><div class="label">${I18N.t("sec.pain")}</div><p>${x.pain}</p></div>
+      <div><div class="label">${I18N.t("sec.solution")}</div><p>${x.purpose}</p></div>
+      <div><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+      <div class="effect"><div class="label">${I18N.t("sec.effect")}</div>${eff}</div>
+      <div><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>
     </div>
-    ${x.evidence&&!x.evidence.imgs&&!x.evidence.layers?evidenceHTML(x):""}
+    <!-- live lab last: read the case and watch the run first, then try it yourself -->
+    <div class="lab lab-last" id="lab-${x.id}"></div>
   </section></div></div>`);
   buildLab(x,document.getElementById("lab-"+x.id));
 });}
