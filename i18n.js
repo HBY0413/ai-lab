@@ -432,18 +432,18 @@ X.th.gov={facet:"การกำกับดูแล AI",title:"ด่านป
 - กำหนดเวลา: ต้องตอบกลับ [บุคคล A] ภายในวันศุกร์
 - ขั้นตอนถัดไป: ตรวจสิทธิ์การส่งออกและเวอร์ชันคอมโพเนนต์หลังอัปเกรด หากจำเป็นให้ติดต่อผ่าน [โทรศัพท์ A] หรือ [อีเมล A] เพื่อยืนยันหน้าจอข้อผิดพลาด`}};
 
-X.en.build={facet:"Building with AI",title:"Shipping Complete Systems with AI Agents",gain:"Idea → <strong>live product</strong>",
-  purpose:"Outside work I use AI agents to turn ideas straight into working websites and tools, practising how to break down requirements, direct an agent and verify the result. This lab itself was built the same way.",
+X.en.build={facet:"Building with AI",title:"Other Projects Built with AI",gain:"Idea → <strong>live product</strong>",
+  purpose:"Outside work I use AI agents to turn ideas straight into working websites and tools, practising how to break down requirements, direct an agent and verify the result. This lab itself was built the same way. The OCR item finder is a fuller case, so it has its own entry as experiment 08.",
   steps:["Break the idea into small, testable steps","Direct the agent to build, testing and fixing step by step","Deploy and keep iterating"],
-  effect:{type:"kpi",items:[["7","GitHub projects"],["3D · OCR · web","different stacks"]]},
-  tech:["Three.js","OCR","GitHub Pages","Agent collaboration"],
-  lab:{items:[["3D role-playing game","A browser 3D RPG: village, characters and 48 models, 107 files in total."],["Okinawa road-trip site","7-day itinerary, intro animation and ocean sounds, deployed on GitHub Pages."],["LineageGoblin","Windows desktop tool: screen OCR plus item-database matching (experiment 08)."]]}};
-X.th.build={facet:"สร้างงานร่วมกับ AI",title:"สร้างระบบที่ใช้งานได้จริงด้วย AI Agent",gain:"ไอเดีย → <strong>ผลงานที่ใช้งานจริง</strong>",
-  purpose:"นอกเวลางาน ผมใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเครื่องมือที่ใช้ได้จริง เพื่อฝึกแยกความต้องการ สั่งงาน Agent และตรวจสอบผลลัพธ์ ห้องแล็บนี้ก็สร้างด้วยวิธีเดียวกัน",
+  effect:{type:"kpi",items:[["7","GitHub projects"],["3D · web · audio","different stacks"]]},
+  tech:["Three.js","Web Audio","GitHub Pages","Agent collaboration"],
+  lab:{items:[["3D role-playing game","A browser 3D RPG: village, characters and 48 models, 107 files in total."],["Okinawa road-trip site","7-day itinerary, intro animation and ocean sounds, deployed on GitHub Pages."]]}};
+X.th.build={facet:"สร้างงานร่วมกับ AI",title:"ผลงานอื่นที่พัฒนาด้วย AI",gain:"ไอเดีย → <strong>ผลงานที่ใช้งานจริง</strong>",
+  purpose:"นอกเวลางาน ผมใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเครื่องมือที่ใช้ได้จริง เพื่อฝึกแยกความต้องการ สั่งงาน Agent และตรวจสอบผลลัพธ์ ห้องแล็บนี้ก็สร้างด้วยวิธีเดียวกัน ส่วนเครื่องมือ OCR ค้นหาไอเท็มมีรายละเอียดมากกว่า จึงแยกเป็นการทดลองที่ 08",
   steps:["แยกไอเดียเป็นขั้นตอนเล็ก ๆ ที่ตรวจสอบได้","สั่ง Agent ลงมือทำ ทดสอบและแก้ไขทีละขั้น","ปรับใช้จริงและพัฒนาต่อเนื่อง"],
-  effect:{type:"kpi",items:[["7","โปรเจกต์บน GitHub"],["3D · OCR · เว็บ","เทคโนโลยีหลากหลาย"]]},
-  tech:["Three.js","OCR","GitHub Pages","ทำงานร่วมกับ Agent"],
-  lab:{items:[["เกมเล่นตามบทบาท 3D","เกม RPG 3D บนเบราว์เซอร์: หมู่บ้าน ตัวละคร และโมเดล 48 ชิ้น รวม 107 ไฟล์"],["เว็บไซต์ทริปขับรถเที่ยวโอกินาวา","แผนเที่ยว 7 วัน แอนิเมชันเปิด และเสียงคลื่น ใช้งานบน GitHub Pages"],["LineageGoblin","เครื่องมือเดสก์ท็อป Windows: OCR หน้าจอและจับคู่ฐานข้อมูลไอเท็ม (การทดลองที่ 08)"]]}};
+  effect:{type:"kpi",items:[["7","โปรเจกต์บน GitHub"],["3D · เว็บ · เสียง","เทคโนโลยีหลากหลาย"]]},
+  tech:["Three.js","Web Audio","GitHub Pages","ทำงานร่วมกับ Agent"],
+  lab:{items:[["เกมเล่นตามบทบาท 3D","เกม RPG 3D บนเบราว์เซอร์: หมู่บ้าน ตัวละคร และโมเดล 48 ชิ้น รวม 107 ไฟล์"],["เว็บไซต์ทริปขับรถเที่ยวโอกินาวา","แผนเที่ยว 7 วัน แอนิเมชันเปิด และเสียงคลื่น ใช้งานบน GitHub Pages"]]}};
 
 
 /* pain point → solution framing */
