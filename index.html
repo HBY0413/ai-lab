@@ -237,6 +237,11 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .blk-lab .lab-last{margin-top:0}
 .blk .replay{margin:0}
 @media (max-width:700px){.case2{grid-template-columns:1fr}.blk{padding:14px}}
+
+.blk .cc+.cc,.blk .cc+.techrow{margin-top:12px}
+.blk-gain .impact{margin:0 0 14px}
+.blk-look .sub+.sub{margin-top:18px;padding-top:16px;border-top:1px dashed rgba(255,255,255,.1)}
+.blk-look .sub>.label{margin-bottom:10px}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -596,7 +601,6 @@ function renderAll(){EXPS.forEach((x,n)=>{
   <div class="slide" data-id="${x.id}" data-label="${x.title}" data-no="${no}" aria-roledescription="slide"><div class="wrap">
   <section class="bench" id="${x.id}">
     <div class="bench-head"><span class="no">EXP-${no}</span><h2>${x.title}</h2><span class="facet">${x.facet}</span></div>
-    <div class="impact"><span>${I18N.t("sec.impact")}</span><strong>${x.gain}</strong></div>
     ${blocksHTML(x,eff)}
   </section></div></div>`);
   buildLab(x,document.getElementById("lab-"+x.id));
@@ -702,12 +706,15 @@ const HAS_RUN=["report","manual","kb","maint","cases"];
 function replayHTML(x){return `<figure class="replay"><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t("ev.runNote")}</figcaption></figure>`}
 /* one clearly separated block per part of a case, numbered, with a jump bar at the top */
 function blocksHTML(x,eff){
+  // story order: what it is -> the pain it was built for -> what it delivered -> what it really looks like -> try it
   const B=[];
-  if(HAS_RUN.includes(x.id))B.push(["run",I18N.t("ev.run"),replayHTML(x)]);
-  if(x.evidence)B.push(["out",I18N.t("blk.out"),evidenceHTML(x,true)]);
-  B.push(["case",I18N.t("blk.case"),`<div class="case2"><div class="cc pain"><div class="label">${I18N.t("sec.pain")}</div><p>${x.pain}</p></div><div class="cc sol"><div class="label">${I18N.t("sec.solution")}</div><p>${x.purpose}</p></div></div>
-     <div class="cc how"><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>`]);
-  B.push(["res",I18N.t("blk.res"),`<div class="effect">${eff}</div><div class="techrow"><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>`]);
+  B.push(["what",I18N.t("blk.what"),`<div class="cc sol"><p>${x.purpose}</p></div>
+     <div class="cc how"><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+     <div class="techrow"><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>`]);
+  B.push(["pain",I18N.t("blk.pain"),`<div class="cc pain"><p>${x.pain}</p></div>`]);
+  B.push(["gain",I18N.t("blk.gain"),`<div class="impact"><span>${I18N.t("sec.impact")}</span><strong>${x.gain}</strong></div><div class="effect">${eff}</div>`]);
+  const run=HAS_RUN.includes(x.id),out=!!x.evidence;
+  if(run||out)B.push(["look",I18N.t("blk.look"),(run?`<div class="sub"><div class="label">${I18N.t("ev.run")}</div>${replayHTML(x)}</div>`:"")+(out?`<div class="sub"><div class="label">${I18N.t("blk.out")}</div>${evidenceHTML(x,true)}</div>`:"")]);
   B.push(["lab",I18N.t("blk.lab"),`<div class="lab lab-last" id="lab-${x.id}"></div>`]);
   const nav=`<nav class="secnav" aria-label="${esc(x.title)}">${B.map(([k,t],i)=>`<button type="button" data-jump="blk-${x.id}-${k}"><b>${String(i+1).padStart(2,"0")}</b>${t}</button>`).join("")}</nav>`;
   return nav+B.map(([k,t,html],i)=>`<div class="blk blk-${k}" id="blk-${x.id}-${k}"><div class="bh"><span>${String(i+1).padStart(2,"0")}</span><h3>${t}</h3></div>${html}</div>`).join("");
