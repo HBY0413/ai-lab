@@ -275,6 +275,23 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .sh-warn ul{margin:6px 0 0;padding-left:1.2em;color:#F7F8F9;line-height:1.65}
 .sh-warn p{margin:6px 0 0;color:#C2C8CE}
 @media (max-width:700px){.sh-meta{grid-template-columns:1fr}}
+
+/* 08 goblin lab */
+.lg-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:12px;margin-top:10px}
+.lg-list{display:flex;flex-direction:column;gap:4px;max-height:420px;overflow:auto}
+.lg-list button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:7px 10px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.03);color:#F7F8F9;cursor:pointer}
+.lg-list button span{color:#8A939B}
+.lg-list button:hover{border-color:#F0A060}
+.lgpop{border:1px solid rgba(240,160,96,.35);border-radius:10px;background:#101318;padding:12px 14px;max-height:420px;overflow:auto}
+.lgt b{display:block;color:#F7F8F9}.lgt span{color:#8A939B}
+.lgs{margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.07)}
+.lgh{color:#E2B33B;margin-bottom:4px}
+.lgst{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0}
+.lgst dt{color:#8A939B}.lgst dd{margin:0;color:#E6E9EC}
+.lgpop ul{margin:0;padding-left:1.1em;line-height:1.7}
+.lgpop a{color:#7FB8FF;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.lgpop small{color:#8A939B}
+@media (max-width:700px){.lg-grid{grid-template-columns:1fr}}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -525,8 +542,8 @@ ${i}`,
   id:"ocr",facet:"影像辨識・OCR",title:"AI 協作開發的國際服道具辨識工具（OCR＋模糊比對）",
   gain:"看不懂英文 → <strong>中文道具資料</strong>",
   pain:"在國際英文伺服器玩遊戲的亞洲玩家，常看不懂英文的道具名稱和說明。想查資料得自己打英文，拼錯一個字就查不到；邊玩邊查也很打斷節奏。",
-  purpose:"做了一個桌面工具，提供兩種查法：輸入文字，就算拼錯也能靠模糊比對找到道具資料；或直接用 OCR 掃描遊戲畫面辨識道具，自動對應中文名稱與說明。",
-  steps:["文字查詢：輸入道具名稱（可拼錯、可不完整），用模糊比對找到最相近的道具","OCR 掃描：截取遊戲畫面上的道具說明框，辨識出文字","清掉強化值（+7、t7、＋9）、價格等雜訊，再比對道具資料庫，顯示中文名稱與資料"],
+  purpose:"做了一個免安裝的 Windows 小工具：畫面上一隻可拖曳的浮動哥布林小視窗，提供兩種查法。打字查詢完全離線，中英文、拼錯或只打一部分都能找到；在遊戲裡按 Alt+Q 框住道具名稱，約 3 秒就彈出中文小視窗。小視窗列出素質、掉落的怪物、有賣的商人與開出來源，藍字可以再點下去追查。資料來自 L1Justice 官方資料庫：道具 3,299、怪物 1,982、掉落 11,778 筆、商人販售 14,654 筆，中文名稱為人工翻譯並保留英文原名。",
+  steps:["打字查詢：中英文、拼錯或部分字都能查，比對 3,299 筆道具，完全離線","點道具彈出中文小視窗：素質、掉落怪物、商人價格、開出來源；藍字可再點怪物或商人","遊戲裡按 Alt+Q：畫面凍結、框住道具名稱，辨識後清掉強化值等雜訊，再模糊比對資料庫","打「@地圖名」可以看那張地圖有哪些怪"],
   effect:{type:"kpi",items:[["2 種查法","文字輸入＋畫面掃描"],["8 種","OCR／拼字錯誤可容錯"]]},
   tech:["OCR","模糊比對","Levenshtein 距離","C# 桌面工具"],
   lab:{
@@ -680,37 +697,7 @@ function buildLab(x,el){
   }
   if(L.kind==="shots"){buildShots(x,labShell(el,I18N.t("sh.title")));return}
   if(L.kind==="place"){const b=labShell(el,REAL.t("pl.path")==="存放位置"?"檔案歸檔模擬器":(I18N.lang==="th"?"จำลองการจัดเก็บไฟล์":"Filing simulator"));buildPlace(b,L);return}
-  if(L.kind==="fuzzy"){
-    const b=labShell(el,I18N.t("lab.fuzzy"));
-    b.innerHTML=`<div class="hint">${L.hint}</div>
-      <div class="label">① ${I18N.t("fz.textMode")}</div>
-      <input type="text" id="fz-in" value="${esc(L.input)}" aria-label="${I18N.t("fz.read")}">
-      <div class="row">${L.samples.map(s=>`<button type="button" class="fz-s">${esc(s)}</button>`).join("")}</div>
-      <div class="label" style="margin-top:6px">② ${I18N.t("fz.scanMode")}</div>
-      <div class="scanbox"><figure style="margin:0"><canvas id="fz-cv" width="480" height="300"></canvas><figcaption class="hint">${I18N.t("fz.sampleImg")}</figcaption></figure>
-        <div style="display:flex;flex-direction:column;gap:8px"><button type="button" class="primary" id="fz-scan">${I18N.t("fz.scanBtn")}</button>
-        <label class="hint" style="cursor:pointer;text-decoration:underline">${I18N.t("fz.upload")}<input type="file" id="fz-file" accept="image/*" style="display:none"></label>
-        <span class="hint" id="fz-note"></span></div></div>
-      <div class="out" id="fz-out"></div>`;
-    const inp=b.querySelector("#fz-in"),out=b.querySelector("#fz-out"),cv=b.querySelector("#fz-cv"),note=b.querySelector("#fz-note");
-    const run=()=>out.innerHTML=renderFuzzy(inp.value);
-    inp.addEventListener("input",run);
-    b.querySelectorAll(".fz-s").forEach(btn=>btn.addEventListener("click",()=>{inp.value=btn.textContent;run()}));
-    drawTooltip(cv);let uploaded=null;
-    b.querySelector("#fz-file").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const img=new Image();img.onload=()=>{const x=cv.getContext("2d"),r=Math.min(cv.width/img.width,cv.height/img.height);x.fillStyle="#000";x.fillRect(0,0,cv.width,cv.height);x.drawImage(img,(cv.width-img.width*r)/2,(cv.height-img.height*r)/2,img.width*r,img.height*r);uploaded=f};img.src=URL.createObjectURL(f)});
-    b.querySelector("#fz-scan").addEventListener("click",async()=>{
-      let canImg=false;try{canImg=!!(sample&&(await sample.limits()).images)}catch(e){}
-      if(!canImg){if(uploaded){drawTooltip(cv);uploaded=null;note.textContent=I18N.t("fz.scanNeedSample")}else note.textContent=I18N.t("fz.scanNoAI");inp.value=SAMPLE_OCR;run();return}
-      note.textContent=I18N.t("fz.scanning");
-      try{
-        const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
-        const r=await sample("This is a screenshot from an MMORPG. Find the item name line in the item tooltip and copy it exactly as it appears, including any enchant prefix like +7 and any spelling as shown. Reply with that single line only, nothing else.",{images:[blob],modelTier:"quick",cache:false});
-        const line=(r.text||"").split("\n").map(t=>t.trim()).filter(Boolean)[0]||"";
-        if(!line)throw 0;inp.value=line;note.textContent=I18N.t("fz.scanRead")+line;run();
-      }catch(e){note.textContent=I18N.t("fz.scanFail")}
-    });
-    run();return;
-  }
+  if(L.kind==="fuzzy"){buildGoblin(labShell(el,I18N.t("lab.fuzzy")));return}
   const isGov=L.kind==="gov";
   const b=labShell(el,I18N.t(isGov?"lab.gov":"lab.ai"));
   const docsHtml=L.docs?`<details><summary class="hint">${I18N.t("lab.docs")}</summary><pre class="mono" style="white-space:pre-wrap;font-size:13px;background:var(--code);padding:10px;margin:6px 0 0">${esc(L.docs)}</pre></details>`:"";
@@ -750,6 +737,77 @@ function buildLab(x,el){
 
 
 /* sample in-game tooltip for the OCR scan bench (drawn, with a deliberate OCR-style typo) */
+
+/* ---------- 08: LineageGoblin lab, running on the tool's real data (L1Justice DB, 2026/11/11) ---------- */
+let LGP=null;
+function loadLG(){if(window.LG_DATA)return Promise.resolve(window.LG_DATA);if(LGP)return LGP;
+  LGP=new Promise((ok,no)=>{const sc=document.createElement("script");sc.src="lg-data.js";sc.onload=()=>ok(window.LG_DATA);sc.onerror=no;document.head.appendChild(sc)});return LGP}
+const zhUI=()=>I18N.lang==="zh";
+function lgSearch(D,q){
+  q=q.trim();if(!q)return[];
+  if(q.startsWith("@")){const m=q.slice(1).toLowerCase();return Object.entries(D.mon).filter(([,v])=>v.p.some(p=>p.toLowerCase().includes(m))).slice(0,30).map(([k,v])=>({kind:"mon",k,v}))}
+  const ql=q.toLowerCase(),hits=[];
+  D.items.forEach((it,k)=>{const z=it.z,e=it.e.toLowerCase();let sc=0;
+    if(z===q||e===ql)sc=100;else if(z.startsWith(q)||e.startsWith(ql))sc=80;else if(z.includes(q)||e.includes(ql))sc=60;
+    if(sc)hits.push({kind:"item",k,v:it,sc:sc-(z.length+e.length)/200})});
+  Object.entries(D.mon).forEach(([k,v])=>{if(v.z.includes(q)||v.e.toLowerCase().includes(ql))hits.push({kind:"mon",k,v,sc:50})});
+  if(hits.length)return hits.sort((a,b)=>b.sc-a.sc).slice(0,30);
+  // nothing contains it: fall back to fuzzy matching on English names (typos, OCR noise)
+  const c=cleanOCR(q).text;if(!c)return[];
+  return D.items.map((it,k)=>{const t=it.e.toLowerCase().replace(/\s*\((normal|blessed|cursed)\)/,"");const d=lev(c,t);return{kind:"item",k,v:it,sc:1-d/Math.max(c.length,t.length)-(/blessed|cursed/i.test(it.e)&&!/blessed|cursed/i.test(q)?.01:0),fz:1}})
+    .filter(h=>h.sc>.55).sort((a,b)=>b.sc-a.sc).slice(0,10);
+}
+function lgItemHTML(D,k){const it=D.items[k];
+  const sec=(t,body)=>body?`<div class="lgs"><div class="lgh">${t}</div>${body}</div>`:"";
+  const stats=it.s.length?`<dl class="lgst">${it.s.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join("")}</dl>`:"";
+  const drops=it.d.slice(0,8).map(([m,r])=>{const M=D.mon[m];return `<li><a data-mon="${m}">${esc(M.z)}</a> <small>Lv${M.l} · ${r}${M.p.length?" · "+esc(M.p.slice(0,2).join("、")):""}</small></li>`}).join("");
+  const sells=it.m.slice(0,6).map(([n,sp,bp])=>`<li><a data-merch="${esc(n)}">${esc(n)}</a> <small>${zhUI()?"賣":"sell"} ${sp} · ${zhUI()?"收購":"buy"} ${bp}</small></li>`).join("");
+  const opens=it.o.slice(0,5).map(([n,q,r])=>`<li>${esc(n)} <small>×${q} · ${r}</small></li>`).join("");
+  return `<div class="lgpop"><div class="lgt"><b>${esc(it.z)}</b><span>${esc(it.e)}</span></div>
+    ${sec(I18N.t("lg.stats"),stats)}${sec(I18N.t("lg.drops")+(it.d.length>8?` (${it.d.length})`:""),drops&&`<ul>${drops}</ul>`)}${sec(I18N.t("lg.sells")+(it.m.length>6?` (${it.m.length})`:""),sells&&`<ul>${sells}</ul>`)}${sec(I18N.t("lg.opens"),opens&&`<ul>${opens}</ul>`)}</div>`}
+function lgMonHTML(D,m){const M=D.mon[m];
+  return `<div class="lgpop"><div class="lgt"><b>${esc(M.z)}</b><span>${esc(M.e)} · Lv${M.l}</span></div>
+   ${M.p.length?`<div class="lgs"><div class="lgh">${I18N.t("lg.maps")}</div><p>${esc(M.p.join("、"))}</p></div>`:""}
+   <div class="lgs"><div class="lgh">${I18N.t("lg.monDrops")} (${M.d.length})</div><ul>${M.d.slice(0,12).map(([k,r])=>`<li><a data-item="${k}">${esc(D.items[k].z)}</a> <small>${r}</small></li>`).join("")}</ul></div></div>`}
+function lgMerchHTML(D,n){const S=D.merch[n];
+  return `<div class="lgpop"><div class="lgt"><b>${esc(S.z)}</b><span>${esc(S.e)}</span></div><div class="lgs"><div class="lgh">${I18N.t("lg.merchSells")} (${S.s.length})</div><ul>${S.s.slice(0,14).map(([k,sp,bp])=>`<li><a data-item="${k}">${esc(D.items[k].z)}</a> <small>${zhUI()?"賣":"sell"} ${sp} · ${zhUI()?"收購":"buy"} ${bp}</small></li>`).join("")}</ul></div></div>`}
+function buildGoblin(b){
+  b.innerHTML=`<div class="hint">${I18N.t("lg.hint")}</div>
+    <div class="label">① ${I18N.t("fz.textMode")}</div>
+    <input type="text" class="lg-in" value="haste" aria-label="${I18N.t("fz.textMode")}">
+    <div class="row">${["haste","細劍","rapeir","+7 Siiver Sword","@象牙塔"].map(q=>`<button type="button" class="fz-s">${esc(q)}</button>`).join("")}</div>
+    <div class="lg-grid"><div class="lg-list"></div><div class="lg-detail"></div></div>
+    <div class="label" style="margin-top:12px">② ${I18N.t("fz.scanMode")}</div>
+    <div class="scanbox"><figure style="margin:0"><canvas class="lg-cv" width="480" height="300"></canvas><figcaption class="hint">${I18N.t("fz.sampleImg")}</figcaption></figure>
+      <div style="display:flex;flex-direction:column;gap:8px"><button type="button" class="primary lg-scan">${I18N.t("fz.scanBtn")}</button>
+      <label class="hint" style="cursor:pointer;text-decoration:underline">${I18N.t("fz.upload")}<input type="file" class="lg-file" accept="image/*" style="display:none"></label>
+      <span class="hint lg-note"></span></div></div>
+    <p class="hint lg-meta"></p>`;
+  const inp=b.querySelector(".lg-in"),list=b.querySelector(".lg-list"),det=b.querySelector(".lg-detail"),cv=b.querySelector(".lg-cv"),note=b.querySelector(".lg-note");
+  list.innerHTML=`<p class="hint">${I18N.t("lg.loading")}</p>`;
+  loadLG().then(D=>{
+    b.querySelector(".lg-meta").textContent=I18N.t("lg.meta",{i:D.meta.items.toLocaleString(),m:D.meta.mon.toLocaleString(),d:D.meta.drops.toLocaleString(),s:D.meta.sells.toLocaleString()});
+    const open=(kind,key)=>{det.innerHTML=kind==="item"?lgItemHTML(D,+key):kind==="mon"?lgMonHTML(D,key):lgMerchHTML(D,key)};
+    const run=()=>{const h=lgSearch(D,inp.value);
+      list.innerHTML=h.length?(h[0].fz?`<p class="hint">${I18N.t("lg.fuzzy")}</p>`:"")+h.map(x=>`<button type="button" data-${x.kind==="item"?"item":"mon"}="${x.k}"><b>${esc(x.v.z)}</b><span>${esc(x.v.e)}${x.fz?` · ${(x.sc*100).toFixed(0)}%`:""}</span></button>`).join(""):`<p class="hint">${I18N.t("fz.none")}</p>`;
+      if(h.length)open(h[0].kind,h[0].k);else det.innerHTML=""};
+    b.addEventListener("click",e=>{const a=e.target.closest("[data-item],[data-mon],[data-merch]");if(!a)return;
+      if(a.dataset.item!==undefined)open("item",a.dataset.item);else if(a.dataset.mon!==undefined)open("mon",a.dataset.mon);else open("merch",a.dataset.merch)});
+    inp.addEventListener("input",run);
+    b.querySelectorAll(".fz-s").forEach(x=>x.addEventListener("click",()=>{inp.value=x.textContent;run()}));
+    drawTooltip(cv);let uploaded=null;
+    b.querySelector(".lg-file").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const img=new Image();img.onload=()=>{const x=cv.getContext("2d"),r=Math.min(cv.width/img.width,cv.height/img.height);x.fillStyle="#000";x.fillRect(0,0,cv.width,cv.height);x.drawImage(img,(cv.width-img.width*r)/2,(cv.height-img.height*r)/2,img.width*r,img.height*r);uploaded=f};img.src=URL.createObjectURL(f)});
+    b.querySelector(".lg-scan").addEventListener("click",async()=>{
+      let canImg=false;try{canImg=!!(sample&&(await sample.limits()).images)}catch(e){}
+      if(!canImg){if(uploaded){drawTooltip(cv);uploaded=null;note.textContent=I18N.t("fz.scanNeedSample")}else note.textContent=I18N.t("fz.scanNoAI");inp.value=SAMPLE_OCR;run();return}
+      note.textContent=I18N.t("fz.scanning");
+      try{const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
+        const r=await sample("This is a screenshot from an MMORPG. Find the item name line in the item tooltip and copy it exactly as it appears, including any enchant prefix like +7 and any spelling as shown. Reply with that single line only, nothing else.",{images:[blob],modelTier:"quick",cache:false});
+        const line=(r.text||"").split("\n").map(t=>t.trim()).filter(Boolean)[0]||"";if(!line)throw 0;inp.value=line;note.textContent=I18N.t("fz.scanRead")+line;run();
+      }catch(e){note.textContent=I18N.t("fz.scanFail")}});
+    run();
+  }).catch(()=>{list.innerHTML=`<p class="hint">${I18N.t("lg.fail")}</p>`});
+}
 const SAMPLE_OCR="+7 Siiver Sword";
 function drawTooltip(cv){
   const x=cv.getContext("2d"),W=cv.width,H=cv.height;
@@ -773,8 +831,8 @@ const INTRO={
  build:{zh:"用 AI 開發的其他作品：沒有工程團隊，靠 AI Agent 把想法做成可以上線使用的網站與遊戲。",en:"Other things I built with AI: with no engineering team, I used AI agents to turn ideas into a live website and a game.",th:"ผลงานอื่นที่พัฒนาด้วย AI: ไม่มีทีมวิศวกร แต่ใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเกมที่ใช้งานได้จริง"},
  ocr:{zh:"一個用 AI 協作開發的 Windows 小工具：幫亞洲玩家在國際英文伺服器上，用打字或掃描畫面查到道具的中文資料。",en:"A small Windows tool I built with AI: it helps Asian players on international English servers look up items in Chinese by typing or scanning the screen.",th:"เครื่องมือ Windows เล็ก ๆ ที่พัฒนาร่วมกับ AI: ช่วยผู้เล่นชาวเอเชียบนเซิร์ฟเวอร์ภาษาอังกฤษค้นข้อมูลไอเท็มเป็นภาษาจีนด้วยการพิมพ์หรือสแกนหน้าจอ"}
 };
-const HAS_RUN=["report","manual","kb","maint","cases"];
-function replayHTML(x){return `<figure class="replay"><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t("ev.runNote")}</figcaption></figure>`}
+const HAS_RUN=["report","manual","kb","maint","cases","ocr"];
+function replayHTML(x){return `<figure class="replay"><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t(x.id==="ocr"?"ev.runNoteOcr":"ev.runNote")}</figcaption></figure>`}
 /* one clearly separated block per part of a case, numbered, with a jump bar at the top */
 function blocksHTML(x,eff){
   // story order: what it is -> the pain it was built for -> what it delivered -> what it really looks like -> try it

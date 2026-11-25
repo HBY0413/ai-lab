@@ -78,6 +78,19 @@ const D={
 "sh.warnT":{zh:"需要你確認的地方",en:"Please check",th:"สิ่งที่ควรตรวจ"},
 "sh.okT":{zh:"檢查結果",en:"Check result",th:"ผลการตรวจ"},
 "sh.ok":{zh:"沒有發現問題，這頁可以直接使用。",en:"Nothing looks off; this page is ready to use.",th:"ไม่พบปัญหา ใช้หน้านี้ได้เลย"},
+"lg.hint":{zh:"這是 LineageGoblin 實際使用的資料（L1Justice 官方資料庫）。打中文或英文、拼錯或只打一部分都能找到；點藍字可以看怪物掉落、商人販售；打「@地圖名」看那張地圖有哪些怪。",en:"This runs on LineageGoblin's real data (the L1Justice database). Type Chinese or English, partial or misspelled; click blue links to see monster drops and merchant stock; type @map to list a map's monsters.",th:"ทำงานบนข้อมูลจริงของ LineageGoblin (ฐานข้อมูล L1Justice) พิมพ์จีนหรืออังกฤษ สะกดผิดหรือพิมพ์บางส่วนก็หาเจอ คลิกลิงก์สีฟ้าเพื่อดูของดรอปและร้านค้า พิมพ์ @ชื่อแผนที่ เพื่อดูมอนสเตอร์"},
+"lg.loading":{zh:"載入道具資料中…",en:"Loading item data…",th:"กำลังโหลดข้อมูล…"},
+"lg.fail":{zh:"資料載入失敗，請重新整理。",en:"Couldn't load the data; please refresh.",th:"โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรช"},
+"lg.fuzzy":{zh:"沒有完全相符，以下是模糊比對結果：",en:"No exact match; closest fuzzy matches:",th:"ไม่ตรงทั้งหมด ผลที่ใกล้เคียง:"},
+"lg.stats":{zh:"素質",en:"Stats",th:"ค่าสถานะ"},
+"lg.drops":{zh:"掉落的怪物",en:"Dropped by",th:"ดรอปจาก"},
+"lg.sells":{zh:"有賣的商人",en:"Sold by",th:"ร้านที่ขาย"},
+"lg.opens":{zh:"可從這些道具開出",en:"Opened from",th:"เปิดได้จาก"},
+"lg.maps":{zh:"出沒地圖",en:"Found on",th:"พบที่"},
+"lg.monDrops":{zh:"會掉的道具",en:"Drops",th:"ของดรอป"},
+"lg.merchSells":{zh:"販售的道具",en:"Stock",th:"สินค้า"},
+"lg.meta":{zh:"資料：道具 {i}、怪物 {m}、掉落 {d} 筆、商人販售 {s} 筆（2026/11/11 抓取）。查詢在你的瀏覽器裡離線完成。",en:"Data: {i} items, {m} monsters, {d} drops, {s} merchant listings (fetched 2026/11/11). Lookups run offline in your browser.",th:"ข้อมูล: ไอเท็ม {i} มอนสเตอร์ {m} ดรอป {d} รายการขาย {s} (ดึงเมื่อ 2026/11/11) ค้นหาแบบออฟไลน์ในเบราว์เซอร์"},
+"ev.runNoteOcr":{zh:"依工具 README 的操作流程重現，道具、怪物與商人資料取自工具實際使用的資料庫；畫面是示意，不是程式的實際介面。",en:"Re-created from the tool's README; item, monster and merchant data come from the database the tool actually uses. The screens are illustrative, not the program's real interface.",th:"จำลองตามขั้นตอนใน README ของเครื่องมือ ข้อมูลไอเท็ม มอนสเตอร์ และร้านค้ามาจากฐานข้อมูลที่เครื่องมือใช้จริง หน้าจอเป็นภาพประกอบ ไม่ใช่หน้าตาจริงของโปรแกรม"},
 "card.k":{zh:"AI 導入 · 資料 · 系統整合",en:"AI adoption · Data · Systems integration",th:"การนำ AI มาใช้ · ข้อมูล · บูรณาการระบบ"},
 "card.role":{zh:"11 年 IT 系統與資料經驗，現在專注把 AI 導入真實工作流程，做成可上線、可治理的 AI Agent。",en:"11+ years in IT systems and data, now focused on bringing AI into real workflows as governed AI agents that actually go live.",th:"ประสบการณ์ระบบไอทีและข้อมูลกว่า 11 ปี ปัจจุบันมุ่งนำ AI เข้าสู่งานจริง เป็น AI Agent ที่ใช้งานได้จริงและกำกับดูแลได้"},
 "card.m1":{zh:"<b>1 天 → 30 分</b>紀錄簡報製作時間縮短約 94%",en:"<b>1 day → 30 min</b>record-deck time cut by about 94%",th:"<b>1 วัน → 30 นาที</b>ลดเวลาทำสไลด์บันทึกลงราว 94%"},
@@ -499,11 +512,13 @@ const PS={
   build:["มีไอเดียมากมายแต่ไม่มีทีมวิศวกร ปกติต้องจ้างคนพัฒนาและรอนาน ไอเดียเล็ก ๆ จึงมักหายไป","ผมใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเครื่องมือที่ใช้งานได้ด้วยตัวเอง ตั้งแต่แยกความต้องการ สั่งงาน Agent และตรวจสอบทีละขั้นจนใช้งานจริง ห้องแล็บนี้ก็สร้างด้วยวิธีเดียวกัน"]}};
 for(const l of ["en","th"])for(const id in PS[l]){X[l][id]=X[l][id]||{};X[l][id].pain=PS[l][id][0];X[l][id].purpose=PS[l][id][1]}
 Object.assign(X.en.ocr,{title:"AI-built Item Finder for International Servers (OCR + Fuzzy Search)",gain:"Unreadable English → <strong>item details in Chinese</strong>",
-  steps:["Text search: type an item name (misspelled or partial is fine) and fuzzy matching finds the closest item","OCR scan: capture the item tooltip on the game screen and read its text","Strip enchant levels (+7, t7, ＋9), prices and other noise, match against the item database, and show the Chinese name and details"],
+  purpose:"I built a portable Windows tool: a draggable floating goblin window with two ways to look things up. Typed search is fully offline and handles Chinese or English, partial or misspelled names. In game, Alt+Q lets you box the item name and a Chinese pop-up appears in about 3 seconds, listing stats, monsters that drop it, merchants and boxes it comes from, with blue links to dig further. Data comes from the L1Justice database: 3,299 items, 1,982 monsters, 11,778 drops and 14,654 merchant listings, with hand-translated Chinese names and the English originals kept.",
+  steps:["Text search: Chinese or English, partial or misspelled, across 3,299 items, fully offline","Click an item for a Chinese pop-up: stats, monsters that drop it, merchant prices, boxes it comes from; blue links lead to the monster or merchant","In game, press Alt+Q: the screen freezes, you box the item name, the text is read, enchant levels and noise are stripped, then fuzzy-matched","Type @map name to list the monsters on that map"],
   effect:{type:"kpi",items:[["2 ways","type or scan"],["8 kinds","of OCR/spelling errors tolerated"]]}});
 X.en.ocr.lab={hint:"Try both: type a name (typos welcome), or scan the sample game screen below or upload your own screenshot."};
 Object.assign(X.th.ocr,{title:"ตัวช่วยค้นหาไอเท็มเซิร์ฟเวอร์อินเตอร์ที่พัฒนาด้วย AI (OCR + ค้นหาแบบคลุมเครือ)",gain:"อ่านอังกฤษไม่ออก → <strong>ข้อมูลไอเท็มภาษาจีน</strong>",
-  steps:["ค้นด้วยข้อความ: พิมพ์ชื่อไอเท็ม (สะกดผิดหรือไม่ครบก็ได้) แล้วจับคู่แบบคลุมเครือหาไอเท็มที่ใกล้ที่สุด","สแกนด้วย OCR: จับภาพกล่องคำอธิบายไอเท็มบนหน้าจอเกมแล้วอ่านข้อความ","ลบค่าตีบวก (+7, t7, ＋9) ราคา และสัญญาณรบกวน แล้วจับคู่กับฐานข้อมูลไอเท็ม แสดงชื่อภาษาจีนและรายละเอียด"],
+  purpose:"ผมสร้างเครื่องมือ Windows แบบไม่ต้องติดตั้ง: หน้าต่างก็อบลินลอยที่ลากได้ ค้นได้สองแบบ พิมพ์ค้นหาแบบออฟไลน์ รองรับจีนหรืออังกฤษ สะกดผิดหรือบางส่วนก็ได้ ในเกมกด Alt+Q ครอบชื่อไอเท็ม ประมาณ 3 วินาทีจะแสดงหน้าต่างภาษาจีน มีค่าสถานะ มอนสเตอร์ที่ดรอป ร้านค้า และกล่องที่เปิดได้ ลิงก์สีฟ้าคลิกต่อได้ ข้อมูลจากฐานข้อมูล L1Justice: ไอเท็ม 3,299 มอนสเตอร์ 1,982 ดรอป 11,778 รายการขาย 14,654 ชื่อจีนแปลด้วยมือและเก็บชื่ออังกฤษไว้",
+  steps:["ค้นด้วยข้อความ: จีนหรืออังกฤษ สะกดผิดหรือบางส่วนก็ได้ จาก 3,299 ไอเท็ม ทำงานออฟไลน์","คลิกไอเท็มเพื่อดูหน้าต่างภาษาจีน: ค่าสถานะ มอนสเตอร์ที่ดรอป ราคาร้านค้า และกล่องที่เปิดได้ ลิงก์สีฟ้าคลิกต่อได้","ในเกมกด Alt+Q: หน้าจอหยุด ครอบชื่อไอเท็ม อ่านข้อความ ตัดค่าตีบวกและสัญญาณรบกวน แล้วจับคู่แบบคลุมเครือ","พิมพ์ @ชื่อแผนที่ เพื่อดูมอนสเตอร์ในแผนที่นั้น"],
   effect:{type:"kpi",items:[["2 วิธี","พิมพ์หรือสแกน"],["8 แบบ","ข้อผิดพลาด OCR/การสะกดที่รับมือได้"]]}});
 X.th.ocr.lab={hint:"ลองทั้ง 2 แบบ: พิมพ์ชื่อ (สะกดผิดได้) หรือสแกนภาพหน้าจอเกมตัวอย่างด้านล่าง หรืออัปโหลดภาพหน้าจอของคุณเอง"};
 
