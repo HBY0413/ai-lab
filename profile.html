@@ -116,13 +116,13 @@ const T={
 };
 const t=k=>(T[k]&&(T[k][L]||T[k].zh))||k;
 const TILES={
- zh:[["<em>1 天</em> → 30 分鐘","140–200 頁的升級／保養紀錄簡報，原本一人整天製作再請同事核對，現在半小時完成並附核對明細"],["<em>17 頁</em>簡報","月會報告一次產出，人天自動計算，附核對明細 Excel，每個數字可回查"],["<em>5 支</em> Skill","一個月內從零到上線，經過 14 版 PoC 迭代"],["<em>35 項</em>","保養檢查寫法統一成標準句型，跨客戶、跨環境一致"]],
- en:[["<em>1 day</em> → 30 min","140–200-page upgrade/maintenance record decks used to take one person a full day plus a colleague's review; now done in 30 minutes with an audit list"],["<em>17-slide</em> deck","Monthly report generated in one run, person-days calculated automatically, with an audit workbook so every number is traceable"],["<em>5</em> skills live","From zero to production in one month, through 14 PoC iterations"],["<em>35</em> checks","Maintenance check wording standardised into fixed sentence patterns across clients and environments"]],
- th:[["<em>1 วัน</em> → 30 นาที","สไลด์บันทึกอัปเกรด/บำรุงรักษา 140–200 หน้า เดิมใช้คนหนึ่งคนทั้งวันและให้เพื่อนตรวจ ตอนนี้เสร็จใน 30 นาทีพร้อมรายการตรวจสอบ"],["สไลด์ <em>17 หน้า</em>","รายงานประจำเดือนสร้างในครั้งเดียว คำนวณ man-day อัตโนมัติ พร้อม Excel ตรวจสอบให้ย้อนดูทุกตัวเลขได้"],["<em>5</em> Skill","จากศูนย์ถึงใช้งานจริงในหนึ่งเดือน ผ่าน PoC 14 รอบ"],["<em>35</em> รายการ","ปรับการเขียนรายการตรวจบำรุงรักษาเป็นรูปแบบมาตรฐานเดียวกันทุกลูกค้าและทุกสภาพแวดล้อม"]]
+ zh:[["<em>1 天</em> → 30 分鐘","140–200 頁的升級／保養紀錄簡報，原本一人整天製作再請同事核對，現在半小時完成並附核對明細"],["<em>半天</em> → 15 分鐘","給主管的 17 頁月會報告簡報一次產出，人天自動計算，附核對明細 Excel，每個數字可回查"],["<em>5 支</em> Skill","一個月內從零到上線，經過 14 版 PoC 迭代"],["<em>35 項</em>","保養檢查寫法統一成標準句型，跨客戶、跨環境一致"]],
+ en:[["<em>1 day</em> → 30 min","140–200-page upgrade/maintenance record decks used to take one person a full day plus a colleague's review; now done in 30 minutes with an audit list"],["<em>Half a day</em> → 15 min","17-slide monthly report deck for managers generated in one run, person-days calculated automatically, with an audit workbook so every number is traceable"],["<em>5</em> skills live","From zero to production in one month, through 14 PoC iterations"],["<em>35</em> checks","Maintenance check wording standardised into fixed sentence patterns across clients and environments"]],
+ th:[["<em>1 วัน</em> → 30 นาที","สไลด์บันทึกอัปเกรด/บำรุงรักษา 140–200 หน้า เดิมใช้คนหนึ่งคนทั้งวันและให้เพื่อนตรวจ ตอนนี้เสร็จใน 30 นาทีพร้อมรายการตรวจสอบ"],["<em>ครึ่งวัน</em> → 15 นาที","สไลด์รายงานประจำเดือน 17 หน้าสำหรับหัวหน้าสร้างในครั้งเดียว คำนวณ man-day อัตโนมัติ พร้อม Excel ตรวจสอบให้ย้อนดูทุกตัวเลขได้"],["<em>5</em> Skill","จากศูนย์ถึงใช้งานจริงในหนึ่งเดือน ผ่าน PoC 14 รอบ"],["<em>35</em> รายการ","ปรับการเขียนรายการตรวจบำรุงรักษาเป็นรูปแบบมาตรฐานเดียวกันทุกลูกค้าและทุกสภาพแวดล้อม"]]
 };
 const ROWS={
  zh:[["manual","AI 升級／保養紀錄簡報產生器","上百張現場截圖要整理成正式簡報，一份一整天，常有錯字與截圖放錯頁","1 天 → 30 分鐘"],
-     ["report","AI 部門月會報告產生器","每月手動撈資料、算人天、逐頁排簡報","給主管的 17 頁月報簡報一次產出＋核對明細"],
+     ["report","AI 部門月會報告產生器","每月手動撈資料、算人天、逐頁排簡報","17 頁月報簡報：半天 → 15 分鐘＋核對明細"],
      ["gov","AI 導入的五層治理","資料不能隨意外送，AI 導入卡在資安","治理寫進每支 Skill，主管同意下完成驗證"],
      ["kb","AI 部門 FAQ 問答助手","答案散在同事腦中與 SharePoint，新人找不到","有出處的回答，只讀不寫"],
      ["cases","AI 歷史案子學習稽核","同樣的錯誤反覆發生，經驗沒變成規則","跨客戶找出重複模式，規則由人決定"],
@@ -130,7 +130,7 @@ const ROWS={
      ["ocr","AI 協作開發的國際服道具辨識工具","亞洲玩家看不懂英文道具，拼錯就查不到","打字或掃描畫面都能查到中文資料"],
      ["build","用 AI 開發的其他作品","想法多但沒有工程團隊","7 個 GitHub 專案（3D、網頁、音效）"]],
  en:[["manual","AI upgrade/maintenance record deck generator","Hundreds of on-site screenshots into a formal deck took a full day, with typos and misplaced screenshots","1 day → 30 min"],
-     ["report","AI monthly department report generator","Pulling data, counting person-days and building slides by hand every month","17-slide report deck for managers in one run + audit workbook"],
+     ["report","AI monthly department report generator","Pulling data, counting person-days and building slides by hand every month","17-slide monthly deck: half a day → 15 min + audit workbook"],
      ["gov","Five-layer governance for AI adoption","Data couldn't leave freely, so AI adoption stalled on security","Governance built into every skill; validated with manager approval"],
      ["kb","AI department FAQ assistant","Answers lived in people's heads and SharePoint; new staff couldn't find them","Cited answers, read-only by design"],
      ["cases","AI learning audit of past projects","The same mistakes kept recurring and never became rules","Recurring patterns found across clients; people decide the rules"],
@@ -138,7 +138,7 @@ const ROWS={
      ["ocr","AI-built item finder for international game servers","Asian players couldn't read English items; one typo and search failed","Type or scan the screen to get item details in Chinese"],
      ["build","Other projects built with AI","Plenty of ideas, no engineering team","7 GitHub projects (3D, web, audio)"]],
  th:[["manual","ตัวสร้างสไลด์บันทึกอัปเกรด/บำรุงรักษาด้วย AI","จัดภาพหน้าจอนับร้อยเป็นสไลด์ทางการใช้เวลาทั้งวัน มีคำผิดและภาพผิดหน้า","1 วัน → 30 นาที"],
-     ["report","ตัวสร้างรายงานประชุมประจำเดือนด้วย AI","ต้องดึงข้อมูล คำนวณ man-day และทำสไลด์เองทุกเดือน","สไลด์รายงาน 17 หน้าสำหรับหัวหน้าในครั้งเดียว + Excel ตรวจสอบ"],
+     ["report","ตัวสร้างรายงานประชุมประจำเดือนด้วย AI","ต้องดึงข้อมูล คำนวณ man-day และทำสไลด์เองทุกเดือน","สไลด์รายงาน 17 หน้า: ครึ่งวัน → 15 นาที + Excel ตรวจสอบ"],
      ["gov","การกำกับดูแล 5 ชั้นสำหรับการนำ AI มาใช้","ส่งข้อมูลออกไม่ได้ การนำ AI มาใช้ติดเรื่องความปลอดภัย","ฝังการกำกับดูแลในทุก Skill และทดสอบภายใต้การอนุมัติของหัวหน้า"],
      ["kb","ผู้ช่วย AI ตอบคำถาม FAQ ของแผนก","คำตอบอยู่ในหัวคนและ SharePoint พนักงานใหม่หาไม่เจอ","ตอบพร้อมแหล่งที่มา อ่านอย่างเดียว"],
      ["cases","AI ตรวจสอบเพื่อเรียนรู้จากโปรเจกต์ในอดีต","ความผิดพลาดเดิมเกิดซ้ำและไม่กลายเป็นกฎ","พบรูปแบบซ้ำข้ามลูกค้า ให้คนตัดสินใจเรื่องกฎ"],

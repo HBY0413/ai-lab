@@ -53,7 +53,7 @@ const D={
 "card.k":{zh:"AI 導入 · 資料 · 系統整合",en:"AI adoption · Data · Systems integration",th:"การนำ AI มาใช้ · ข้อมูล · บูรณาการระบบ"},
 "card.role":{zh:"11 年 IT 系統與資料經驗，現在專注把 AI 導入真實工作流程，做成可上線、可治理的 AI Agent。",en:"11+ years in IT systems and data, now focused on bringing AI into real workflows as governed AI agents that actually go live.",th:"ประสบการณ์ระบบไอทีและข้อมูลกว่า 11 ปี ปัจจุบันมุ่งนำ AI เข้าสู่งานจริง เป็น AI Agent ที่ใช้งานได้จริงและกำกับดูแลได้"},
 "card.m1":{zh:"<b>1 天 → 30 分</b>紀錄簡報製作時間縮短約 94%",en:"<b>1 day → 30 min</b>record-deck time cut by about 94%",th:"<b>1 วัน → 30 นาที</b>ลดเวลาทำสไลด์บันทึกลงราว 94%"},
-"card.m2":{zh:"<b>17 頁簡報</b>主管的月會報告一次產出，免手動撈資料、算人天，數字都可回查",en:"<b>17-slide deck</b>managers' monthly report in one run, no manual data pulls or person-day math, every figure traceable",th:"<b>สไลด์ 17 หน้า</b>รายงานประจำเดือนของหัวหน้าในครั้งเดียว ไม่ต้องดึงข้อมูลหรือคำนวณวันทำงานเอง ทุกตัวเลขตรวจย้อนได้"},
+"card.m2":{zh:"<b>半天 → 15 分</b>主管月會報告簡報製作時間縮短約 94%",en:"<b>Half a day → 15 min</b>managers' monthly report deck, about 94% faster",th:"<b>ครึ่งวัน → 15 นาที</b>ลดเวลาทำสไลด์รายงานประจำเดือนของหัวหน้าลงราว 94%"},
 "card.m3":{zh:"<b>5 支</b>AI Agent Skill 上線",en:"<b>5</b>AI agent skills live",th:"<b>5</b>AI Agent Skill ใช้งานจริง"},
 "card.quick":{zh:"1 分鐘看重點",en:"1-minute overview",th:"ภาพรวม 1 นาที"},
 "card.lab":{zh:"進入實驗室看證據",en:"Enter the lab for proof",th:"เข้าห้องแล็บดูหลักฐาน"},
