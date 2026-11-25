@@ -242,6 +242,8 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .blk-gain .impact{margin:0 0 14px}
 .blk-look .sub+.sub{margin-top:18px;padding-top:16px;border-top:1px dashed rgba(255,255,255,.1)}
 .blk-look .sub>.label{margin-bottom:10px}
+
+.blk .intro{margin:0 0 14px;font-size:var(--fs-m,18px)!important;line-height:1.55;color:#F7F8F9;font-weight:500}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -702,13 +704,24 @@ function drawTooltip(cv){
 }
 
 /* ---------- real skill evidence ---------- */
+/* one-line opener for each case: what it is, before anything else */
+const INTRO={
+ report:{zh:"一支 AI Agent Skill：讀取部門總表與協銷進度，自動產出給主管的整份月會報告簡報，並附核對明細。",en:"An AI agent skill that reads the department's master and presales workbooks and produces the full monthly meeting deck for managers, with an audit workbook.",th:"AI Agent Skill ที่อ่านตารางหลักและตารางติดตามงานขายของแผนก แล้วสร้างสไลด์รายงานประชุมประจำเดือนทั้งฉบับให้หัวหน้า พร้อม Excel ตรวจสอบ"},
+ manual:{zh:"一支 AI Agent Skill：把現場截圖和簡短標註，整理成格式統一的 140–200 頁系統升級／保養紀錄簡報。",en:"An AI agent skill that turns on-site screenshots and short notes into a consistent 140–200-page upgrade and maintenance record deck.",th:"AI Agent Skill ที่เปลี่ยนภาพหน้าจอหน้างานและบันทึกสั้น ๆ ให้เป็นสไลด์บันทึกอัปเกรด/บำรุงรักษา 140–200 หน้าในรูปแบบเดียวกัน"},
+ kb:{zh:"一支 AI Agent Skill：同仁問客戶維運問題時，先比對部門 FAQ 記錄，有出處才回答，而且只讀不寫。",en:"An AI agent skill that checks the department's FAQ records whenever colleagues ask support questions, and answers only with a cited source. Read-only.",th:"AI Agent Skill ที่ตรวจบันทึก FAQ ของแผนกเมื่อเพื่อนร่วมงานถามคำถามด้านซัพพอร์ต และตอบเฉพาะเมื่อมีแหล่งอ้างอิง อ่านอย่างเดียว"},
+ maint:{zh:"一份所有 AI Skill 共用的存檔規範：AI 產出的檔案一律放到同一個出口、統一命名、絕不覆蓋。",en:"A filing standard shared by every AI skill: everything AI produces goes to one place, with consistent names, and nothing is ever overwritten.",th:"มาตรฐานการจัดเก็บที่ทุก AI Skill ใช้ร่วมกัน: ไฟล์ที่ AI สร้างไปอยู่ที่เดียว ตั้งชื่อแบบเดียวกัน และไม่เขียนทับ"},
+ cases:{zh:"一支 AI Agent Skill：定期翻閱過去的升級案子，找出反覆出現的寫法與異常，提出規則修改建議給人審核。",en:"An AI agent skill that periodically reviews past upgrade projects, finds recurring wording and issues, and proposes rule changes for a person to approve.",th:"AI Agent Skill ที่ทบทวนโปรเจกต์อัปเกรดในอดีตเป็นระยะ หารูปแบบการเขียนและปัญหาที่เกิดซ้ำ แล้วเสนอการแก้กฎให้คนอนุมัติ"},
+ gov:{zh:"一套讓 AI 能放心導入的治理做法：從資料不外送到主管核准，分五層寫進每一支 Skill。",en:"A governance approach that makes AI safe to adopt: five layers, from keeping data in-house to manager sign-off, built into every skill.",th:"แนวทางกำกับดูแลที่ทำให้นำ AI มาใช้ได้อย่างมั่นใจ: 5 ชั้น ตั้งแต่ไม่ส่งข้อมูลออกนอกจนถึงการอนุมัติของหัวหน้า ฝังไว้ในทุก Skill"},
+ build:{zh:"用 AI 開發的其他作品：沒有工程團隊，靠 AI Agent 把想法做成可以上線使用的網站與遊戲。",en:"Other things I built with AI: with no engineering team, I used AI agents to turn ideas into a live website and a game.",th:"ผลงานอื่นที่พัฒนาด้วย AI: ไม่มีทีมวิศวกร แต่ใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเกมที่ใช้งานได้จริง"},
+ ocr:{zh:"一個用 AI 協作開發的 Windows 小工具：幫亞洲玩家在國際英文伺服器上，用打字或掃描畫面查到道具的中文資料。",en:"A small Windows tool I built with AI: it helps Asian players on international English servers look up items in Chinese by typing or scanning the screen.",th:"เครื่องมือ Windows เล็ก ๆ ที่พัฒนาร่วมกับ AI: ช่วยผู้เล่นชาวเอเชียบนเซิร์ฟเวอร์ภาษาอังกฤษค้นข้อมูลไอเท็มเป็นภาษาจีนด้วยการพิมพ์หรือสแกนหน้าจอ"}
+};
 const HAS_RUN=["report","manual","kb","maint","cases"];
 function replayHTML(x){return `<figure class="replay"><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t("ev.runNote")}</figcaption></figure>`}
 /* one clearly separated block per part of a case, numbered, with a jump bar at the top */
 function blocksHTML(x,eff){
   // story order: what it is -> the pain it was built for -> what it delivered -> what it really looks like -> try it
   const B=[];
-  B.push(["what",I18N.t("blk.what"),`<div class="cc sol"><p>${x.purpose}</p></div>
+  B.push(["what",I18N.t("blk.what"),`${INTRO[x.id]?`<p class="intro">${INTRO[x.id][I18N.lang]||INTRO[x.id].zh}</p>`:""}<div class="cc sol"><p>${x.purpose}</p></div>
      <div class="cc how"><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
      <div class="techrow"><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>`]);
   B.push(["pain",I18N.t("blk.pain"),`<div class="cc pain"><p>${x.pain}</p></div>`]);
