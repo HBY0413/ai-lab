@@ -200,6 +200,12 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .swipe-hint b{color:var(--accent)}
 @media (max-width:700px){.bar-top .status{display:none}.dots>button[data-i]{display:none}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}.track{scroll-behavior:auto}}
+
+/* LIVE LAB indicator: fluorescent green LED blinking every 1.5s */
+.live-ind{display:inline-flex;align-items:center;gap:8px}
+.live-ind .led{width:9px;height:9px;border-radius:50%;background:#39FF7A;box-shadow:0 0 6px #39FF7A,0 0 14px rgba(57,255,122,.65);animation:ledBlink 1.5s ease-in-out infinite}
+@keyframes ledBlink{0%,55%{opacity:1;box-shadow:0 0 6px #39FF7A,0 0 14px rgba(57,255,122,.65)}70%,90%{opacity:.18;box-shadow:none}100%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.live-ind .led{animation:none}}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -575,7 +581,7 @@ function renderAll(){EXPS.forEach((x,n)=>{
   buildLab(x,document.getElementById("lab-"+x.id));
 });}
 
-function labShell(el,title){el.innerHTML=`<div class="lab-bar"><span>${title}</span><span>● LIVE LAB</span></div><div class="lab-body"></div>`;return el.querySelector(".lab-body")}
+function labShell(el,title){el.innerHTML=`<div class="lab-bar"><span>${title}</span><span class="live-ind"><i class="led"></i>LIVE LAB</span></div><div class="lab-body"></div>`;return el.querySelector(".lab-body")}
 
 function buildLab(x,el){
   const L=x.lab;
