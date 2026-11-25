@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 應用實驗室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+Thai:wght@300;400;500;700&family=Jost:wght@200;300;400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a lab notebook on blueprint grid paper. Index of experiments up top,
+   then one bench per application: notes on the left, a live instrument on the right. */
+:root{
+  --paper:#F4F6F3; --grid:#DCE3DE; --ink:#13303A; --ink-2:#4A6470; --line:#C5D0CB;
+  --accent:#E2622B; --accent-ink:#FFFFFF; --panel:#FFFFFF; --code:#EAF0EC;
+  --good:#2F8F5B; --warn:#B7791F;
+  --display:"Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;
+  --body:"Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1B20; --grid:#1A2A31; --ink:#E6EEEA; --ink-2:#9DB2B9; --line:#2A3E46;
+    --accent:#F2814E; --accent-ink:#1A0D06; --panel:#15252C; --code:#1C3039;
+    --good:#5CC58C; --warn:#E0A64A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1B20; --grid:#1A2A31; --ink:#E6EEEA; --ink-2:#9DB2B9; --line:#2A3E46;
+  --accent:#F2814E; --accent-ink:#1A0D06; --panel:#15252C; --code:#1C3039;
+  --good:#5CC58C; --warn:#E0A64A; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+  color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.7;
+}
+a{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--mono)}
+header.top{padding:48px 0 28px}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--ink-2);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(34px,5vw,54px);line-height:1.15;margin:.2em 0 .3em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{max-width:62ch;color:var(--ink-2);font-size:17px;margin:0}
+.status{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-size:13px;font-family:var(--mono)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--warn)}
+.status.on .dot{background:var(--good)}
+
+/* index */
+.index{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:26px 0 10px}
+.tile{display:flex;flex-direction:column;gap:6px;padding:16px 18px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--ink);text-decoration:none;color:inherit;transition:transform .15s,border-color .15s}
+.tile:hover,.tile:focus-visible{transform:translateY(-2px);border-left-color:var(--accent);outline:none}
+.tile .no{font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.tile b{font-size:17px;line-height:1.4}
+.tile .facet{align-self:flex-start;font-size:12px;padding:1px 8px;border-radius:3px;background:var(--code);color:var(--ink-2)}
+.tile .gain{font-size:14px;color:var(--ink-2)}
+.tile .gain strong{color:var(--accent)}
+
+/* bench sections */
+section.bench{margin:56px 0;padding-top:12px;border-top:2px solid var(--ink)}
+.bench-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-bottom:18px}
+.bench-head .no{font-family:var(--mono);font-size:14px;color:var(--accent);font-weight:600}
+.bench-head h2{font-family:var(--display);font-size:clamp(24px,3vw,30px);font-weight:900;margin:0;text-wrap:balance}
+.bench-head .facet{font-size:13px;padding:2px 10px;border:1px solid var(--line);border-radius:3px;color:var(--ink-2);background:var(--panel)}
+.grid2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:22px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.notes{display:flex;flex-direction:column;gap:16px}
+.notes p{margin:0;max-width:62ch}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink-2);text-transform:uppercase;margin-bottom:4px}
+ol.steps{margin:0;padding-left:1.3em}
+ol.steps li{margin:2px 0}
+.effect{background:var(--panel);border:1px solid var(--line);padding:14px 16px}
+.bar{display:grid;grid-template-columns:72px 1fr auto;align-items:center;gap:10px;font-size:14px;margin:6px 0}
+.bar .track{height:14px;background:var(--code);position:relative}
+.bar .fill{position:absolute;inset:0 auto 0 0;background:var(--ink-2)}
+.bar.after .fill{background:var(--accent)}
+.bar span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:13px;padding:2px 9px;border-radius:3px;background:var(--code);color:var(--ink)}
+.kpi{display:flex;flex-wrap:wrap;gap:18px}
+.kpi div{display:flex;flex-direction:column}
+.kpi strong{font-family:var(--mono);font-size:26px;color:var(--accent);line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi small{color:var(--ink-2);font-size:13px}
+
+/* lab instrument */
+.lab{background:var(--panel);border:1px solid var(--ink);box-shadow:6px 6px 0 var(--grid);display:flex;flex-direction:column;min-width:0}
+.lab-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:13px}
+.lab-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.lab textarea,.lab input[type=text]{width:100%;font:14px/1.6 var(--mono);color:var(--ink);background:var(--code);border:1px solid var(--line);padding:10px;resize:vertical}
+.lab textarea:focus,.lab input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:600 14px var(--body);cursor:pointer;border:1px solid var(--ink);background:var(--panel);color:var(--ink);padding:8px 14px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.hint{font-size:13px;color:var(--ink-2)}
+.out{border-top:1px dashed var(--line);padding-top:10px;min-height:120px;font-size:15px;overflow-x:auto}
+.out .tag{display:inline-block;font-family:var(--mono);font-size:12px;padding:1px 8px;margin-bottom:6px;border:1px solid var(--line);color:var(--ink-2)}
+.out .tag.live{border-color:var(--good);color:var(--good)}
+.out table{border-collapse:collapse;font-size:14px;margin:6px 0;min-width:100%}
+.out th,.out td{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+.out th{background:var(--code)}
+.out h4{margin:10px 0 4px;font-size:15px}
+.out ul{margin:4px 0;padding-left:1.2em}
+.out p{margin:4px 0}
+.out mark{background:color-mix(in srgb,var(--accent) 22%,transparent);color:inherit;padding:0 2px}
+.match{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:15px}
+.match .score{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.meter{height:6px;background:var(--code);grid-column:1/-1}
+.meter i{display:block;height:100%;background:var(--accent)}
+.projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.proj.link{display:flex;flex-direction:column;text-decoration:none;color:inherit;cursor:pointer;transition:border-color .2s,transform .2s}.proj.link:hover{border-color:#F0A060;transform:translateY(-2px)}.proj .go{margin-top:auto;padding-top:10px;font-weight:600;color:#F0A060;font-size:.92em}
+.proj{background:var(--panel);border:1px solid var(--line);padding:14px}
+.proj b{display:block;margin-bottom:4px}
+.proj p{margin:0;font-size:14px;color:var(--ink-2)}
+.demos{margin:30px 0 6px}
+.demos h3{font-size:20px;margin:0 0 4px}
+.demo-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:12px}
+.demo{display:flex;flex-direction:column;gap:6px;padding:18px;background:var(--ink);color:var(--paper);text-decoration:none;border:1px solid var(--ink)}
+.demo .role{font-family:var(--mono);font-size:12px;letter-spacing:.05em;opacity:.75}
+.demo b{font-size:19px;line-height:1.35}
+.demo p{margin:0;font-size:14px;opacity:.85}
+.demo .go{margin-top:auto;font-weight:700;color:var(--accent)}
+.demo.soon{background:var(--panel);color:var(--ink);border-style:dashed}
+.demo.soon .go{color:var(--ink-2)}
+a.demo:hover,a.demo:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.langsw{display:inline-flex;border:1px solid rgba(127,140,150,.45);border-radius:999px;overflow:hidden;flex:0 0 auto}
+.langsw button{background:none;border:none;color:inherit;font:500 12px "Jost","Noto Sans TC","Noto Sans Thai",sans-serif;padding:6px 10px;cursor:pointer;opacity:.7}
+.langsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);opacity:1}
+#hdr .langsw{border-color:rgba(241,236,227,.35);background:rgba(15,20,28,.35);backdrop-filter:blur(6px)}
+#hdr .langsw button[aria-pressed="true"]{background:#F2814E;color:#1A0D06}
+.pain{border-left:3px solid var(--accent);padding:6px 0 6px 12px;background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.pain p{font-weight:500}
+.scanbox{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
+.scanbox canvas,.scanbox img{width:240px;max-width:100%;height:auto;border:1px solid var(--line);background:#000}
+.modes{display:flex;gap:6px;flex-wrap:wrap}
+.modes button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.evid{margin-top:22px;border-top:1px dashed var(--line);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+.evid .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.evid .gal button{padding:0;border:1px solid var(--line);background:#fff;cursor:zoom-in;display:block}
+.evid .gal img{width:100%;height:auto;display:block;aspect-ratio:16/9;object-fit:cover}
+.evid .sk{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:12px}
+@media (max-width:860px){.evid .sk{grid-template-columns:1fr}}
+.evid .top{}
+.evid.top{margin:0 0 20px;border-top:none;padding-top:0}
+.evid pre.tree{white-space:pre}
+.evid pre{margin:0;white-space:pre-wrap;font:12.5px/1.7 var(--mono);background:var(--code);border:1px solid var(--line);padding:12px;overflow-x:auto;color:var(--ink)}
+#lightbox{position:fixed;inset:0;z-index:30;background:rgba(5,7,9,.9);display:none;place-items:center;padding:24px;cursor:zoom-out}
+#lightbox.on{display:grid}
+#lightbox img{max-width:min(1400px,96vw);max-height:88vh;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+#lightbox .nav{position:fixed;top:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font:600 22px var(--mono);width:48px;height:48px;border-radius:50%;cursor:pointer}
+#lightbox .p{left:16px}#lightbox .n{right:16px}
+.place{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.place label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink-2)}
+.place select,.place input[type=text],.place input[type=date]{font:13px var(--mono);padding:6px 8px;border:1px solid var(--line);background:var(--code);color:var(--ink)}
+.pl-path{font:13px/1.6 var(--mono);word-break:break-all;background:var(--code);padding:8px 10px;border-left:3px solid var(--accent)}
+.layer{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;padding:12px 0;border-top:1px solid var(--line)}
+.layer .lt{display:flex;flex-direction:column;gap:2px}.layer .lt b{font-size:16px;color:var(--accent)}.layer .lt span{font-size:14px;color:var(--ink-2);max-width:70ch}
+.layer .lg{display:flex;flex-direction:column;gap:8px}.layer .lg button{padding:0;border:1px solid var(--line);background:#0D0F11;cursor:zoom-in;text-align:left}
+.layer .lg img{width:100%;height:auto;display:block}
+.impact{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin:0 0 18px;padding:14px 18px;border:1px solid var(--line);border-left:4px solid var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.impact span{font:600 12px var(--mono);letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+.impact strong{font:600 clamp(20px,2.6vw,28px)/1.35 var(--display);color:var(--ink)}
+.impact strong strong{color:var(--accent)}
+footer{border-top:2px solid var(--ink);margin-top:60px;padding:22px 0 50px;color:var(--ink-2);font-size:14px}
+
+/* ===== carousel shell ===== */
+html,body{height:100%}
+body{display:flex;flex-direction:column;overflow:hidden}
+.bar-top{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:10px 20px;border-bottom:2px solid var(--ink);background:var(--paper);flex-wrap:wrap}
+.bar-top .brand{font-weight:900;font-size:17px;white-space:nowrap}
+.bar-top .brand span{color:var(--accent)}
+.tabs{display:flex;gap:6px;overflow-x:auto;flex:1 1 400px;scrollbar-width:none;padding:2px}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 auto;font:500 13px var(--body);padding:5px 11px;border:1px solid var(--line);background:var(--panel);color:var(--ink-2)}
+.tabs button .n{font-family:var(--mono);font-size:11px;margin-right:5px;opacity:.7}
+.tabs button[aria-current="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.status.mini{margin-top:0;padding:3px 10px;font-size:12px}
+.status.mini span:last-child{max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track{flex:1 1 auto;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;cursor:grab;overscroll-behavior-x:contain}
+.track::-webkit-scrollbar{display:none}
+.track.dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto;user-select:none}
+.slide{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden}
+.slide>.wrap{padding-top:26px;padding-bottom:90px}
+.slide section.bench{margin:0;border-top:none;padding-top:0}
+.nav-arrow{position:fixed;top:50%;z-index:5;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:700 20px var(--mono);background:var(--ink);color:var(--paper);border:none;opacity:.85;padding:0}
+.nav-arrow:hover{opacity:1}
+.nav-arrow.prev{left:10px}.nav-arrow.next{right:10px}
+.nav-arrow:disabled{opacity:.2}
+.dots{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;z-index:5;background:var(--panel);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+.dots button{width:8px;height:8px;border-radius:50%;padding:0;border:none;background:var(--line)}
+.dots button[aria-current="true"]{background:var(--accent);width:22px;border-radius:4px}
+.dots .count{font:12px var(--mono);color:var(--ink-2);margin:0 4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dots .nav-arrow{position:static;width:30px;height:30px;font-size:14px;transform:none;display:grid}
+.swipe-hint{font:13px var(--mono);color:var(--ink-2);display:flex;align-items:center;gap:8px;margin-top:18px}
+.swipe-hint b{color:var(--accent)}
+@media (max-width:700px){.bar-top .status{display:none}.dots>button[data-i]{display:none}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}.track{scroll-behavior:auto}}
+</style>
+<script src="i18n.js"></script>
+<script src="real.js"></script>
+<link rel="stylesheet" href="house.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="bar-top">
+  <div class="brand">AI <span>Lab</span></div>
+  <nav class="tabs" id="tabs" data-i18n-aria="tabs.aria"></nav>
+  <div class="status mini" id="aiStatus" role="status"><span class="dot"></span><span data-i18n="status.connecting">正在連接 AI…</span></div><span id="swTop"></span>
+</div>
+<div id="stage" aria-label="3D AI 實驗室"></div>
+<div id="loader" class="fade"><div class="big">AI<br>Lab<small data-i18n="ld.sub">AI 應用實驗室</small></div><div class="arch"><i></i><b></b></div><div class="bar"><span id="loadMsg" data-i18n="ld.msg">正在佈置實驗室</span><span class="l"></span><em id="loadPct">0%</em></div></div>
+<header id="hdr" class="chrome"><button type="button" class="logo" id="logo">AI Lab<sup>®</sup></button><nav id="hdrNav" aria-label="主題"></nav><div class="right"><button type="button" class="sound" id="soundBtn" aria-pressed="false"><i></i><i></i><i></i><span>SOUND OFF</span></button><a class="menu quickpill" href="profile.html" data-i18n="card.quick">1 分鐘看重點</a><span id="swHdr"></span><button type="button" class="menu" id="menuBtn"><span data-i18n="menu">Menu</span> <i></i></button><div class="clock"><span id="clockT">--:--</span><small>TAIPEI · GMT+8</small></div></div></header>
+<div id="stageNo" class="chrome" aria-hidden="true"></div>
+<div id="entryUI" class="chrome fade hide">
+  <div class="scrollcue"><span data-i18n="cue">向下捲動進入 · SCROLL</span><em><b id="scrollFill"></b></em></div>
+  <div class="head card"><div class="ck" data-i18n="card.k"></div><div class="cn">Scott H.</div><div class="cr" data-i18n="card.role"></div>
+    <div class="cm"><span data-i18n="card.m1"></span><span data-i18n="card.m2"></span><span data-i18n="card.m3"></span></div></div>
+  <div class="side" data-i18n="entry.side">點門進入 · Click to enter</div>
+  <button type="button" id="doorBadge" aria-label="進入實驗室"><svg viewBox="0 0 104 104" aria-hidden="true"><defs><path id="cbp" d="M52,52 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs><text fill="#F1ECE3" font-family="Jost" font-size="11" letter-spacing="3.2"><textPath href="#cbp" data-i18n="entry.badge">CLICK TO ENTER · 點擊進入 ·</textPath></text></svg><b>→</b></button>
+  <div class="acts"><a class="pillbtn" href="profile.html"><b data-i18n="card.quick" style="font-weight:inherit">1 分鐘看重點</b> <span>→</span></a><button type="button" class="pillbtn solid" id="enterBtn2"><b data-i18n="card.lab" style="font-weight:inherit">進入實驗室看證據</b> <span>●</span></button></div>
+</div>
+<div id="roomUI" class="chrome fade hide">
+  <div id="hint"><i>✥</i><div><small data-i18n="hint.k">Lab rules</small><span data-i18n="hint.t">點任一塊標示牌或物件，就能打開那個主題；拖曳可以轉動視角，← → 逐一參觀，Esc 回到房間。</span></div><button type="button" id="hintX" aria-label="關閉提示">×</button></div>
+  <div id="cap"><button type="button" id="capPrev" aria-label="上一個">←</button><span class="n" id="capN">01/09</span><span class="t" id="capT"></span><button type="button" class="go" id="capGo" data-i18n="cap.open">打開</button><button type="button" id="capNext" aria-label="下一個">→</button></div>
+  <div id="badge"><svg viewBox="0 0 86 86" aria-hidden="true"><defs><path id="bbp" d="M43,43 m-31,0 a31,31 0 1,1 62,0 a31,31 0 1,1 -62,0"/></defs><text fill="#14181F" font-family="Jost" font-size="8" font-weight="600" letter-spacing="1.4"><textPath href="#bbp" data-i18n="badge">OPEN TO WORK · AI 導入 · THAILAND · </textPath></text></svg><b>AI</b></div>
+</div>
+<div id="tip"></div>
+<aside id="panel" aria-label="主題內容"><div class="ph"><span class="k" id="pk"></span><button type="button" id="pclose" data-i18n="panel.close">返回房間 Esc</button></div><div class="pb" id="pbody"></div></aside>
+<div id="menuOv" role="dialog" aria-label="選單"><button type="button" class="x" id="menuX" data-i18n="menu.close">關閉 Esc</button><div class="in"><div class="k" data-i18n="menu.k">房間導覽 · Room map</div><ol id="menuList"></ol></div></div>
+<div id="veil"></div>
+<div class="track" id="track" aria-roledescription="carousel">
+  <div class="slide" data-id="home" data-label-key="home.label" data-label="首頁" aria-roledescription="slide"><div class="wrap">
+    <header class="top" style="padding-top:20px">
+      <div class="eyebrow">AI Application Lab · 2026</div>
+      <h1 data-i18n="home.h1">把 AI 用進<em>真實工作流程</em>的 8 個實驗</h1>
+      <p class="lede" data-i18n="home.lede"></p>
+      <div class="swipe-hint" data-i18n="home.swipe">← 左右拖曳或滑動切換主題，也可以點下方任一卡片 <b>→</b></div>
+      <nav class="index" data-i18n-aria="home.index" id="index"></nav>
+    </header>
+  </div></div>
+  <div class="slide" data-id="demos" data-label-key="demos.label" data-label="專屬 Demo" aria-roledescription="slide"><div class="wrap">
+    <div class="demos" style="margin-top:0">
+      <div class="eyebrow" data-i18n="demos.eyebrow"></div>
+      <h1 style="font-size:clamp(28px,4vw,42px)" data-i18n="demos.h"></h1>
+      <div class="demo-row">
+        <a class="demo" href="vision.html"><span class="role" data-i18n="demo1.role"></span><b data-i18n="demo1.t"></b><p data-i18n="demo1.p"></p><span class="go" data-i18n="demo.go"></span></a>
+        <div class="demo soon"><span class="role" data-i18n="demo2.role"></span><b data-i18n="demo2.t"></b><p data-i18n="demo2.p"></p><span class="go" data-i18n="demo.soon"></span></div>
+        <div class="demo soon"><span class="role" data-i18n="demo3.role"></span><b data-i18n="demo3.t"></b><p data-i18n="demo3.p"></p><span class="go" data-i18n="demo.soon"></span></div>
+      </div>
+    </div>
+    <footer style="margin-top:40px">
+      <p data-i18n="footer.note"></p>
+      <p class="mono">GitHub · HBY0413</p>
+    </footer>
+  </div></div>
+</div>
+<button type="button" class="nav-arrow prev" id="prev" aria-label="上一個主題">←</button>
+<button type="button" class="nav-arrow next" id="next" aria-label="下一個主題">→</button>
+<div class="dots" id="dots"></div>
+
+<script>
+window.__startHash=location.hash;
+/* ---------- tiny markdown renderer (tables, headings, lists, bold) ---------- */
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/==(.+?)==/g,"<mark>$1</mark>")}
+function md(src){
+  const lines=src.replace(/\r/g,"").split("\n");let html="",i=0,inList=false;
+  const closeList=()=>{if(inList){html+="</ul>";inList=false}};
+  while(i<lines.length){
+    const l=lines[i];
+    if(/^\s*\|/.test(l)){
+      closeList();const rows=[];
+      while(i<lines.length&&/^\s*\|/.test(lines[i])){rows.push(lines[i]);i++}
+      const cells=r=>r.trim().replace(/^\||\|$/g,"").split("|").map(c=>c.trim());
+      const body=rows.filter(r=>!/^\s*\|?\s*:?-{2,}/.test(r));
+      html+="<table>"+body.map((r,k)=>"<tr>"+cells(r).map(c=>k===0?`<th>${inline(c)}</th>`:`<td>${inline(c)}</td>`).join("")+"</tr>").join("")+"</table>";
+      continue;
+    }
+    if(/^#{1,4}\s/.test(l)){closeList();html+=`<h4>${inline(l.replace(/^#+\s/,""))}</h4>`}
+    else if(/^\s*([-*•]|\d+\.)\s+/.test(l)){if(!inList){html+="<ul>";inList=true}html+=`<li>${inline(l.replace(/^\s*([-*•]|\d+\.)\s+/,""))}</li>`}
+    else if(l.trim()===""){closeList()}
+    else{closeList();html+=`<p>${inline(l)}</p>`}
+    i++;
+  }
+  closeList();return html;
+}
+
+/* ---------- experiments ---------- */
+const EXPS_ZH=[
+{
+  id:"manual",facet:"文件自動化",title:"系統升級紀錄手冊產生器",
+  gain:"約 8 小時 → <strong>30 分鐘</strong>",
+  pain:"每次到客戶現場升級系統，工程師都得把動輒上百張截圖整理成給客戶的正式升級手冊。一份要花一整天，還常有錯字、標註跟截圖對不上，交付前要反覆檢查。",
+  purpose:"把公司的手冊格式和檢查清單做成 Agent Skill：先逐張比對截圖與標註、修正錯字，有疑問就停下來問人，確認後直接套用公司版型產出正式手冊。",
+  steps:["讀入現場草稿（截圖＋簡短標註）","依 YAML 檢查清單逐項審稿，列出疑點請人確認","套用公司簡報版型，產出封面、摘要、章節頁與步驟頁"],
+  effect:{type:"bar",before:["人工",480,"約 8 小時"],after:["Agent",30,"30 分鐘"],note:"經過 14 版迭代後上線"},
+  tech:["Agent Skill","Python 產生 PPTX","YAML 規則","人工確認關卡"],
+  lab:{
+    kind:"ai",hint:"貼上現場草稿的步驟標註，AI 會審稿並整理成正式步驟頁大綱。",
+    input:`01 登入Tablaeu Server管理頁面
+02 停止服務 tsm stop
+03 執行安裝檔 截圖顯示的是 2025.1 版本
+04 安裝完成 確認版本為2025.3
+05 tsm start 啟動服務
+06 檢查背景程式 全部正常`,
+    btn:"審稿並整理",
+    prompt:i=>`你是 IT 系統升級紀錄手冊的審稿 Agent。以下是工程師在現場留下的步驟標註（每行一步，可能有錯字、前後不一致）。
+請用繁體中文輸出兩段，使用 Markdown：
+#### 審稿疑點
+- 逐條列出錯字、前後矛盾（例如版本號不一致）或資訊不足之處，說明理由與建議，用 ==文字== 標出有問題的原文。
+#### 正式步驟頁大綱
+一個表格，欄位：| 步驟 | 標題 | 說明 |，標題精簡、說明一句話，語氣正式。有疑點的步驟在說明後加註「（待確認）」。
+不要加其他段落。
+草稿：
+${i}`,
+    example:`#### 審稿疑點
+- 步驟 01 ==Tablaeu== 應為「Tableau」，屬拼字錯誤。
+- 步驟 03 截圖顯示 ==2025.1==，但步驟 04 寫升級完成為 ==2025.3==，版本號不一致，請確認實際安裝的版本與截圖是否對應。
+- 步驟 06「全部正常」未說明檢查方式，建議補上指令（例如 tsm status -v）或截圖。
+#### 正式步驟頁大綱
+| 步驟 | 標題 | 說明 |
+|---|---|---|
+| 1 | 登入管理頁面 | 以系統管理員身分登入 Tableau Server 管理頁面。 |
+| 2 | 停止服務 | 執行 tsm stop 停止 Tableau Server 服務。 |
+| 3 | 執行安裝程式 | 執行新版安裝檔進行升級。（待確認：截圖版本為 2025.1） |
+| 4 | 確認版本 | 安裝完成後確認版本號。（待確認：與步驟 3 版本不一致） |
+| 5 | 啟動服務 | 執行 tsm start 啟動 Tableau Server 服務。 |
+| 6 | 檢查背景程式 | 確認所有背景程式狀態正常。（待確認：補上檢查方式） |`
+  }
+},
+{
+  id:"report",facet:"報告自動產出",title:"月會報告自動產生",
+  gain:"一次產出 <strong>17 頁</strong>",
+  pain:"每月月會前，要從工單系統撈資料、算案件量和處理時效，再一頁一頁做成 17 頁簡報。工作重複又耗時，數字一更新就得重做好幾頁。",
+  purpose:"Agent 讀入當月資料，自動計算指標、寫出重點摘要與異常說明，一次排進固定的月會報告版型。",
+  steps:["匯入當月工單資料","計算案件量、結案率、平均處理時間等指標","撰寫重點摘要與異常說明，排入報告版型"],
+  effect:{type:"kpi",items:[["17 頁","一次產出"],["人工逐頁 → 自動","報告製作方式"]]},
+  tech:["Agent Skill","資料彙整","摘要生成"],
+  lab:{
+    kind:"ai",hint:"以下是模擬的當月工單統計，AI 會寫出給主管看的月會摘要。",
+    input:`月份,類別,件數,已結案,平均處理時數
+10月,系統異常,42,40,3.5
+10月,帳號權限,65,65,0.8
+10月,報表需求,18,12,26.0
+10月,升級維護,6,6,7.2
+9月,系統異常,30,30,4.1
+9月,帳號權限,61,61,0.9
+9月,報表需求,15,13,20.5
+9月,升級維護,4,4,6.8`,
+    btn:"產生月會摘要",
+    prompt:i=>`你是 IT 部門的月會報告 Agent。根據以下 CSV（模擬資料），用繁體中文、Markdown 輸出：
+#### 本月總覽
+一個表格：| 類別 | 本月件數 | 較上月 | 結案率 | 平均處理時數 |，較上月用 +N / -N 表示，結案率取整數百分比。最後一列為合計。
+#### 重點觀察
+- 3 點以內，每點一句，指出最需要主管注意的變化，數字要從資料算出，不要編造。
+#### 建議行動
+- 2 點以內。
+資料：
+${i}`,
+    example:`#### 本月總覽
+| 類別 | 本月件數 | 較上月 | 結案率 | 平均處理時數 |
+|---|---|---|---|---|
+| 系統異常 | 42 | +12 | 95% | 3.5 |
+| 帳號權限 | 65 | +4 | 100% | 0.8 |
+| 報表需求 | 18 | +3 | 67% | 26.0 |
+| 升級維護 | 6 | +2 | 100% | 7.2 |
+| 合計 | 131 | +21 | 94% | — |
+#### 重點觀察
+- 系統異常較上月增加 12 件（+40%），是本月最大增幅。
+- 報表需求結案率僅 67%，平均處理時數由 20.5 拉長到 26.0 小時。
+- 帳號權限件數最多，但處理快且全數結案，流程穩定。
+#### 建議行動
+- 追查系統異常增加的共同原因，確認是否與特定系統或升級有關。
+- 報表需求排定優先順序，評估是否以自助式報表分流。`
+  }
+},
+{
+  id:"maint",facet:"紀錄結構化",title:"保養紀錄整理",
+  gain:"自由文字 → <strong>結構化表格</strong>",
+  pain:"保養紀錄每個人寫法不同，有人寫一句話、有人寫一大段。想查某台設備的狀況或統計異常，只能一筆一筆翻，真正的異常也容易被埋在文字裡。",
+  purpose:"Agent 把口語紀錄拆成日期、設備、項目、結果、狀態、下次保養 6 個固定欄位，自動標出異常，直接寫成可匯入的表格。",
+  steps:["讀入口語化的保養紀錄","拆解出日期、設備、項目、結果、下次保養","標示異常項目，輸出統一格式表格"],
+  effect:{type:"kpi",items:[["固定 6 欄","統一格式"],["異常自動標示","不再漏看"]]},
+  tech:["Agent Skill","資訊擷取","資料正規化"],
+  lab:{
+    kind:"ai",hint:"貼上幾段口語化的保養紀錄，AI 會整理成表格並標出異常。",
+    input:`11/3 早上去機房看了一下，DB主機風扇有點吵，先清灰塵，下個月再看
+11/5 UPS 電池測試ok，放電到80%正常，半年後再測
+11/12 備份主機硬碟 SMART 出現警告 sector reallocated 增加，已通知廠商報價更換
+11/12 順便檢查空調，溫度22度正常`,
+    btn:"整理成表格",
+    prompt:i=>`你是保養紀錄整理 Agent。把以下口語化保養紀錄整理成繁體中文 Markdown 表格，欄位固定為：| 日期 | 設備 | 保養項目 | 結果 | 狀態 | 下次保養 |。
+狀態只能是「正常」「觀察」「異常」，異常要用 ==異常== 標示。下次保養若原文有寫相對時間，換算成日期（年份用 2026）；沒寫就填「—」。
+表格後加一行「#### 需追蹤」，列出非正常項目與建議。不要編造原文沒有的資訊。
+紀錄：
+${i}`,
+    example:`| 日期 | 設備 | 保養項目 | 結果 | 狀態 | 下次保養 |
+|---|---|---|---|---|---|
+| 2026/11/03 | DB 主機 | 風扇清潔 | 風扇聲音偏大，已清除灰塵 | 觀察 | 2026/12/03 |
+| 2026/11/05 | UPS | 電池放電測試 | 放電至 80% 正常 | 正常 | 2027/05/05 |
+| 2026/11/12 | 備份主機 | 硬碟健康檢查 | SMART 警告，reallocated sector 增加 | ==異常== | — |
+| 2026/11/12 | 機房空調 | 溫度檢查 | 22°C 正常 | 正常 | — |
+#### 需追蹤
+- 備份主機硬碟：已通知廠商報價，建議確認更換時程並先確保備份完整。
+- DB 主機風扇：12 月複查，若噪音持續建議更換風扇。`
+  }
+},
+{
+  id:"kb",facet:"知識庫問答",title:"企業知識庫問答",
+  gain:"翻文件找答案 → <strong>直接問</strong>",
+  pain:"公司 SOP 和技術文件散在 SharePoint 各處，新人找不到就一直問資深同事；直接問一般的 AI，又可能編出公司根本沒有的規定。",
+  purpose:"Agent 只根據公司文件回答並註明出處；文件裡沒有的就直說沒有，不自己編。",
+  steps:["串接 SharePoint 文件與資料庫","依問題找出相關段落","只用找到的內容作答並標註出處，找不到就明說"],
+  effect:{type:"kpi",items:[["附出處","每個答案可回查"],["查無資料就說","避免 AI 亂編"]]},
+  tech:["文件檢索","有依據的回答","SharePoint 串接"],
+  lab:{
+    kind:"ai",hint:"下方是三份模擬 SOP。試著問一個文件裡有、和一個文件裡沒有的問題。",
+    docs:`[SOP-01 帳號申請] 新進人員帳號由主管於 HR 系統送出申請，IT 於 1 個工作天內開通。權限比照同職務範本，特殊權限需另填「權限申請單」並經部門主管與資安窗口簽核。
+[SOP-02 VPN 連線] 遠端連線須使用公司核發筆電與 FortiClient VPN。首次登入需綁定 MFA（Microsoft Authenticator）。連續輸錯密碼 5 次會鎖定 30 分鐘，可請 IT 解鎖。
+[SOP-03 報表需求] 新報表需求請於工單系統選「報表需求」類別，附上欄位定義與使用情境。一般需求 10 個工作天內完成，緊急需求需處長核准。`,
+    input:"VPN 密碼打錯被鎖住了怎麼辦？",
+    single:true,
+    btn:"詢問知識庫",
+    prompt:(q,docs)=>`你是企業知識庫問答 Agent。只能根據下方文件回答，用繁體中文，2～4 句。
+每個事實後面用【SOP-編號】標示出處。如果文件沒有答案，回答「目前的文件中沒有這個資訊」，並建議可以詢問哪個單位，不要自行推測。
+文件：
+${docs}
+問題：${q}`,
+    example:`連續輸錯密碼 5 次後，帳號會被鎖定 30 分鐘，可以等鎖定時間過後再試，或直接請 IT 協助解鎖【SOP-02】。之後登入請使用公司核發筆電與 FortiClient VPN，並以已綁定的 MFA 完成驗證【SOP-02】。`
+  }
+},
+{
+  id:"cases",facet:"知識萃取",title:"歷史案件學習",
+  gain:"散落案件 → <strong>觀察報告</strong>",
+  pain:"同樣的問題反覆發生，每次都從頭排查；處理經驗只留在個人腦中，人一換就斷了。",
+  purpose:"Agent 掃描歷史案件，歸納重複發生的問題、根本原因和預防建議，變成團隊共用的經驗庫。",
+  steps:["讀入過往案件紀錄","依問題類型與根本原因分群","產出觀察報告：重複問題、根因、預防建議"],
+  effect:{type:"kpi",items:[["重複問題浮現","從個案到模式"],["預防建議","從救火到防火"]]},
+  tech:["Agent Skill","分類歸納","根因分析"],
+  lab:{
+    kind:"ai",hint:"以下是 8 筆模擬的歷史案件，AI 會找出重複發生的模式。",
+    input:`C01 週一早上儀表板資料沒更新，排程擷取失敗，原因：來源DB週末備份鎖表
+C02 使用者看不到報表，原因：AD群組未同步
+C03 儀表板載入很慢，原因：擷取檔過大未分割
+C04 週一資料沒更新，擷取逾時，原因：週末備份與擷取時間重疊
+C05 新人無法登入，原因：AD群組未加入
+C06 報表數字對不起來，原因：來源表欄位定義變更未通知
+C07 週一早上排程失敗，原因：DB備份鎖表
+C08 部門主管看不到新報表，原因：權限群組未同步`,
+    btn:"產出觀察報告",
+    prompt:i=>`你是歷史案件學習 Agent。分析以下案件（模擬資料），用繁體中文 Markdown 輸出：
+#### 重複發生的問題
+一個表格：| 問題模式 | 案件 | 次數 | 根本原因 |，依次數由多到少。
+#### 預防建議
+- 針對前兩個模式，各給一個具體、可執行的預防措施。
+#### 一句話結論
+一句話。不要編造案件裡沒有的資訊。
+案件：
+${i}`,
+    example:`#### 重複發生的問題
+| 問題模式 | 案件 | 次數 | 根本原因 |
+|---|---|---|---|
+| 週一資料未更新／排程失敗 | C01、C04、C07 | 3 | 週末 DB 備份鎖表，與擷取排程時間重疊 |
+| 看不到報表或無法登入 | C02、C05、C08 | 3 | AD 權限群組未同步或未加入 |
+| 儀表板載入慢 | C03 | 1 | 擷取檔過大未分割 |
+| 數字對不起來 | C06 | 1 | 來源欄位定義變更未通知 |
+#### 預防建議
+- 排程衝突：把週末擷取排程移到備份完成之後，並加上擷取失敗時的自動通知。
+- 權限同步：新人與新報表上線時加入「AD 群組檢查」步驟，或設定群組自動同步。
+#### 一句話結論
+75% 的案件集中在兩個可預防的流程問題，處理好排程與權限同步就能大幅減少週一的救火。`
+  }
+},
+{
+  id:"ocr",facet:"影像辨識・OCR",title:"國際服道具辨識工具（OCR＋模糊比對）",
+  gain:"看不懂英文 → <strong>中文道具資料</strong>",
+  pain:"在國際英文伺服器玩遊戲的亞洲玩家，常看不懂英文的道具名稱和說明。想查資料得自己打英文，拼錯一個字就查不到；邊玩邊查也很打斷節奏。",
+  purpose:"做了一個桌面工具，提供兩種查法：輸入文字，就算拼錯也能靠模糊比對找到道具資料；或直接用 OCR 掃描遊戲畫面辨識道具，自動對應中文名稱與說明。",
+  steps:["文字查詢：輸入道具名稱（可拼錯、可不完整），用模糊比對找到最相近的道具","OCR 掃描：截取遊戲畫面上的道具說明框，辨識出文字","清掉強化值（+7、t7、＋9）、價格等雜訊，再比對道具資料庫，顯示中文名稱與資料"],
+  effect:{type:"kpi",items:[["2 種查法","文字輸入＋畫面掃描"],["8 種","OCR／拼字錯誤可容錯"]]},
+  tech:["OCR","模糊比對","Levenshtein 距離","C# 桌面工具"],
+  lab:{
+    kind:"fuzzy",hint:"試兩種查法：直接打字查（故意拼錯也可以），或掃描下方的遊戲畫面範例、上傳你自己的截圖。",
+    input:"+8 Siiver Sword",
+    samples:["+7Silver Sword","t7 Silver Sword","＋9 Rapier","Price 1200 +6 Long Sword adena","+6 Elven Chain Mail","+7 Blessed Silver Sword","Ice Queen's Earring Lvl 3"]
+  }
+},
+{
+  id:"gov",facet:"AI 治理",title:"去識別化防護關卡",
+  gain:"資料外送前 <strong>先遮罩</strong>",
+  pain:"想把雲端 AI 用在工作上，但公司資料裡有客戶名稱和個資，資安規範不允許直接外送，AI 導入卡在第一步。",
+  purpose:"在資料送出前加一道本機的去識別化關卡：姓名、電話、Email、身分證字號、客戶公司名稱先換成代號並留下紀錄，AI 只看得到遮罩後的內容。這是我規劃的五層治理中的第一道。",
+  steps:["在本機比對個資與客戶名稱","以代號取代並保留對照表（不外送）","只把遮罩後的文字交給 AI 處理"],
+  effect:{type:"kpi",items:[["5 層","治理規劃"],["0 筆","原始個資外送"]]},
+  tech:["去識別化","只讀原則","人工確認","稽核紀錄"],
+  lab:{
+    kind:"gov",hint:"左邊的遮罩在你的瀏覽器裡完成；按「交給 AI 摘要」時，送出去的只有遮罩後的文字。",
+    input:`客戶聯成精密股份有限公司的王大明先生來電，反映上週升級後報表無法匯出。
+聯絡電話 0912-345-678，Email：daming.wang@example.com。
+另附申請人身分證字號 A123456789，請於週五前回覆。`,
+    btn:"交給 AI 摘要",
+    prompt:i=>`以下是已去識別化的客服紀錄，〔〕內是代號。用繁體中文寫出 3 點以內的處理摘要（問題、期限、下一步），保留代號原樣，不要猜測代號背後的真實資料。
+${i}`,
+    example:`- 問題：〔客戶A〕反映上週系統升級後，報表無法匯出。
+- 期限：需於週五前回覆〔人員A〕。
+- 下一步：檢查升級後的匯出權限與元件版本，必要時透過〔電話A〕或〔Email A〕聯繫確認錯誤畫面。`
+  }
+},
+{
+  id:"build",facet:"AI 協作開發",title:"用 AI Agent 快速做出完整系統",
+  gain:"想法 → <strong>可上線的作品</strong>",
+  pain:"想法很多，但沒有工程團隊；傳統做法要找人開發、等很久，小想法常常就不了了之。",
+  purpose:"我用 AI Agent 把想法直接做成能用的網站與工具：自己拆解需求、指揮 Agent 實作、逐步驗證到上線。這間實驗室本身也是這樣做出來的。",
+  steps:["把想法拆成可驗證的小步驟","指揮 Agent 實作，逐步測試與修正","部署上線，持續迭代"],
+  effect:{type:"kpi",items:[["7 個","GitHub 專案"],["3D・OCR・網頁","不同技術面向"]]},
+  tech:["Three.js","OCR","GitHub Pages","Agent 協作"],
+  lab:{kind:"projects",items:[
+    ["3D 角色扮演遊戲","瀏覽器裡的 3D RPG：村莊、角色與 48 個模型，共 107 個檔案。","https://claude.ai/artifact/NECNGr5WUk2tu6J6zQeNDj"],
+    ["沖繩自駕旅遊網站","7 天行程、開場動畫與海浪音效，部署在 GitHub Pages。","https://hby0413.github.io/okinawa-trip-2027/"],
+    ["LineageGoblin","Windows 桌面工具：螢幕 OCR 加上道具資料庫比對，就是第 06 號實驗。","#ocr"]
+  ]}
+}
+];
+const EXPS=REAL.apply(I18N.localizeExps(EXPS_ZH),I18N.lang);
+EXPS.forEach(x=>{if(x.evidence&&x.evidence.layers)x.evidence.flat=x.evidence.layers.flatMap(l=>l.imgs)});
+
+/* ---------- AI connection ---------- */
+let sample=null;
+const statusEl=document.getElementById("aiStatus");
+function setStatus(on){
+  statusEl.classList.toggle("on",on);
+  statusEl.children[1].textContent=I18N.t(on?"status.on":"status.off");
+}
+setStatus(false);
+(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}setStatus(!!sample)})();
+
+/* ---------- render ---------- */
+const idx=document.getElementById("index"),track=document.getElementById("track");
+function renderAll(){EXPS.forEach((x,n)=>{
+  const no=String(n+1).padStart(2,"0");
+  idx.insertAdjacentHTML("beforeend",`<a class="tile" href="#${x.id}"><span class="no">EXP-${no}</span><span class="facet">${x.facet}</span><b>${x.title}</b><span class="gain">${x.gain}</span></a>`);
+  let eff="";
+  if(x.effect.type==="bar"){
+    const [bl,bv,bt]=x.effect.before,[al,av,at]=x.effect.after,max=Math.max(bv,av);
+    eff=`<div class="bar"><span>${bl}</span><span class="track"><span class="fill" style="width:${bv/max*100}%"></span></span><span>${bt}</span></div>
+         <div class="bar after"><span>${al}</span><span class="track"><span class="fill" style="width:${av/max*100}%"></span></span><span>${at}</span></div>
+         <div class="hint">${x.effect.note}</div>`;
+  }else{
+    eff=`<div class="kpi">${x.effect.items.map(([a,b])=>`<div><strong>${a}</strong><small>${b}</small></div>`).join("")}</div>`;
+  }
+  track.insertAdjacentHTML("beforeend",`
+  <div class="slide" data-id="${x.id}" data-label="${x.title}" data-no="${no}" aria-roledescription="slide"><div class="wrap">
+  <section class="bench" id="${x.id}">
+    <div class="bench-head"><span class="no">EXP-${no}</span><h2>${x.title}</h2><span class="facet">${x.facet}</span></div>
+    <div class="impact"><span>${I18N.t("sec.impact")}</span><strong>${x.gain}</strong></div>
+    ${x.evidence&&(x.evidence.imgs||x.evidence.layers)?evidenceHTML(x,true):""}
+    <div class="grid2">
+      <div class="notes">
+        <div class="pain"><div class="label">${I18N.t("sec.pain")}</div><p>${x.pain}</p></div>
+        <div><div class="label">${I18N.t("sec.solution")}</div><p>${x.purpose}</p></div>
+        <div><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+        <div class="effect"><div class="label">${I18N.t("sec.effect")}</div>${eff}</div>
+        <div><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>
+      </div>
+      <div class="lab" id="lab-${x.id}"></div>
+    </div>
+    ${x.evidence&&!x.evidence.imgs&&!x.evidence.layers?evidenceHTML(x):""}
+  </section></div></div>`);
+  buildLab(x,document.getElementById("lab-"+x.id));
+});}
+
+function labShell(el,title){el.innerHTML=`<div class="lab-bar"><span>${title}</span><span>● LIVE LAB</span></div><div class="lab-body"></div>`;return el.querySelector(".lab-body")}
+
+function buildLab(x,el){
+  const L=x.lab;
+  if(L.kind==="projects"){
+    const b=labShell(el,I18N.t("lab.projects"));
+    const U=(EXPS_ZH.find(e=>e.id===x.id)||{lab:{items:[]}}).lab.items.map(i=>i[2]);
+    b.innerHTML=`<div class="projects">${L.items.map(([t,d],k)=>{const u=U[k];if(!u)return `<div class="proj"><b>${t}</b><p>${d}</p></div>`;const ext=/^https?:/.test(u);
+      return `<a class="proj link" href="${u}" ${ext?'target="_blank" rel="noopener"':'data-goto="'+u.slice(1)+'"'}><b>${t}</b><p>${d}</p><span class="go">${I18N.t(ext?"proj.open":"proj.see")} ${ext?"↗":"→"}</span></a>`}).join("")}</div>`;
+    b.querySelectorAll("[data-goto]").forEach(a=>a.addEventListener("click",ev=>{ev.preventDefault();const id=a.dataset.goto;if(window.__lab&&__lab.openStation)__lab.openStation(id);else location.hash=id}));
+    return;
+  }
+  if(L.kind==="place"){const b=labShell(el,REAL.t("pl.path")==="存放位置"?"檔案歸檔模擬器":(I18N.lang==="th"?"จำลองการจัดเก็บไฟล์":"Filing simulator"));buildPlace(b,L);return}
+  if(L.kind==="fuzzy"){
+    const b=labShell(el,I18N.t("lab.fuzzy"));
+    b.innerHTML=`<div class="hint">${L.hint}</div>
+      <div class="label">① ${I18N.t("fz.textMode")}</div>
+      <input type="text" id="fz-in" value="${esc(L.input)}" aria-label="${I18N.t("fz.read")}">
+      <div class="row">${L.samples.map(s=>`<button type="button" class="fz-s">${esc(s)}</button>`).join("")}</div>
+      <div class="label" style="margin-top:6px">② ${I18N.t("fz.scanMode")}</div>
+      <div class="scanbox"><figure style="margin:0"><canvas id="fz-cv" width="480" height="300"></canvas><figcaption class="hint">${I18N.t("fz.sampleImg")}</figcaption></figure>
+        <div style="display:flex;flex-direction:column;gap:8px"><button type="button" class="primary" id="fz-scan">${I18N.t("fz.scanBtn")}</button>
+        <label class="hint" style="cursor:pointer;text-decoration:underline">${I18N.t("fz.upload")}<input type="file" id="fz-file" accept="image/*" style="display:none"></label>
+        <span class="hint" id="fz-note"></span></div></div>
+      <div class="out" id="fz-out"></div>`;
+    const inp=b.querySelector("#fz-in"),out=b.querySelector("#fz-out"),cv=b.querySelector("#fz-cv"),note=b.querySelector("#fz-note");
+    const run=()=>out.innerHTML=renderFuzzy(inp.value);
+    inp.addEventListener("input",run);
+    b.querySelectorAll(".fz-s").forEach(btn=>btn.addEventListener("click",()=>{inp.value=btn.textContent;run()}));
+    drawTooltip(cv);let uploaded=null;
+    b.querySelector("#fz-file").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const img=new Image();img.onload=()=>{const x=cv.getContext("2d"),r=Math.min(cv.width/img.width,cv.height/img.height);x.fillStyle="#000";x.fillRect(0,0,cv.width,cv.height);x.drawImage(img,(cv.width-img.width*r)/2,(cv.height-img.height*r)/2,img.width*r,img.height*r);uploaded=f};img.src=URL.createObjectURL(f)});
+    b.querySelector("#fz-scan").addEventListener("click",async()=>{
+      let canImg=false;try{canImg=!!(sample&&(await sample.limits()).images)}catch(e){}
+      if(!canImg){if(uploaded){drawTooltip(cv);uploaded=null;note.textContent=I18N.t("fz.scanNeedSample")}else note.textContent=I18N.t("fz.scanNoAI");inp.value=SAMPLE_OCR;run();return}
+      note.textContent=I18N.t("fz.scanning");
+      try{
+        const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
+        const r=await sample("This is a screenshot from an MMORPG. Find the item name line in the item tooltip and copy it exactly as it appears, including any enchant prefix like +7 and any spelling as shown. Reply with that single line only, nothing else.",{images:[blob],modelTier:"quick",cache:false});
+        const line=(r.text||"").split("\n").map(t=>t.trim()).filter(Boolean)[0]||"";
+        if(!line)throw 0;inp.value=line;note.textContent=I18N.t("fz.scanRead")+line;run();
+      }catch(e){note.textContent=I18N.t("fz.scanFail")}
+    });
+    run();return;
+  }
+  const isGov=L.kind==="gov";
+  const b=labShell(el,I18N.t(isGov?"lab.gov":"lab.ai"));
+  const docsHtml=L.docs?`<details><summary class="hint">${I18N.t("lab.docs")}</summary><pre class="mono" style="white-space:pre-wrap;font-size:13px;background:var(--code);padding:10px;margin:6px 0 0">${esc(L.docs)}</pre></details>`:"";
+  b.innerHTML=`<div class="hint">${L.hint}</div>${docsHtml}
+    <label class="label" for="in-${x.id}">${I18N.t(L.single?"lab.question":"lab.input")}</label>
+    ${L.single?`<input type="text" id="in-${x.id}" value="${esc(L.input)}">`:`<textarea id="in-${x.id}" rows="${Math.min(9,L.input.split("\n").length+1)}">${esc(L.input)}</textarea>`}
+    ${isGov?`<div class="label">${I18N.t("lab.masked")}</div><div class="out" id="mask-${x.id}" style="min-height:0"></div>`:""}
+    <div class="row"><button type="button" class="primary" id="run-${x.id}">${L.btn}</button><button type="button" id="ex-${x.id}">${I18N.t("lab.example")}</button><span class="hint" id="note-${x.id}"></span></div>
+    <div class="out" id="out-${x.id}"></div>`;
+  const inp=b.querySelector("#in-"+x.id),out=b.querySelector("#out-"+x.id),btn=b.querySelector("#run-"+x.id),note=b.querySelector("#note-"+x.id);
+  const showExample=()=>{out.innerHTML=`<span class="tag">${I18N.t("tag.example")}</span>`+md(L.example)};
+  let maskEl=null;
+  if(isGov){maskEl=b.querySelector("#mask-"+x.id);const upd=()=>{maskEl.innerHTML=renderMask(inp.value)};inp.addEventListener("input",upd);upd()}
+  b.querySelector("#ex-"+x.id).addEventListener("click",showExample);
+  showExample();
+  let ctrl=null;
+  btn.addEventListener("click",async()=>{
+    if(!sample){showExample();note.textContent=I18N.t("note.noai");return}
+    const payload=isGov?deidentify(inp.value).text:inp.value;
+    if(!payload.trim()){note.textContent=I18N.t("note.empty");return}
+    if(ctrl)ctrl.abort();ctrl=new AbortController();
+    btn.disabled=true;note.textContent=I18N.t("note.busy");
+    out.innerHTML=`<span class="tag live">${I18N.t("tag.live")}</span><div class="stream"></div>`;
+    const st=out.querySelector(".stream");
+    try{
+      const prompt=(L.docs?L.prompt(payload,L.docs):L.prompt(payload))+I18N.t("out.note");
+      const r=await sample(prompt,{signal:ctrl.signal,modelTier:"quick",cache:false,onText:({text})=>{st.innerHTML=md(text)}});
+      st.innerHTML=md(r.text);note.textContent=I18N.t("note.done");
+    }catch(e){
+      if(e&&e.name==="AbortError")return;
+      if(e&&e.code==="not_granted"){note.textContent=I18N.t("note.denied");showExample()}
+      else if(e&&e.code==="rate_limited"){note.textContent=I18N.t("note.rate")}
+      else{note.textContent=I18N.t("note.fail");showExample()}
+    }finally{btn.disabled=false}
+  });
+}
+
+
+/* sample in-game tooltip for the OCR scan bench (drawn, with a deliberate OCR-style typo) */
+const SAMPLE_OCR="+7 Siiver Sword";
+function drawTooltip(cv){
+  const x=cv.getContext("2d"),W=cv.width,H=cv.height;
+  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,"#2b3a2f");g.addColorStop(1,"#1a2420");x.fillStyle=g;x.fillRect(0,0,W,H);
+  for(let i=0;i<300;i++){x.fillStyle=`rgba(255,255,255,${Math.random()*.04})`;x.fillRect(Math.random()*W,Math.random()*H,3,3)}
+  x.fillStyle="rgba(10,10,14,.88)";x.strokeStyle="#8a7a4a";x.lineWidth=2;x.fillRect(40,30,W-80,H-60);x.strokeRect(40,30,W-80,H-60);
+  x.fillStyle="#7fd3ff";x.font="bold 26px Georgia,serif";x.fillText(SAMPLE_OCR,62,74);
+  x.fillStyle="#d8d2c2";x.font="18px Georgia,serif";["Damage: Small 11 / Large 13","Two-handed: No   Material: Silver","Weight 40","Can be traded","Price 1,200 adena"].forEach((t,i)=>x.fillText(t,62,112+i*30));
+  x.fillStyle="#f2b76a";x.font="15px Georgia,serif";x.fillText("Undead damage +",62,H-48);
+}
+
+/* ---------- real skill evidence ---------- */
+function evidenceHTML(x,top){
+  const e=x.evidence;
+  if(e.layers){return `<div class="evid top"><div class="label">${esc(e.title)}</div><p class="hint" style="margin:0">${esc(e.note)}</p>${e.layers.map(l=>`<div class="layer"><div class="lt"><b>${esc(l.t)}</b><span>${esc(l.d)}</span></div><div class="lg">${l.imgs.map(src=>`<button type="button" data-lb="${x.id}" data-i="${e.flat.indexOf(src)}"><img src="${src}" loading="lazy" alt="${esc(l.t)}"></button>`).join("")}</div></div>`).join("")}</div>`}
+  let h=`<div class="evid${top?" top":""}"><div class="label">${REAL.t("ev.title")}</div>`;
+  if(e.imgs){h+=`<p class="hint" style="margin:0">${REAL.t("ev.slides")}</p><div class="gal">${e.imgs.map((src,i)=>`<button type="button" data-lb="${x.id}" data-i="${i}" aria-label="${esc(x.title)} ${i+1}"><img src="${src}" loading="lazy" alt="${esc(x.title)} ${i+1}"></button>`).join("")}</div>`}
+  h+=`<div class="sk"><div><div class="label">${REAL.t("ev.struct")}</div><pre class="tree">${esc(e.tree.join("\n"))}</pre></div><div><div class="label">${REAL.t("ev.excerpt")}</div><pre>${esc(e.excerpt)}</pre></div></div></div>`;
+  return h;
+}
+(function(){
+  const lb=document.createElement("div");lb.id="lightbox";lb.innerHTML=`<button type="button" class="nav p" aria-label="prev">←</button><img alt=""><button type="button" class="nav n" aria-label="next">→</button>`;document.body.appendChild(lb);
+  let set=[],i=0;const img=lb.querySelector("img");const show=()=>{img.src=set[i]};
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-lb]");if(b){const x=EXPS.find(z=>z.id===b.dataset.lb);set=x.evidence.flat||x.evidence.imgs;i=+b.dataset.i;show();lb.classList.add("on");e.stopPropagation();return}
+    if(!lb.classList.contains("on"))return;if(e.target.closest(".p")){i=(i-1+set.length)%set.length;show();return}if(e.target.closest(".n")){i=(i+1)%set.length;show();return}lb.classList.remove("on")},true);
+  document.addEventListener("keydown",e=>{if(!lb.classList.contains("on"))return;e.stopImmediatePropagation();if(e.key==="Escape")lb.classList.remove("on");if(e.key==="ArrowRight"){i=(i+1)%set.length;show()}if(e.key==="ArrowLeft"){i=(i-1+set.length)%set.length;show()}},true);
+})();
+/* ---------- file-placement bench (rules from file-placement) ---------- */
+function buildPlace(b,L){
+  const today=new Date(),pad=n=>String(n).padStart(2,"0"),iso=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+  const lang=I18N.lang;
+  b.innerHTML=`<div class="hint">${L.hint}</div>
+   <div class="place">
+    <label>${REAL.t("pl.type")}<select id="pl-type">${REAL.PL.map(p=>`<option value="${p.k}">${p[lang]||p.zh}</option>`).join("")}</select></label>
+    <label>${REAL.t("pl.cust")}<input type="text" id="pl-cust" value="甲科技"></label>
+    <label>${REAL.t("pl.date")}<input type="date" id="pl-date" value="${iso}"></label>
+    <label>${REAL.t("pl.topic")}<input type="text" id="pl-topic" value="BI平台安裝手冊"></label>
+    <label>${REAL.t("pl.ext")}<select id="pl-ext"><option>pptx</option><option>xlsx</option><option>docx</option><option>pdf</option></select></label>
+    <label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="pl-ex">${REAL.t("pl.exists")}</label>
+   </div><div class="out" id="pl-out"></div>`;
+  const $=id=>b.querySelector(id),out=$("#pl-out");
+  const run=()=>{
+    const p=REAL.PL.find(z=>z.k===$("#pl-type").value),c=($("#pl-cust").value||"客戶").replace(/[\\/:*?"<>|]/g,""),d=($("#pl-date").value||iso).replace(/-/g,""),topic=($("#pl-topic").value||"主題").replace(/[\\/:*?"<>|]/g,""),ext=$("#pl-ext").value,ex=$("#pl-ex").checked;
+    const root="…\\〔部門〕\\_AgentSkill應用區\\_檔案輸出區\\";const why=[];let path,name;
+    if(p.k==="unclear"){
+      const c1=REAL.PL[0].dir(c,d),c2=REAL.PL[4].dir(c,d),c3=REAL.PL[2].dir(c,d);
+      out.innerHTML=`<div class="label">${REAL.t("pl.why")}</div><p>${REAL.t("pl.ask")}</p><div class="pl-path">① ${esc(root+c1)}<br>② ${esc(root+c2)}<br>③ ${esc(root+c3)}</div>`;return}
+    if(p.exc===1){path=`…\\${c}\\<原始截圖資料夾>\\`;why.push(REAL.t("pl.exc1"));name=`${d}_${topic}_AI生成`}
+    else if(p.exc===2){path="…\\〔部門〕\\_AgentSkill應用區\\_KM_設定\\";why.push(REAL.t("pl.exc2"),REAL.t("pl.noSuffix"));name=`monthly-report_${topic}`}
+    else{path=root+p.dir(c,d)+"\\";why.push(REAL.t("pl.table",{c:p[lang]||p.zh}));
+      name=p.k==="monthly"?`${d.slice(0,6)}_月會報告_AI生成`:`${d}_${topic}_AI生成`}
+    if(ex&&p.exc!==2){name+="_v2";why.push(REAL.t("pl.ver"))}
+    name+="."+ext;
+    out.innerHTML=`<div class="label">${REAL.t("pl.path")}</div><div class="pl-path">${esc(path)}</div><div class="label" style="margin-top:8px">${REAL.t("pl.name")}</div><div class="pl-path">${esc(name)}</div><div class="label" style="margin-top:8px">${REAL.t("pl.why")}</div><ul>${why.map(w=>`<li>${esc(w)}</li>`).join("")}</ul>`;
+  };
+  b.querySelectorAll("select,input").forEach(el=>el.addEventListener("input",run));b.querySelectorAll("input[type=checkbox]").forEach(el=>el.addEventListener("change",run));run();
+}
+/* ---------- fuzzy matcher (EXP-06) ---------- */
+const ITEMS=[["Silver Sword","銀劍"],["Rapier","細劍"],["Long Sword","長劍"],["Elven Chain Mail","妖精鎖子甲"],["Katana","武士刀"],["Two-Handed Sword","雙手劍"],["Crossbow","十字弓"],["Leather Armor","皮盔甲"],["Helm of Magic Resistance","抗魔頭盔"],["Robe of Lich","巫妖長袍"],["Ice Queen's Earring Lvl 3","冰之女王的耳環3階"],["Ice Queen's Earring Lvl 0","冰之女王的耳環0階"],["Elven Shield","妖精盾牌"],["Short Sword","短劍"],["Dagger","匕首"],["Great Axe","巨斧"],["Spear","長矛"],["Mithril Gloves","米索莉手套"]];
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,j)=>j);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function cleanOCR(s){
+  let t=s.replace(/＋/g,"+").replace(/[^\w\s'+-]/g," ");
+  const steps=[];
+  const before=t;
+  t=t.replace(/(^|\s)[+t4-]?\s?\d{1,2}(?=\s?[A-Za-z])/g," ");
+  if(t!==before)steps.push(I18N.t("fz.enchant"));
+  t=t.replace(/([a-z])([A-Z])/g,"$1 $2").replace(/(\d)([A-Za-z])/g,"$1 $2");
+  let blessed=/blessed/i.test(t),cursed=/cursed/i.test(t);
+  t=t.replace(/\b(blessed|cursed)\b/ig," ");
+  if(blessed)steps.push(I18N.t("fz.blessedFound"));if(cursed)steps.push(I18N.t("fz.cursedFound"));
+  return {text:t.replace(/\s+/g," ").trim().toLowerCase(),steps,blessed,cursed};
+}
+function bestMatch(clean){
+  const toks=clean.split(" ").filter(Boolean);
+  return ITEMS.map(([en,zh])=>{
+    const target=en.toLowerCase().replace(/[^\w\s']/g," ").replace(/\s+/g," ");
+    const tl=target.split(" ").length;let best=0,win="";
+    for(let w=Math.max(1,tl-1);w<=tl+1;w++)for(let i=0;i+w<=toks.length;i++){
+      const cand=toks.slice(i,i+w).join(" "),d=lev(cand,target),s=1-d/Math.max(cand.length,target.length);
+      if(s>best){best=s;win=cand}
+    }
+    return {en,zh,score:best,win};
+  }).sort((a,b)=>b.score-a.score);
+}
+function renderFuzzy(raw){
+  if(!raw.trim())return `<p class="hint">${I18N.t("fz.enter")}</p>`;
+  const c=cleanOCR(raw),m=bestMatch(c.text),top=m[0];
+  const ok=top.score>=0.75;
+  const suffix=c.blessed?I18N.t("fz.blessed"):c.cursed?I18N.t("fz.cursed"):"";
+  return `<div class="label">${I18N.t("fz.clean")}</div><p class="mono">${esc(c.text)||I18N.t("fz.empty")} ${c.steps.length?`<span class="hint">· ${c.steps.join(I18N.t("sep"))}</span>`:""}</p>
+  <div class="label" style="margin-top:8px">${I18N.t("fz.result")}</div>
+  <p style="font-size:20px;margin:2px 0 8px"><strong>${ok?esc(top.zh+suffix):I18N.t("fz.none")}</strong> ${ok?`<span class="hint mono">${esc(top.en)}</span>`:""}</p>
+  <div class="match">${m.slice(0,3).map(r=>`<span>${esc(r.zh)} <span class="hint mono">${esc(r.en)}</span></span><span class="score">${(r.score*100).toFixed(0)}%</span><span class="meter"><i style="width:${(r.score*100).toFixed(0)}%"></i></span>`).join("")}</div>`;
+}
+
+/* ---------- de-identification (EXP-07) ---------- */
+function deidentify(s){
+  const map=[],cnt={};
+  const code=(k,v)=>{const ex=map.find(m=>m.v===v);if(ex)return ex.c;cnt[k]=(cnt[k]||0)+1;const c=I18N.lang==="zh"?`〔${k}${String.fromCharCode(64+cnt[k])}〕`:`[${k}${String.fromCharCode(64+cnt[k])}]`;map.push({k,v,c});return c};
+  let t=s;
+  t=t.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,v=>code(I18N.t("code.email"),v));
+  t=t.replace(/0[689]\d-?\d{3}-?\d{4}|09\d{2}-?\d{3}-?\d{3}/g,v=>code(I18N.t("code.phone"),v));
+  t=t.replace(/\b[A-Z][12]\d{8}\b|\b\d-\d{4}-\d{5}-\d{2}-\d\b/g,v=>code(I18N.t("code.id"),v));
+  t=t.replace(/(?:[A-Z][\w&]*\s){1,4}(?:Co\., Ltd\.|Inc\.|Corp\.|Ltd\.)/g,v=>code(I18N.t("code.client"),v.trim()));
+  t=t.replace(/บริษัท\s?\S+?\s?จำกัด/g,v=>code(I18N.t("code.client"),v));
+  t=t.replace(/(?:Mr\.|Ms\.|Mrs\.)\s[A-Z][a-z]+(?:\s[A-Z][a-z]+)?/g,v=>code(I18N.t("code.person"),v));
+  t=t.replace(/คุณ\S+(?:\s\S+)?(?=\s(?:จาก|โทร))/g,v=>code(I18N.t("code.person"),v));
+  t=t.replace(/[一-龥]{2,6}(股份有限公司|有限公司)/g,v=>{const name=v.replace(/^(客戶)/,"");return v.startsWith("客戶")?"客戶"+code(I18N.t("code.client"),name):code(I18N.t("code.client"),v)});
+  t=t.replace(/[一-龥]{2,3}(?=(先生|小姐|經理|協理))/g,v=>code(I18N.t("code.person"),v));
+  return {text:t,map};
+}
+function renderMask(raw){
+  const {text,map}=deidentify(raw);
+  const shown=esc(text).replace(/〔[^〕]+〕|\[[^\]\n]+\]/g,m=>`<mark>${m}</mark>`).replace(/\n/g,"<br>");
+  return `<p>${shown}</p><div class="hint" style="margin-top:6px">${I18N.t("gov.count",{n:map.length})}${map.map(m=>esc(m.c)).join(I18N.t("sep"))||I18N.t("gov.none")}${I18N.t("gov.local")}</div>`;
+}
+
+/* ---------- carousel ---------- */
+function initCarousel(){
+  const slides=[...track.querySelectorAll(".slide")],tabs=document.getElementById("tabs"),dots=document.getElementById("dots");
+  tabs.innerHTML=slides.map((s,i)=>`<button type="button" data-i="${i}">${s.dataset.no?`<span class="n">${s.dataset.no}</span>`:""}${s.dataset.label}</button>`).join("");
+  dots.innerHTML=slides.map((s,i)=>`<button type="button" data-i="${i}" aria-label="${s.dataset.label}"></button>`).join("")+`<span class="count" id="count"></span>`;
+  dots.prepend(document.getElementById("prev"));dots.append(document.getElementById("next"));
+  let cur=0;
+  const go=(i,smooth=true)=>{i=Math.max(0,Math.min(slides.length-1,i));track.scrollTo({left:i*track.clientWidth,behavior:smooth?"smooth":"auto"})};
+  const mark=i=>{
+    if(i===cur&&tabs.dataset.init)return;cur=i;tabs.dataset.init=1;
+    tabs.querySelectorAll("button").forEach((b,k)=>b.setAttribute("aria-current",k===i));
+    dots.querySelectorAll("button").forEach((b,k)=>b.setAttribute("aria-current",k===i));
+    document.getElementById("count").textContent=`${String(i+1).padStart(2,"0")} / ${String(slides.length).padStart(2,"0")}`;
+    document.getElementById("prev").disabled=i===0;document.getElementById("next").disabled=i===slides.length-1;
+    const t=tabs.children[i];if(t)t.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+    const id=slides[i].dataset.id;try{history.replaceState(null,"",id==="home"?location.pathname+location.search:"#"+id)}catch(e){}
+  };
+  track.addEventListener("scroll",()=>mark(Math.round(track.scrollLeft/track.clientWidth)),{passive:true});
+  tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)go(+b.dataset.i)});
+  dots.addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(b)go(+b.dataset.i)});
+  document.getElementById("prev").addEventListener("click",()=>go(cur-1));
+  document.getElementById("next").addEventListener("click",()=>go(cur+1));
+  idx.addEventListener("click",e=>{const a=e.target.closest("a.tile");if(!a)return;e.preventDefault();go(slides.findIndex(s=>s.dataset.id===a.getAttribute("href").slice(1)))});
+  document.addEventListener("keydown",e=>{if(e.target.closest("input,textarea,select"))return;if(e.key==="ArrowRight")go(cur+1);if(e.key==="ArrowLeft")go(cur-1)});
+  // mouse drag (touch & trackpad swipe use native scrolling)
+  let dragging=false,sx=0,sl=0,moved=0;
+  track.addEventListener("pointerdown",e=>{
+    if(e.pointerType!=="mouse"||e.button!==0)return;
+    if(e.target.closest("input,textarea,button,a,canvas,select,summary,pre,.out,label"))return;
+    dragging=true;moved=0;sx=e.clientX;sl=track.scrollLeft;
+  });
+  window.addEventListener("pointermove",e=>{
+    if(!dragging)return;const dx=e.clientX-sx;moved=Math.max(moved,Math.abs(dx));
+    if(moved>4){track.classList.add("dragging");track.scrollLeft=sl-dx}
+  });
+  window.addEventListener("pointerup",e=>{
+    if(!dragging)return;dragging=false;
+    if(!track.classList.contains("dragging"))return;
+    const dx=e.clientX-sx,w=track.clientWidth,base=Math.round(sl/w);
+    track.classList.remove("dragging");
+    go(Math.abs(dx)>w*0.12?base+(dx<0?1:-1):base);
+  });
+  window.addEventListener("resize",()=>go(cur,false));
+  const startId=(location.hash||"").slice(1);
+  const si=Math.max(0,slides.findIndex(s=>s.dataset.id===startId));
+  mark(si);if(si)requestAnimationFrame(()=>go(si,false));
+}
+I18N.apply();
+document.querySelectorAll(".slide[data-label-key]").forEach(sl=>sl.dataset.label=I18N.t(sl.dataset.labelKey));
+document.getElementById("swTop").innerHTML=I18N.switcher();
+const swH=document.getElementById("swHdr");if(swH)swH.innerHTML=I18N.switcher();
+renderAll();initCarousel();
+</script>
+<script src="house.js"></script>
+</body>
+</html>

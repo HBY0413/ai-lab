@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scott H. · AI 導入作品集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="i18n.js"></script>
+<style>
+/* One-page profile for HR and hiring managers: who, what, impact, proof. Industrial palette matching the 3D lab. */
+:root{
+  --bg:#0F1214;--panel:#171B1F;--panel2:#1D2227;--ink:#ECEEF0;--ink2:#A3ADB6;--line:#2A3137;
+  --amber:#F0A060;--yellow:#E2B33B;--ok:#5CC58C;
+  --display:"Jost","Noto Sans TC","Noto Sans Thai",sans-serif;--body:"Noto Sans TC","Noto Sans Thai",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.7 var(--body)}
+a{color:var(--amber)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}
+.top .logo{font:600 18px var(--display);text-decoration:none;color:var(--ink)}
+.top .r{display:flex;gap:10px;align-items:center}
+.langsw{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsw button{background:none;border:none;color:var(--ink2);font:500 12px var(--display);padding:6px 11px;cursor:pointer}
+.langsw button[aria-pressed="true"]{background:var(--amber);color:#1A0D06}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font:500 14px var(--body)}
+.btn.solid{background:var(--amber);border-color:var(--amber);color:#1A0D06;font-weight:700}
+.hero{padding:46px 0 26px;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:30px;align-items:end}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.k{font:600 12px var(--mono);letter-spacing:.14em;color:var(--amber);text-transform:uppercase}
+h1{font:300 clamp(42px,6vw,72px)/1.05 var(--display);margin:.15em 0 .2em;letter-spacing:-.01em}
+.role{font:500 clamp(18px,2.2vw,22px)/1.5 var(--body);margin:0 0 12px;text-wrap:balance}
+.lede{color:var(--ink2);max-width:60ch;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{font-size:13px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink2)}
+.cta{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.cta p{margin:0;font-size:13px;color:var(--ink2)}
+section{padding:30px 0;border-top:1px solid var(--line)}
+h2{font:500 22px var(--body);margin:0 0 16px;display:flex;gap:12px;align-items:baseline}
+h2 small{font:600 12px var(--mono);color:var(--amber);letter-spacing:.12em}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--yellow);padding:16px}
+.tile strong{display:block;font:500 clamp(26px,3vw,34px)/1.15 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
+.tile strong em{font-style:normal;color:var(--amber)}
+.tile span{display:block;margin-top:6px;font-size:14px;color:var(--ink2);line-height:1.55}
+.tbl{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14.5px}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);font:600 12px var(--mono);letter-spacing:.08em;color:var(--ink2);text-transform:uppercase}
+td.case b{display:block;font-size:15.5px}td.case small{color:var(--ink2);font:12px var(--mono)}
+td.gain{color:var(--amber);font-weight:700;white-space:normal;min-width:160px}
+td.ev a{white-space:nowrap;font-weight:500}
+.tl{display:flex;flex-direction:column;gap:0}
+.tl .it{display:grid;grid-template-columns:150px minmax(0,1fr);gap:18px;padding:14px 0;border-bottom:1px dashed var(--line)}
+@media (max-width:640px){.tl .it{grid-template-columns:1fr;gap:2px}}
+.tl .when{font:500 14px var(--mono);color:var(--amber)}
+.tl b{font-size:16px}.tl p{margin:4px 0 0;color:var(--ink2);font-size:14.5px;max-width:70ch}
+.cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.col{background:var(--panel);border:1px solid var(--line);padding:14px}
+.col b{display:block;margin-bottom:6px}.col ul{margin:0;padding-left:1.1em;color:var(--ink2);font-size:14px}
+.target{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--amber);padding:16px 18px}
+.target p{margin:0 0 6px}.target p:last-child{margin:0;color:var(--ink2);font-size:14.5px}
+footer{padding:26px 0 50px;color:var(--ink2);font-size:13px;border-top:1px solid var(--line)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><a class="logo" href="index.html">AI Lab<sup>®</sup></a><div class="r"><span id="sw"></span><a class="btn" href="index.html" data-t="toLab"></a></div></header>
+
+  <div class="hero">
+    <div>
+      <div class="k" data-t="k"></div>
+      <h1>Scott H.</h1>
+      <p class="role" data-t="role"></p>
+      <p class="lede" data-t="lede"></p>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="cta"><a class="btn solid" href="index.html#room" data-t="ctaLab"></a><p data-t="ctaNote"></p></div>
+  </div>
+
+  <section><h2><small>01</small><span data-t="h.impact"></span></h2><div class="tiles" id="tiles"></div></section>
+  <section><h2><small>02</small><span data-t="h.cases"></span></h2><div class="tbl"><table><thead><tr><th data-t="th.case"></th><th data-t="th.pain"></th><th data-t="th.gain"></th><th data-t="th.ev"></th></tr></thead><tbody id="rows"></tbody></table></div></section>
+  <section><h2><small>03</small><span data-t="h.tl"></span></h2><div class="tl" id="tl"></div></section>
+  <section><h2><small>04</small><span data-t="h.skills"></span></h2><div class="cols" id="cols"></div></section>
+  <section><h2><small>05</small><span data-t="h.target"></span></h2><div class="target"><p data-t="target1"></p><p data-t="target2"></p></div></section>
+  <footer data-t="foot"></footer>
+</div>
+<script>
+const L=(window.I18N&&I18N.lang)||"zh";
+const T={
+ k:{zh:"AI 導入 · 資料 · 系統整合",en:"AI adoption · Data · Systems integration",th:"การนำ AI มาใช้ · ข้อมูล · บูรณาการระบบ"},
+ role:{zh:"把 AI 導入真實工作流程的人：從找出最耗工的作業，到做成可上線、可治理的 AI Agent。",en:"I bring AI into real workflows: from finding the most time-consuming work to shipping governed AI agents people actually use.",th:"ผมนำ AI เข้าสู่งานจริง ตั้งแต่ค้นหางานที่กินเวลามากที่สุด จนถึงสร้าง AI Agent ที่ใช้งานได้จริงและมีการกำกับดูแล"},
+ lede:{zh:"超過 11 年 IT 資歷，做過機房與網路維運、客戶技術窗口、戰情室儀表板與資料整合，現在負責團隊的生成式 AI 導入。2026 年 9 月開始做 AI Agent，一個月內讓 5 支 Skill 上線。",en:"11+ years in IT: server-room and network operations, customer technical support, command-centre dashboards and data integration. I now lead my team's generative-AI adoption; I started building AI agents in September 2026 and had 5 skills live within a month.",th:"ประสบการณ์ไอทีมากกว่า 11 ปี ทั้งดูแลห้องเซิร์ฟเวอร์และเครือข่าย ผู้ประสานงานเทคนิคกับลูกค้า แดชบอร์ดศูนย์บัญชาการ และการเชื่อมต่อข้อมูล ปัจจุบันรับผิดชอบการนำ Generative AI มาใช้ในทีม เริ่มสร้าง AI Agent ในเดือนกันยายน 2026 และใช้งานจริงได้ 5 Skill ภายในหนึ่งเดือน"},
+ chips:{zh:["11+ 年 IT","AI Agent 導入","資料治理","可長期派駐泰國","中文・英文讀寫"],en:["11+ years IT","AI agent adoption","Data governance","Open to long-term posting in Thailand","Chinese · English (reading/writing)"],th:["ไอที 11+ ปี","นำ AI Agent มาใช้","กำกับดูแลข้อมูล","พร้อมประจำในไทยระยะยาว","จีน · อังกฤษ (อ่าน/เขียน)"]},
+ toLab:{zh:"3D 實驗室",en:"3D lab",th:"ห้องแล็บ 3D"},
+ ctaLab:{zh:"進入 AI 實驗室看實際證據 →",en:"See the evidence in the AI lab →",th:"ดูหลักฐานในห้องแล็บ AI →"},
+ ctaNote:{zh:"每個成果都附 Skill 實際產出的畫面與原始檔截圖，也可以直接操作。",en:"Every result comes with real skill output and source screenshots, and you can try each one.",th:"ทุกผลงานมีภาพผลลัพธ์จริงของ Skill และภาพไฟล์ต้นฉบับ และทดลองใช้งานได้"},
+ "h.impact":{zh:"關鍵成果",en:"Key results",th:"ผลลัพธ์สำคัญ"},
+ "h.cases":{zh:"做過什麼、解決什麼、效益在哪",en:"What I built, what it solved, what it delivered",th:"ทำอะไร แก้ปัญหาอะไร และได้ผลอย่างไร"},
+ "th.case":{zh:"成果",en:"Project",th:"ผลงาน"},"th.pain":{zh:"解決的問題",en:"Problem solved",th:"ปัญหาที่แก้"},"th.gain":{zh:"效益",en:"Impact",th:"ผลลัพธ์"},"th.ev":{zh:"證據",en:"Evidence",th:"หลักฐาน"},
+ "h.tl":{zh:"經歷",en:"Experience",th:"ประสบการณ์"},
+ "h.skills":{zh:"能力",en:"Skills",th:"ทักษะ"},
+ "h.target":{zh:"求職方向",en:"What I'm looking for",th:"ตำแหน่งที่มองหา"},
+ target1:{zh:"台廠泰國據點，或有泰國廠的台灣企業：AI 導入、智慧製造、數位轉型相關職務。",en:"Taiwanese companies with operations in Thailand: roles in AI adoption, smart manufacturing or digital transformation.",th:"บริษัทไต้หวันที่มีฐานในไทย: ตำแหน่งด้านการนำ AI มาใช้ การผลิตอัจฉริยะ หรือดิจิทัลทรานส์ฟอร์เมชัน"},
+ target2:{zh:"能帶來的是：找出最值得自動化的作業、做成可上線的 AI 工具、同時把資安與治理設計進去，並推動同事真的用起來。",en:"What I bring: finding the work most worth automating, turning it into AI tools that go live, designing security and governance in from the start, and getting colleagues to actually use them.",th:"สิ่งที่ผมนำมาได้: ค้นหางานที่คุ้มค่าที่สุดในการทำให้อัตโนมัติ สร้างเป็นเครื่องมือ AI ที่ใช้งานจริง ออกแบบความปลอดภัยและการกำกับดูแลตั้งแต่ต้น และผลักดันให้เพื่อนร่วมงานใช้งานจริง"},
+ foot:{zh:"所有工作相關內容均已去識別化，不含公司與客戶名稱；展示資料為模擬資料。",en:"All work-related content is de-identified with no company or client names; demo data is simulated.",th:"เนื้อหาที่เกี่ยวกับงานทั้งหมดปกปิดตัวตนแล้ว ไม่มีชื่อบริษัทหรือลูกค้า ข้อมูลสาธิตเป็นข้อมูลจำลอง"},
+ ev:{zh:"看證據 →",en:"See proof →",th:"ดูหลักฐาน →"}
+};
+const t=k=>(T[k]&&(T[k][L]||T[k].zh))||k;
+const TILES={
+ zh:[["<em>1 天</em> → 30 分鐘","140–200 頁的升級／保養紀錄簡報，原本一人整天製作再請同事核對，現在半小時完成並附核對明細"],["<em>17 頁</em>","月會報告一次產出，人天自動計算，附核對明細 Excel，每個數字可回查"],["<em>5 支</em> Skill","一個月內從零到上線，經過 14 版 PoC 迭代"],["<em>35 項</em>","保養檢查寫法統一成標準句型，跨客戶、跨環境一致"]],
+ en:[["<em>1 day</em> → 30 min","140–200-page upgrade/maintenance record decks used to take one person a full day plus a colleague's review; now done in 30 minutes with an audit list"],["<em>17 pages</em>","Monthly report generated in one run, person-days calculated automatically, with an audit workbook so every number is traceable"],["<em>5</em> skills live","From zero to production in one month, through 14 PoC iterations"],["<em>35</em> checks","Maintenance check wording standardised into fixed sentence patterns across clients and environments"]],
+ th:[["<em>1 วัน</em> → 30 นาที","สไลด์บันทึกอัปเกรด/บำรุงรักษา 140–200 หน้า เดิมใช้คนหนึ่งคนทั้งวันและให้เพื่อนตรวจ ตอนนี้เสร็จใน 30 นาทีพร้อมรายการตรวจสอบ"],["<em>17 หน้า</em>","รายงานประจำเดือนสร้างในครั้งเดียว คำนวณ man-day อัตโนมัติ พร้อม Excel ตรวจสอบให้ย้อนดูทุกตัวเลขได้"],["<em>5</em> Skill","จากศูนย์ถึงใช้งานจริงในหนึ่งเดือน ผ่าน PoC 14 รอบ"],["<em>35</em> รายการ","ปรับการเขียนรายการตรวจบำรุงรักษาเป็นรูปแบบมาตรฐานเดียวกันทุกลูกค้าและทุกสภาพแวดล้อม"]]
+};
+const ROWS={
+ zh:[["manual","升級／保養紀錄簡報產生器","上百張現場截圖要整理成正式簡報，一份一整天，常有錯字與截圖放錯頁","1 天 → 30 分鐘"],
+     ["report","部門月會報告產生器","每月手動撈資料、算人天、逐頁排簡報","17 頁一次產出＋核對明細"],
+     ["gov","AI 導入的五層治理","資料不能隨意外送，AI 導入卡在資安","治理寫進每支 Skill，主管同意下完成驗證"],
+     ["kb","部門 FAQ 問答助手","答案散在同事腦中與 SharePoint，新人找不到","有出處的回答，只讀不寫"],
+     ["cases","歷史案子學習稽核","同樣的錯誤反覆發生，經驗沒變成規則","跨客戶找出重複模式，規則由人決定"],
+     ["maint","AI 產出檔案存放規範","AI 產出散落、命名不一、分不出是否 AI 生成","單一出口、統一命名、不覆蓋"],
+     ["ocr","國際服道具辨識工具","亞洲玩家看不懂英文道具，拼錯就查不到","打字或掃描畫面都能查到中文資料"],
+     ["build","用 AI Agent 做出完整系統","想法多但沒有工程團隊","7 個 GitHub 專案（3D、OCR、網頁）"]],
+ en:[["manual","Upgrade/maintenance record deck generator","Hundreds of on-site screenshots into a formal deck took a full day, with typos and misplaced screenshots","1 day → 30 min"],
+     ["report","Monthly department report generator","Pulling data, counting person-days and building slides by hand every month","17 pages in one run + audit workbook"],
+     ["gov","Five-layer governance for AI adoption","Data couldn't leave freely, so AI adoption stalled on security","Governance built into every skill; validated with manager approval"],
+     ["kb","Department FAQ assistant","Answers lived in people's heads and SharePoint; new staff couldn't find them","Cited answers, read-only by design"],
+     ["cases","Learning audit of past projects","The same mistakes kept recurring and never became rules","Recurring patterns found across clients; people decide the rules"],
+     ["maint","AI output filing rules","AI outputs scattered, inconsistently named, AI-made files indistinguishable","One output location, one naming rule, no overwrites"],
+     ["ocr","Item finder for international game servers","Asian players couldn't read English items; one typo and search failed","Type or scan the screen to get item details in Chinese"],
+     ["build","Shipping complete systems with AI agents","Plenty of ideas, no engineering team","7 GitHub projects (3D, OCR, web)"]],
+ th:[["manual","ตัวสร้างสไลด์บันทึกอัปเกรด/บำรุงรักษา","จัดภาพหน้าจอนับร้อยเป็นสไลด์ทางการใช้เวลาทั้งวัน มีคำผิดและภาพผิดหน้า","1 วัน → 30 นาที"],
+     ["report","ตัวสร้างรายงานประชุมประจำเดือน","ต้องดึงข้อมูล คำนวณ man-day และทำสไลด์เองทุกเดือน","17 หน้าในครั้งเดียว + Excel ตรวจสอบ"],
+     ["gov","การกำกับดูแล 5 ชั้นสำหรับการนำ AI มาใช้","ส่งข้อมูลออกไม่ได้ การนำ AI มาใช้ติดเรื่องความปลอดภัย","ฝังการกำกับดูแลในทุก Skill และทดสอบภายใต้การอนุมัติของหัวหน้า"],
+     ["kb","ผู้ช่วยตอบคำถาม FAQ ของแผนก","คำตอบอยู่ในหัวคนและ SharePoint พนักงานใหม่หาไม่เจอ","ตอบพร้อมแหล่งที่มา อ่านอย่างเดียว"],
+     ["cases","ตรวจสอบเพื่อเรียนรู้จากโปรเจกต์ในอดีต","ความผิดพลาดเดิมเกิดซ้ำและไม่กลายเป็นกฎ","พบรูปแบบซ้ำข้ามลูกค้า ให้คนตัดสินใจเรื่องกฎ"],
+     ["maint","กฎการจัดเก็บไฟล์ที่สร้างด้วย AI","ไฟล์ AI กระจัดกระจาย ชื่อไม่เหมือนกัน แยกไม่ออกว่า AI สร้าง","จุดจัดเก็บเดียว ตั้งชื่อแบบเดียว ไม่เขียนทับ"],
+     ["ocr","ตัวช่วยค้นหาไอเท็มเซิร์ฟเวอร์อินเตอร์","ผู้เล่นเอเชียอ่านไอเท็มภาษาอังกฤษไม่ออก พิมพ์ผิดก็ค้นไม่เจอ","พิมพ์หรือสแกนหน้าจอเพื่อดูข้อมูลภาษาจีน"],
+     ["build","สร้างระบบที่ใช้งานได้จริงด้วย AI Agent","มีไอเดียมากแต่ไม่มีทีมวิศวกร","7 โปรเจกต์บน GitHub (3D, OCR, เว็บ)"]]
+};
+const TL={
+ zh:[["現職 · 1 年多","IT 服務業｜資料工程 → AI 導入","資料品質檢核專案、Tableau 儀表板與教育訓練；2026 年 9 月起負責團隊的生成式 AI 導入，5 支 AI Agent Skill 上線並規劃五層治理。"],
+     ["約 6 年","系統整合業｜系統工程師","戰情室儀表板開發與資料串接，跨部門系統導入（含 SharePoint），負責需求訪談、資料流與介接格式定義。"],
+     ["更早","醫藥業｜MIS","Windows Server、網路設備與機房維運，權限控管；協助內外部資安稽核與改善。"],
+     ["更早","軟體業｜客戶技術支援","客戶第一線窗口：重現問題、收集 log、釐清原因交研發修正並追蹤到結案。"],
+     ["起點","硬體系統整合","從設計背景轉入硬體 SI，之後一路走向系統、數據與 AI。"]],
+ en:[["Current · 1+ yr","IT services | Data engineering → AI adoption","Data-quality projects, Tableau dashboards and training; since September 2026 leading the team's generative-AI adoption, with 5 AI agent skills live and a five-layer governance plan."],
+     ["~6 yrs","Systems integrator | Systems engineer","Command-centre dashboards and data integration, cross-department rollouts (incl. SharePoint); owned requirement interviews, data flows and interface specs."],
+     ["Earlier","Pharmaceutical | MIS","Windows Server, network equipment and server-room operations, access control; supported internal and external security audits."],
+     ["Earlier","Software | Customer technical support","First-line client contact: reproduced issues, collected logs, found causes, handed fixes to R&D and followed through to closure."],
+     ["Start","Hardware systems integration","Moved from a design background into hardware SI, then on to systems, data and AI."]],
+ th:[["ปัจจุบัน · 1 ปีกว่า","ธุรกิจบริการไอที | วิศวกรข้อมูล → การนำ AI มาใช้","โปรเจกต์ตรวจคุณภาพข้อมูล แดชบอร์ด Tableau และการอบรม ตั้งแต่กันยายน 2026 รับผิดชอบการนำ Generative AI มาใช้ในทีม มี AI Agent Skill ใช้งานจริง 5 ตัว และวางแผนการกำกับดูแล 5 ชั้น"],
+     ["ประมาณ 6 ปี","บูรณาการระบบ | วิศวกรระบบ","พัฒนาแดชบอร์ดศูนย์บัญชาการและเชื่อมต่อข้อมูล นำระบบเข้าใช้ข้ามแผนก (รวม SharePoint) รับผิดชอบการเก็บความต้องการ กำหนดการไหลของข้อมูลและรูปแบบการเชื่อมต่อ"],
+     ["ก่อนหน้า","ธุรกิจยา | MIS","ดูแล Windows Server อุปกรณ์เครือข่ายและห้องเซิร์ฟเวอร์ ควบคุมสิทธิ์ สนับสนุนการตรวจสอบความปลอดภัยภายในและภายนอก"],
+     ["ก่อนหน้า","ธุรกิจซอฟต์แวร์ | ซัพพอร์ตเทคนิคลูกค้า","ผู้ติดต่อด่านแรกของลูกค้า: จำลองปัญหา เก็บ log หาสาเหตุ ส่งให้ R&D แก้ไข และติดตามจนปิดงาน"],
+     ["จุดเริ่มต้น","บูรณาการระบบฮาร์ดแวร์","จากพื้นฐานด้านการออกแบบสู่งาน SI ฮาร์ดแวร์ แล้วต่อไปยังระบบ ข้อมูล และ AI"]]
+};
+const COLS={
+ zh:[["AI 導入",["Agent Skill 設計與上線","需求盤點、找出值得自動化的作業","治理：去識別化、只讀、人工確認","PoC 迭代與成效量測"]],["資料",["SQL、Python（pandas）","Tableau、Power BI、OpenText BVD","資料品質檢核與核對明細","報表與簡報自動化"]],["系統",["Windows Server、網路、機房維運","API 資料串接","SharePoint 導入","權限控管與稽核支援"]],["協作",["需求訪談與跨部門導入","客戶第一線窗口","教育訓練與推廣","中文・英文讀寫"]]],
+ en:[["AI adoption",["Agent skill design and rollout","Finding the work worth automating","Governance: de-identification, read-only, human sign-off","PoC iteration and impact measurement"]],["Data",["SQL, Python (pandas)","Tableau, Power BI, OpenText BVD","Data-quality checks and audit lists","Report and deck automation"]],["Systems",["Windows Server, networks, server rooms","API data integration","SharePoint rollout","Access control and audit support"]],["Working with people",["Requirement interviews, cross-team rollout","First-line client contact","Training and adoption","Chinese · English (reading/writing)"]]],
+ th:[["การนำ AI มาใช้",["ออกแบบและเปิดใช้ Agent Skill","ค้นหางานที่ควรทำให้อัตโนมัติ","กำกับดูแล: ปกปิดข้อมูล อ่านอย่างเดียว ให้คนยืนยัน","ทำ PoC ซ้ำและวัดผล"]],["ข้อมูล",["SQL, Python (pandas)","Tableau, Power BI, OpenText BVD","ตรวจคุณภาพข้อมูลและรายการตรวจสอบ","ทำรายงานและสไลด์อัตโนมัติ"]],["ระบบ",["Windows Server เครือข่าย ห้องเซิร์ฟเวอร์","เชื่อมต่อข้อมูลผ่าน API","นำ SharePoint มาใช้","ควบคุมสิทธิ์และสนับสนุนการตรวจสอบ"]],["การทำงานร่วมกัน",["เก็บความต้องการและนำระบบใช้ข้ามแผนก","ผู้ติดต่อด่านแรกกับลูกค้า","อบรมและผลักดันการใช้งาน","จีน · อังกฤษ (อ่าน/เขียน)"]]]
+};
+const pick=o=>o[L]||o.zh;
+document.querySelectorAll("[data-t]").forEach(el=>el.innerHTML=t(el.dataset.t));
+document.getElementById("chips").innerHTML=pick(T.chips).map(c=>`<span class="chip">${c}</span>`).join("");
+document.getElementById("tiles").innerHTML=pick(TILES).map(([a,b])=>`<div class="tile"><strong>${a}</strong><span>${b}</span></div>`).join("");
+document.getElementById("rows").innerHTML=pick(ROWS).map(([id,n,p,g],i)=>`<tr><td class="case"><small>${id==="build"?"EXP-08":"EXP-0"+(["manual","report","maint","kb","cases","ocr","gov","build"].indexOf(id)+1)}</small><b>${n}</b></td><td>${p}</td><td class="gain">${g}</td><td class="ev"><a href="index.html#${id}">${t("ev")}</a></td></tr>`).join("");
+document.getElementById("tl").innerHTML=pick(TL).map(([w,h,d])=>`<div class="it"><div class="when">${w}</div><div><b>${h}</b><p>${d}</p></div></div>`).join("");
+document.getElementById("cols").innerHTML=pick(COLS).map(([h,list])=>`<div class="col"><b>${h}</b><ul>${list.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("");
+document.getElementById("sw").innerHTML=I18N.switcher();
+document.title=`Scott H. · ${t("k")}`;
+</script>
+</body>
+</html>

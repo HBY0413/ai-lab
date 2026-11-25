@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCB 瑕疵 AI 檢測站</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+Thai:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: an AOI inspection station console. Dark control-room surfaces,
+   PCB green as the material, signal orange for anything rejected. Steps run top to bottom like a line. */
+:root{
+  --bg:#0E1518; --panel:#152126; --panel-2:#1B2B31; --ink:#E4ECE8; --ink-2:#93A9A6; --line:#27393F;
+  --accent:#F2814E; --accent-ink:#1A0D06; --ok:#5CC58C; --ng:#F2614E; --pcb:#2E6B47;
+  --display:"Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.7}
+a{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--mono)}
+.top{padding:28px 0 8px;display:flex;flex-direction:column;gap:6px}
+.crumb{font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(30px,4.4vw,46px);font-weight:900;line-height:1.2;margin:0;text-wrap:balance}
+.lede{max-width:66ch;color:var(--ink-2);margin:4px 0 0}
+.jd{margin:22px 0 4px;border:1px solid var(--line);background:var(--panel);overflow-x:auto}
+.jd table{border-collapse:collapse;width:100%;font-size:14px;min-width:620px}
+.jd th,.jd td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.jd th{font-family:var(--mono);font-size:12px;color:var(--ink-2);font-weight:400;letter-spacing:.05em}
+.jd td:first-child{color:var(--ink-2);font-family:var(--mono);white-space:nowrap}
+.jd a{text-decoration:none;font-family:var(--mono);white-space:nowrap}
+section.step{margin:40px 0;border-top:1px solid var(--line);padding-top:18px}
+.step-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:12px}
+.step-head .n{font-family:var(--mono);color:var(--accent);font-weight:600}
+.step-head h2{margin:0;font-size:clamp(21px,2.6vw,26px);font-weight:900}
+.step-head p{margin:0;color:var(--ink-2);font-size:15px;flex-basis:100%;max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);padding:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+button{font:600 14px var(--display);cursor:pointer;border:1px solid var(--ink-2);background:var(--panel-2);color:var(--ink);padding:8px 14px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:13px;color:var(--ink-2)}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink-2);text-transform:uppercase}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px}
+.thumbs canvas{width:100%;height:auto;display:block;image-rendering:pixelated;border:2px solid transparent;cursor:pointer;background:#000}
+.thumbs .t{position:relative}
+.thumbs .t span{position:absolute;left:3px;top:3px;font:600 10px var(--mono);padding:0 4px;background:rgba(0,0,0,.7)}
+.thumbs .t.ok canvas{border-color:var(--ok)}
+.thumbs .t.ng canvas{border-color:var(--ng)}
+.thumbs .t.sel canvas{outline:2px solid var(--ink);outline-offset:1px}
+.thumbs .t span.ok{color:var(--ok)} .thumbs .t span.ng{color:var(--ng)}
+.thumbs .t span.wrong{background:var(--ng);color:#fff}
+.progress{height:8px;background:var(--panel-2);flex:1;min-width:160px}
+.progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .1s}
+.viewer{display:flex;flex-wrap:wrap;gap:14px}
+.viewer figure{margin:0;display:flex;flex-direction:column;gap:4px}
+.viewer canvas{width:288px;max-width:100%;height:auto;image-rendering:pixelated;background:#000;border:1px solid var(--line)}
+.verdict{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:10px}
+.pill{font:700 15px var(--mono);padding:3px 12px;border:2px solid}
+.pill.ok{color:var(--ok);border-color:var(--ok)} .pill.ng{color:var(--ng);border-color:var(--ng)}
+.kv{display:flex;flex-direction:column}
+.kv strong{font-family:var(--mono);font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2}
+.kv small{color:var(--ink-2);font-size:12px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media (max-width:600px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.metric{background:var(--panel-2);padding:10px 12px;border-left:3px solid var(--line)}
+.metric strong{display:block;font-family:var(--mono);font-size:26px;font-variant-numeric:tabular-nums;line-height:1.2}
+.metric small{color:var(--ink-2);font-size:13px}
+.metric.bad{border-left-color:var(--ng)} .metric.good{border-left-color:var(--ok)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+#hist{width:100%;height:auto;display:block}
+.draw-wrap canvas{width:384px;max-width:100%;height:auto;image-rendering:pixelated;touch-action:none;cursor:crosshair;border:1px solid var(--line)}
+.ai-out{min-height:110px;border-top:1px dashed var(--line);margin-top:10px;padding-top:10px;font-size:15px}
+.ai-out .tag{display:inline-block;font:12px var(--mono);padding:1px 8px;border:1px solid var(--line);color:var(--ink-2);margin-bottom:6px}
+.ai-out .tag.live{border-color:var(--ok);color:var(--ok)}
+.ai-out h4{margin:8px 0 2px;font-size:15px}
+.ai-out ul{margin:2px 0;padding-left:1.2em}
+.ai-out p{margin:4px 0}
+table.spec{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+table.spec th,table.spec td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.spec th{background:var(--panel-2);font-weight:500}
+.scroll{overflow-x:auto}
+.arch{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.arch div{flex:1 1 160px;background:var(--panel-2);border-top:3px solid var(--pcb);padding:10px 12px;font-size:14px}
+.arch b{display:block;font-size:15px}
+.arch div.here{border-top-color:var(--accent)}
+footer{border-top:1px solid var(--line);margin-top:50px;padding:20px 0 50px;color:var(--ink-2);font-size:14px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+<script src="i18n.js"></script>
+<script src="vision-i18n.js"></script>
+<style>.langsw{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-left:10px;vertical-align:middle}.langsw button{background:none;border:none;color:var(--ink-2);font:500 12px "Jost","Noto Sans TC",sans-serif;padding:4px 10px;cursor:pointer}.langsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="crumb"><a href="index.html#demos">← 回到 AI 實驗室</a> <span>/ 專屬 Demo</span><span id="sw"></span></div>
+  <div class="eyebrow">Target role · 泰國廠 AI 視覺／AOI 工程師</div>
+  <h1>PCB 外觀瑕疵 AI 檢測站</h1>
+  <p class="lede">工廠的瑕疵品很少，很難收集到大量「壞的」樣本。這個 Demo 只用良品訓練異常偵測模型，看到跟良品不一樣的地方就標出來。訓練、推論、門檻值調整都在你的瀏覽器裡即時運算，你也可以自己在板子上畫瑕疵來考它。</p>
+  <div class="jd" role="region" aria-label="職缺需求對照">
+    <table>
+      <thead><tr><th>職缺需求</th><th>這個 Demo 怎麼證明</th><th>位置</th></tr></thead>
+      <tbody>
+        <tr><td>Anomaly Detection</td><td>只用 40 片良品學習每個位置的正常樣貌，推論時計算偏離程度並畫成熱力圖</td><td><a href="#train">STEP 1–2</a></td></tr>
+        <tr><td>模型優化</td><td>用門檻值在「漏放」和「過殺」之間取捨，即時看攔截率與過殺率</td><td><a href="#tune">STEP 3</a></td></tr>
+        <tr><td>深度學習模型訓練</td><td>正式版用 anomalib 的 PatchCore 在 Colab GPU 訓練，匯出 ONNX、用 OpenVINO 加速</td><td><a href="#arch">STEP 6</a></td></tr>
+        <tr><td>定義標註規範</td><td>5 類瑕疵的定義、判定標準與標註方式</td><td><a href="#spec">STEP 5</a></td></tr>
+        <tr><td>規劃 AI 視覺實驗室</td><td>從取像、訓練、部署到產線回饋的完整架構</td><td><a href="#arch">STEP 6</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</header>
+
+<main>
+<section class="step" id="train">
+  <div class="step-head"><span class="n">STEP 1</span><h2>只用良品訓練</h2>
+    <p>產線上的同一個料號，每一片的位置都一樣。模型把板子切成 8×8 像素的小區塊，記下每個位置在良品上的顏色與邊緣特徵分布（平均值與變異），這就是它對「正常」的認識。</p></div>
+  <div class="card">
+    <div class="row" style="margin-bottom:10px">
+      <button type="button" class="primary" id="btnTrain">開始訓練（40 片良品）</button>
+      <div class="progress" aria-hidden="true"><i id="prog"></i></div>
+      <span class="hint mono" id="trainInfo">尚未訓練</span>
+    </div>
+    <div class="thumbs" id="goodThumbs"></div>
+  </div>
+</section>
+
+<section class="step" id="test">
+  <div class="step-head"><span class="n">STEP 2</span><h2>檢測 40 片測試板</h2>
+    <p>測試板有一半是良品，另一半混入短路、斷路、缺孔、刮傷、異物等 5 類瑕疵。點任何一片看熱力圖；框線綠色是判定 OK，紅色是判定 NG，標籤反白的是判錯的。</p></div>
+  <div class="grid2">
+    <div class="card"><div class="thumbs" id="testThumbs"></div></div>
+    <div class="card">
+      <div class="viewer">
+        <figure><div class="label">原始影像</div><canvas id="vRaw" width="192" height="192"></canvas></figure>
+        <figure><div class="label">異常熱力圖</div><canvas id="vHeat" width="192" height="192"></canvas></figure>
+      </div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="tune">
+  <div class="step-head"><span class="n">STEP 3</span><h2>調整門檻值：漏放與過殺的取捨</h2>
+    <p>門檻值越低，越不會放過瑕疵，但會把良品誤判為 NG（過殺），增加人工複判的負擔。門檻值越高則反過來。預設值只用良品的分數決定（取良品分數的最大值再留 10% 餘裕），不偷看瑕疵品答案。</p></div>
+  <div class="card">
+    <div class="row"><label class="label" for="thr">門檻值</label><span class="mono" id="thrVal"></span><button type="button" id="thrReset">回到預設</button></div>
+    <input type="range" id="thr" min="0" max="100" step="0.5">
+    <canvas id="hist" width="1100" height="200" aria-label="良品與瑕疵品的異常分數分布"></canvas>
+    <div class="metrics" style="margin-top:10px">
+      <div class="metric good"><strong id="mTP">–</strong><small>正確攔截瑕疵</small></div>
+      <div class="metric bad"><strong id="mFN">–</strong><small>漏放（瑕疵被判 OK）</small></div>
+      <div class="metric bad"><strong id="mFP">–</strong><small>過殺（良品被判 NG）</small></div>
+      <div class="metric good"><strong id="mTN">–</strong><small>正確放行良品</small></div>
+    </div>
+    <div class="row" style="margin-top:10px;gap:22px">
+      <div class="kv"><strong id="mRecall">–</strong><small>瑕疵攔截率（Recall）</small></div>
+      <div class="kv"><strong id="mPrec">–</strong><small>判 NG 中真的有瑕疵（Precision）</small></div>
+      <div class="kv"><strong id="mOver">–</strong><small>過殺率</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="draw">
+  <div class="step-head"><span class="n">STEP 4</span><h2>自己製造瑕疵，考考模型</h2>
+    <p>在良品上畫出瑕疵，放開滑鼠就會立刻檢測。接著可以把影像和熱力圖交給 Claude，請它判讀瑕疵類型、可能的製程原因與處置建議。</p></div>
+  <div class="grid2">
+    <div class="card draw-wrap">
+      <div class="row" style="margin-bottom:8px" role="group" aria-label="畫筆">
+        <button type="button" data-tool="copper" aria-pressed="true">銅屑（短路）</button>
+        <button type="button" data-tool="cut" aria-pressed="false">刮斷線路（斷路）</button>
+        <button type="button" data-tool="dirt" aria-pressed="false">異物</button>
+        <button type="button" id="btnClear">換一片良品</button>
+      </div>
+      <canvas id="drawCv" width="192" height="192"></canvas>
+      <div class="hint">滑鼠或手指在板子上拖曳作畫。</div>
+    </div>
+    <div class="card">
+      <div class="viewer"><figure><div class="label">即時熱力圖</div><canvas id="drawHeat" width="192" height="192"></canvas></figure></div>
+      <div class="verdict" id="drawVerdict"></div>
+      <div class="row" style="margin-top:12px"><button type="button" class="primary" id="btnAsk">請 Claude 判讀</button><span class="hint" id="askNote"></span></div>
+      <div class="ai-out" id="aiOut"></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="spec">
+  <div class="step-head"><span class="n">STEP 5</span><h2>瑕疵標註規範（草案）</h2>
+    <p>模型好不好，取決於標註是否一致。下表是我跟視覺工程師協作時會先對齊的定義，標註工具使用 CVAT 或 Label Studio。</p></div>
+  <div class="card scroll">
+    <table class="spec">
+      <thead><tr><th>類別</th><th>定義</th><th>判定標準（示意）</th><th>標註方式</th></tr></thead>
+      <tbody>
+        <tr><td>短路 Short</td><td>不該相連的兩條線路或焊墊之間有銅相連</td><td>任何可見的導通殘銅即 NG</td><td>矩形框，涵蓋兩端導體</td></tr>
+        <tr><td>斷路 Open</td><td>線路中斷或寬度明顯縮減</td><td>缺口寬度超過線寬 1/3 即 NG</td><td>矩形框，框住缺口</td></tr>
+        <tr><td>缺孔 Missing hole</td><td>應鑽孔位置未鑽孔或孔偏</td><td>孔位偏移超過孔徑 1/4 即 NG</td><td>以孔位中心框選</td></tr>
+        <tr><td>刮傷 Scratch</td><td>防焊層表面的線狀損傷</td><td>露銅即 NG；未露銅依長度判定</td><td>多邊形，沿刮痕描繪</td></tr>
+        <tr><td>異物 Contamination</td><td>板面附著的粉塵、毛屑、殘膠</td><td>位於焊墊上即 NG</td><td>矩形框</td></tr>
+      </tbody>
+    </table>
+    <p class="hint">判定數值為示意，實際依客戶規格與 IPC-A-600 等級訂定。</p>
+  </div>
+</section>
+
+<section class="step" id="arch">
+  <div class="step-head"><span class="n">STEP 6</span><h2>從 Demo 到產線：AI 視覺實驗室架構</h2>
+    <p>這頁的模型是在瀏覽器裡跑的輕量統計版（概念近似 PaDiM：逐位置建立良品特徵分布），用來讓你直接操作。導入產線時，我會用下面的流程，把模型換成深度學習版本。</p></div>
+  <div class="arch">
+    <div><b>① 取像</b>AOI 相機定位、固定光源、統一解析度，影像依料號歸檔</div>
+    <div><b>② 標註</b>依 STEP 5 規範，在 CVAT 標註少量瑕疵作為驗證集</div>
+    <div><b>③ 訓練</b>anomalib PatchCore／PaDiM，在 Colab 或廠內 GPU 只用良品訓練</div>
+    <div><b>④ 優化</b>匯出 ONNX，用 OpenVINO 加速推論；以驗證集決定門檻值</div>
+    <div><b>⑤ 部署</b>產線邊緣電腦推論，NG 送人工複判站</div>
+    <div class="here"><b>⑥ 回饋</b>複判結果回流成新的訓練與驗證資料，定期重訓</div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <p>所有影像都由程式即時產生，模擬同一料號 PCB 的良品與 5 類瑕疵，不含任何真實客戶資料。訓練與推論都在你的瀏覽器中執行；只有「請 Claude 判讀」會把該片影像與熱力圖送給 AI。</p>
+</footer>
+</div>
+
+<script>
+translatePage();document.getElementById("sw").innerHTML=I18N.switcher();document.title=tv("PCB 外觀瑕疵 AI 檢測站");
+/* ===================== synthetic PCB ===================== */
+const S=192;
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const MASK="#24603F",TRACE="#3E8A57",PAD="#D2A64C",HOLE="#0B0F0D",SILK="#E9EEE6";
+const TRACES=[[[14,40],[110,40],[110,78]],[[14,58],[80,58],[80,120],[150,120]],[[30,150],[30,100],[60,100]],[[120,20],[178,20],[178,96]],[[96,150],[178,150]],[[130,60],[160,60],[160,100]],[[14,176],[120,176]],[[60,140],[60,176]]];
+const PADS=[[110,78],[150,120],[60,100],[178,96],[96,150],[178,150],[130,60],[160,100],[14,40],[14,58],[30,150],[120,20],[14,176],[120,176],[60,140]];
+function drawBoard(ctx,seed){
+  const r=rng(seed),j=()=>(r()-.5)*.6;
+  ctx.fillStyle=MASK;ctx.fillRect(0,0,S,S);
+  ctx.strokeStyle=TRACE;ctx.lineWidth=4;ctx.lineCap="round";ctx.lineJoin="round";
+  TRACES.forEach(t=>{ctx.beginPath();t.forEach(([x,y],i)=>i?ctx.lineTo(x+j(),y+j()):ctx.moveTo(x+j(),y+j()));ctx.stroke()});
+  // IC footprint
+  ctx.fillStyle=PAD;for(let i=0;i<6;i++){ctx.fillRect(20+i*9,76,5,9);ctx.fillRect(20+i*9,92-0,5,0)}
+  ctx.strokeStyle=SILK;ctx.lineWidth=1;ctx.strokeRect(16,70,58,20);
+  PADS.forEach(([x,y])=>{ctx.fillStyle=PAD;ctx.beginPath();ctx.arc(x+j(),y+j(),5.5,0,7);ctx.fill();ctx.fillStyle=HOLE;ctx.beginPath();ctx.arc(x,y,2,0,7);ctx.fill()});
+  ctx.fillStyle=SILK;ctx.font="9px monospace";ctx.fillText("R12",120,136);ctx.fillText("U3",34,66);ctx.fillText("C7",140,46);
+  // fiducials
+  [[184,184],[8,8]].forEach(([x,y])=>{ctx.fillStyle=PAD;ctx.beginPath();ctx.arc(x,y,3,0,7);ctx.fill()});
+  // sensor noise + lighting variation
+  const img=ctx.getImageData(0,0,S,S),d=img.data,g=1+(r()-.5)*.08;
+  for(let i=0;i<d.length;i+=4){const n=(r()-.5)*10;d[i]=d[i]*g+n;d[i+1]=d[i+1]*g+n;d[i+2]=d[i+2]*g+n}
+  ctx.putImageData(img,0,0);
+}
+const DEFECTS=["短路","斷路","缺孔","刮傷","異物"];
+function addDefect(ctx,type,seed){
+  const r=rng(seed*7+3);let box;
+  if(type==="短路"){const pairs=[[[14,40],[14,58]],[[60,58],[60,40]],[[80,100],[60,100]],[[130,120],[130,150]],[[160,100],[178,96]]];const [[x1,y1],[x2,y2]]=pairs[Math.floor(r()*pairs.length)];ctx.strokeStyle=TRACE;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x1+3,y1);ctx.lineTo(x2+3,y2);ctx.stroke();box=[Math.min(x1,x2)-4,Math.min(y1,y2)-4,Math.abs(x2-x1)+12,Math.abs(y2-y1)+8]}
+  else if(type==="斷路"){const pts=[[50,40],[40,58],[80,90],[178,50],[140,150],[90,176]];const [x,y]=pts[Math.floor(r()*pts.length)];ctx.fillStyle=MASK;const hor=(y===40||y===58||y===150||y===176);hor?ctx.fillRect(x-3,y-4,6,8):ctx.fillRect(x-4,y-3,8,6);box=[x-6,y-6,12,12]}
+  else if(type==="缺孔"){const [x,y]=PADS[Math.floor(r()*PADS.length)];ctx.fillStyle=PAD;ctx.beginPath();ctx.arc(x,y,2.6,0,7);ctx.fill();box=[x-7,y-7,14,14]}
+  else if(type==="刮傷"){const x=20+r()*140,y=20+r()*140,a=r()*Math.PI,l=18+r()*14;ctx.strokeStyle="#7FB08C";ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+Math.cos(a)*l,y+Math.sin(a)*l);ctx.stroke();box=[Math.min(x,x+Math.cos(a)*l)-3,Math.min(y,y+Math.sin(a)*l)-3,Math.abs(Math.cos(a)*l)+6,Math.abs(Math.sin(a)*l)+6]}
+  else{const x=20+r()*150,y=20+r()*150;ctx.fillStyle="#2A2420";ctx.beginPath();ctx.ellipse(x,y,3+r()*2,2+r()*2,r()*3,0,7);ctx.fill();box=[x-7,y-7,14,14]}
+  return box;
+}
+function makeCanvas(){const c=document.createElement("canvas");c.width=S;c.height=S;return c}
+
+/* ===================== model: per-location patch statistics ===================== */
+const P=8,ST=4,G=Math.floor((S-P)/ST)+1,F=5;
+function features(ctx){
+  const d=ctx.getImageData(0,0,S,S).data,gray=new Float32Array(S*S);
+  for(let i=0;i<S*S;i++)gray[i]=.3*d[i*4]+.59*d[i*4+1]+.11*d[i*4+2];
+  const gx=new Float32Array(S*S),gy=new Float32Array(S*S);
+  for(let y=1;y<S-1;y++)for(let x=1;x<S-1;x++){const i=y*S+x;gx[i]=gray[i+1]-gray[i-1];gy[i]=gray[i+S]-gray[i-S]}
+  const f=new Float32Array(G*G*F);
+  for(let py=0;py<G;py++)for(let px=0;px<G;px++){
+    let r=0,g=0,b=0,ex=0,ey=0;
+    for(let y=0;y<P;y++)for(let x=0;x<P;x++){const X=px*ST+x,Y=py*ST+y,i=Y*S+X;r+=d[i*4];g+=d[i*4+1];b+=d[i*4+2];ex+=Math.abs(gx[i]);ey+=Math.abs(gy[i])}
+    const n=P*P,o=(py*G+px)*F;f[o]=r/n;f[o+1]=g/n;f[o+2]=b/n;f[o+3]=ex/n;f[o+4]=ey/n;
+  }
+  return f;
+}
+let model=null;
+function fit(list){
+  const N=list.length,L=G*G*F,mu=new Float32Array(L),sd=new Float32Array(L);
+  list.forEach(f=>{for(let i=0;i<L;i++)mu[i]+=f[i]/N});
+  list.forEach(f=>{for(let i=0;i<L;i++)sd[i]+=(f[i]-mu[i])**2/N});
+  for(let i=0;i<L;i++)sd[i]=Math.sqrt(sd[i])+[3,3,3,4,4][i%F];
+  return {mu,sd};
+}
+function infer(ctx){
+  const f=features(ctx),m=new Float32Array(G*G);
+  for(let p=0;p<G*G;p++){let s=0;for(let k=0;k<F;k++){const z=(f[p*F+k]-model.mu[p*F+k])/model.sd[p*F+k];s+=z*z}m[p]=Math.sqrt(s/F)}
+  const sm=new Float32Array(G*G);let mx=0,arg=0;
+  for(let y=0;y<G;y++)for(let x=0;x<G;x++){let s=0,c=0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<G&&Y<G){s+=m[Y*G+X];c++}}const v=s/c;sm[y*G+x]=v;if(v>mx){mx=v;arg=y*G+x}}
+  return {map:sm,score:mx,at:[(arg%G)*ST+P/2,Math.floor(arg/G)*ST+P/2]};
+}
+function heatColor(t){t=Math.max(0,Math.min(1,t));const r=Math.round(255*Math.min(1,t*2)),g=Math.round(255*Math.max(0,t*2-1)*.85+40*(1-t)),b=Math.round(80*(1-t));return[r,g,b]}
+function drawHeat(target,src,res,thr){
+  const ctx=target.getContext("2d");ctx.drawImage(src,0,0);
+  const img=ctx.getImageData(0,0,S,S),d=img.data,scale=thr*1.6;
+  for(let y=0;y<S;y++)for(let x=0;x<S;x++){
+    const gx=Math.min(G-1,Math.max(0,Math.round((x-P/2)/ST))),gy=Math.min(G-1,Math.max(0,Math.round((y-P/2)/ST)));
+    const v=res.map[gy*G+gx]/scale,i=(y*S+x)*4,a=Math.min(.8,Math.max(0,(v-.45)*1.4));
+    if(a>0){const [r,g,b]=heatColor(v);d[i]=d[i]*(1-a)+r*a;d[i+1]=d[i+1]*(1-a)+g*a;d[i+2]=d[i+2]*(1-a)+b*a}else{d[i]*=.55;d[i+1]*=.55;d[i+2]*=.55}
+  }
+  ctx.putImageData(img,0,0);
+  if(res.score>thr){ctx.strokeStyle="#F2614E";ctx.lineWidth=2;ctx.strokeRect(res.at[0]-12,res.at[1]-12,24,24)}
+}
+
+/* ===================== data ===================== */
+const good=[],test=[];
+for(let i=0;i<40;i++){const c=makeCanvas();drawBoard(c.getContext("2d"),1000+i);good.push(c)}
+for(let i=0;i<40;i++){const c=makeCanvas(),x=c.getContext("2d");drawBoard(x,5000+i);let type=null,box=null;if(i%2===1){type=DEFECTS[(i>>1)%5];box=addDefect(x,type,i)}test.push({c,type,box,res:null})}
+
+/* ===================== UI ===================== */
+const $=id=>document.getElementById(id);
+let thr=null,defThr=null,sel=1;
+function thumb(c,cls,tag,onclick){const w=document.createElement("div");w.className="t "+(cls||"");const t=makeCanvas();t.getContext("2d").drawImage(c,0,0);w.appendChild(t);if(tag){const s=document.createElement("span");s.className=tag[1];s.textContent=tag[0];w.appendChild(s)}if(onclick){t.tabIndex=0;t.addEventListener("click",onclick);t.addEventListener("keydown",e=>{if(e.key==="Enter")onclick()})}return w}
+good.forEach(c=>$("goodThumbs").appendChild(thumb(c)));
+
+function renderTest(){
+  const box=$("testThumbs");box.innerHTML="";
+  test.forEach((t,i)=>{
+    let cls="",tag=[tv(t.type||"良品"),""];
+    if(t.res){const ng=t.res.score>thr,wrong=ng!==!!t.type;cls=(ng?"ng":"ok")+(i===sel?" sel":"");tag=[tv(t.type||"良品"),wrong?"wrong":(ng?"ng":"ok")]}
+    else if(i===sel)cls="sel";
+    box.appendChild(thumb(t.c,cls,tag,()=>{sel=i;renderTest();showSel()}));
+  });
+}
+function verdictHTML(res,truth){
+  if(!res)return`<span class="hint">${tv("請先完成 STEP 1 訓練。")}</span>`;
+  const ng=res.score>thr;
+  return `<span class="pill ${ng?"ng":"ok"}">${ng?"NG":"OK"}</span>
+  <div class="kv"><strong>${res.score.toFixed(2)}</strong><small>${tv("異常分數")} (${tv("門檻")} ${thr.toFixed(2)})</small></div>
+  ${truth!==undefined?`<div class="kv"><strong>${tv(truth||"良品")}</strong><small>${tv("實際答案")}</small></div>`:""}`;
+}
+function showSel(){
+  const t=test[sel];$("vRaw").getContext("2d").drawImage(t.c,0,0);
+  if(t.box){const x=$("vRaw").getContext("2d");x.strokeStyle="rgba(255,255,255,.8)";x.setLineDash([3,2]);x.lineWidth=1;x.strokeRect(...t.box);x.setLineDash([])}
+  if(t.res)drawHeat($("vHeat"),t.c,t.res,thr);else{const x=$("vHeat").getContext("2d");x.fillStyle="#000";x.fillRect(0,0,S,S);x.fillStyle="#93A9A6";x.font="11px monospace";x.fillText(tv("等待訓練"),58,98)}
+  $("verdict").innerHTML=verdictHTML(t.res,t.type);
+}
+
+let goodScores=[];
+$("btnTrain").addEventListener("click",async()=>{
+  $("btnTrain").disabled=true;const feats=[],t0=performance.now();
+  for(let i=0;i<good.length;i++){feats.push(features(good[i].getContext("2d")));$("prog").style.width=((i+1)/good.length*70)+"%";if(i%4===3)await new Promise(r=>setTimeout(r))}
+  model=fit(feats);
+  // calibrate threshold on good-only (leave-in, plus a 10% margin)
+  goodScores=good.map(c=>infer(c.getContext("2d")).score);
+  defThr=Math.max(...goodScores)*1.1;thr=defThr;
+  for(let i=0;i<test.length;i++){test[i].res=infer(test[i].c.getContext("2d"));$("prog").style.width=(70+(i+1)/test.length*30)+"%";if(i%5===4)await new Promise(r=>setTimeout(r))}
+  const ms=performance.now()-t0;
+  $("trainInfo").textContent=tv("完成：{a} 片良品、{b} 個區塊 × {c} 維特徵，含 40 片推論共 {d} 秒",{a:good.length,b:G*G,c:F,d:(ms/1000).toFixed(1)});
+  $("btnTrain").textContent=tv("重新訓練");$("btnTrain").disabled=false;
+  setupSlider();renderTest();showSel();updateMetrics();detectDraw();
+});
+
+function setupSlider(){
+  const all=test.map(t=>t.res.score),mx=Math.max(...all,thr)*1.1;
+  const s=$("thr");s.max=mx.toFixed(2);s.step=(mx/400).toFixed(3);s.value=thr;$("thrVal").textContent=thr.toFixed(2);
+}
+$("thr").addEventListener("input",e=>{if(!model)return;thr=+e.target.value;$("thrVal").textContent=thr.toFixed(2);renderTest();showSel();updateMetrics();detectDraw()});
+$("thrReset").addEventListener("click",()=>{if(!model)return;thr=defThr;$("thr").value=thr;$("thrVal").textContent=thr.toFixed(2);renderTest();showSel();updateMetrics();detectDraw()});
+
+function updateMetrics(){
+  let TP=0,FN=0,FP=0,TN=0;
+  test.forEach(t=>{const ng=t.res.score>thr;if(t.type){ng?TP++:FN++}else{ng?FP++:TN++}});
+  $("mTP").textContent=TP;$("mFN").textContent=FN;$("mFP").textContent=FP;$("mTN").textContent=TN;
+  const pct=v=>isFinite(v)?(v*100).toFixed(0)+"%":"–";
+  $("mRecall").textContent=pct(TP/(TP+FN));$("mPrec").textContent=pct(TP/(TP+FP));$("mOver").textContent=pct(FP/(FP+TN));
+  drawHist();
+}
+function drawHist(){
+  const cv=$("hist"),x=cv.getContext("2d"),W=cv.width,H=cv.height,pad=34;
+  x.clearRect(0,0,W,H);
+  const all=test.map(t=>t.res.score),mx=+$("thr").max,bins=40,bw=(W-pad*2)/bins;
+  const gh=new Array(bins).fill(0),bh=new Array(bins).fill(0);
+  test.forEach(t=>{const b=Math.min(bins-1,Math.floor(t.res.score/mx*bins));(t.type?bh:gh)[b]++});
+  const top=Math.max(...gh,...bh,1),u=(H-pad-16)/top;
+  x.strokeStyle="#27393F";x.lineWidth=1;for(let k=0;k<=top;k++){const y=H-pad-k*u;x.beginPath();x.moveTo(pad,y);x.lineTo(W-pad,y);x.stroke()}
+  for(let i=0;i<bins;i++){
+    if(gh[i]){x.fillStyle="rgba(92,197,140,.75)";x.fillRect(pad+i*bw+1,H-pad-gh[i]*u,bw/2-1,gh[i]*u)}
+    if(bh[i]){x.fillStyle="rgba(242,97,78,.8)";x.fillRect(pad+i*bw+bw/2,H-pad-bh[i]*u,bw/2-1,bh[i]*u)}
+  }
+  const tx=pad+thr/mx*(W-pad*2);x.strokeStyle="#F2814E";x.lineWidth=3;x.beginPath();x.moveTo(tx,8);x.lineTo(tx,H-pad);x.stroke();
+  x.fillStyle="#E4ECE8";x.font="22px 'IBM Plex Mono',monospace";x.fillText(tv("門檻 ")+thr.toFixed(2),Math.min(tx+8,W-170),28);
+  x.fillStyle="#93A9A6";x.font="20px 'IBM Plex Mono',monospace";x.fillText("0",pad,H-8);x.fillText(mx.toFixed(1),W-pad-40,H-8);x.fillText(tv("異常分數 →"),W/2-60,H-8);
+  x.fillStyle="#5CC58C";x.fillRect(pad,6,14,14);x.fillStyle="#E4ECE8";x.fillText(tv("良品"),pad+20,20);
+  x.fillStyle="#F2614E";x.fillRect(pad+90,6,14,14);x.fillStyle="#E4ECE8";x.fillText(tv("瑕疵品"),pad+110,20);
+}
+
+/* ---------- draw-your-own ---------- */
+const dc=$("drawCv"),dx=dc.getContext("2d");let tool="copper",boardSeed=9000,drawRes=null;
+function newBoard(){drawBoard(dx,boardSeed++);detectDraw()}
+document.querySelectorAll("[data-tool]").forEach(b=>b.addEventListener("click",()=>{tool=b.dataset.tool;document.querySelectorAll("[data-tool]").forEach(o=>o.setAttribute("aria-pressed",o===b))}));
+$("btnClear").addEventListener("click",()=>{newBoard();$("aiOut").innerHTML=exampleHTML()});
+let drawing=false,last=null;
+function pos(e){const r=dc.getBoundingClientRect();return[(e.clientX-r.left)/r.width*S,(e.clientY-r.top)/r.height*S]}
+function stroke(a,b){dx.lineCap="round";if(tool==="copper"){dx.strokeStyle=TRACE;dx.lineWidth=3}else if(tool==="cut"){dx.strokeStyle=MASK;dx.lineWidth=6}else{dx.strokeStyle="#2A2420";dx.lineWidth=5}dx.beginPath();dx.moveTo(...a);dx.lineTo(...b);dx.stroke()}
+dc.addEventListener("pointerdown",e=>{drawing=true;dc.setPointerCapture(e.pointerId);last=pos(e);stroke(last,last)});
+dc.addEventListener("pointermove",e=>{if(!drawing)return;const p=pos(e);stroke(last,p);last=p});
+dc.addEventListener("pointerup",()=>{drawing=false;detectDraw()});
+function detectDraw(){
+  if(!model){$("drawVerdict").innerHTML=verdictHTML(null);const x=$("drawHeat").getContext("2d");x.drawImage(dc,0,0);return}
+  drawRes=infer(dx);drawHeat($("drawHeat"),dc,drawRes,thr);$("drawVerdict").innerHTML=verdictHTML(drawRes);
+}
+newBoard();
+
+/* ---------- Claude judgement ---------- */
+let sample=null,canImg=false;
+(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample");if(sample){const l=await sample.limits();canImg=!!(l&&l.images)}}}catch(e){sample=null}
+  $("askNote").textContent=tv(sample?(canImg?"會送出這一片的影像與熱力圖":"此環境的 AI 不支援圖片，將只送出檢測數據"):"此環境未開啟即時 AI，按下會顯示範例判讀");})();
+const EXAMPLE=`#### 判讀結果
+- **瑕疵類型**：短路（Short），兩條相鄰線路之間出現殘銅相連。
+- **位置**：熱力圖最高點位於畫面左上方兩條水平線路之間，與框選位置一致。
+#### 可能的製程原因
+- 蝕刻不足：蝕刻液濃度或時間不夠，線距處殘銅未完全去除。
+- 乾膜曝光異常：底片或乾膜上有異物，造成不該留銅的地方被保護。
+#### 建議處置
+- 此片判 NG，送人工複判確認是否導通。
+- 回查同批號蝕刻線的藥水濃度與輸送速度紀錄；若同批多片出現，暫停並開立異常單（8D D2 問題描述可直接引用本判讀）。`;
+function md(s){return s.split("\n").map(l=>{const e=l.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");if(/^####\s/.test(l))return`<h4>${e.slice(5)}</h4>`;if(/^\s*[-*]\s/.test(l))return`<ul><li>${e.replace(/^\s*[-*]\s/,"")}</li></ul>`;return l.trim()?`<p>${e}</p>`:""}).join("").replace(/<\/ul><ul>/g,"")}
+function exampleHTML(){const L=I18N.lang;return`<span class="tag">${tv("範例判讀（預先產生，對應一片短路瑕疵）")}</span>`+md(L!=="zh"&&window.VEX[L]?window.VEX[L]:EXAMPLE)}
+$("aiOut").innerHTML=exampleHTML();
+let ctrl=null;
+$("btnAsk").addEventListener("click",async()=>{
+  if(!model){$("askNote").textContent=tv("請先完成 STEP 1 訓練。");return}
+  if(!sample){$("aiOut").innerHTML=exampleHTML();return}
+  const ng=drawRes.score>thr;
+  const prompt=`你是 PCB 廠 AOI 複判站的資深品保工程師。這是一片 PCB 的檢測結果（模擬影像）。
+異常偵測模型（只用良品訓練）給出異常分數 ${drawRes.score.toFixed(2)}，門檻 ${thr.toFixed(2)}，判定 ${ng?"NG":"OK"}；最異常的位置約在像素座標 (${drawRes.at.map(Math.round).join(", ")})，影像大小 192×192。
+${canImg?"附上兩張圖：第一張是原始影像（綠色為防焊、較亮綠色為線路、金色圓點為焊墊、黑點為鑽孔），第二張是異常熱力圖（越紅越異常，紅框為最異常處）。":"這次沒有附圖，請根據數據說明可能情況，並提醒需要人工看圖確認。"}
+可能的瑕疵類型只有：短路、斷路、缺孔、刮傷、異物，或無瑕疵。
+請用繁體中文 Markdown 輸出三段，每段 2 點以內，簡潔：
+#### 判讀結果
+（瑕疵類型與位置，若判斷為無瑕疵或模型誤判也請直說）
+#### 可能的製程原因
+#### 建議處置`;
+  if(ctrl)ctrl.abort();ctrl=new AbortController();
+  $("btnAsk").disabled=true;$("askNote").textContent=tv("Claude 判讀中…");
+  $("aiOut").innerHTML=`<span class="tag live">${tv("Claude 即時判讀")}</span><div id="aiStream"></div>`;
+  try{
+    const opts={signal:ctrl.signal,cache:false,onText:({text})=>{$("aiStream").innerHTML=md(text)}};
+    if(canImg){const b1=await new Promise(r=>dc.toBlob(r,"image/png")),b2=await new Promise(r=>$("drawHeat").toBlob(r,"image/png"));opts.images=[b1,b2]}
+    const r=await sample(prompt+I18N.t("out.note"),opts);$("aiStream").innerHTML=md(r.text);$("askNote").textContent=tv("完成。再畫一個瑕疵試試看。");
+  }catch(e){
+    if(e&&e.name==="AbortError")return;
+    $("askNote").textContent=tv(e&&e.code==="rate_limited"?"使用次數暫時達上限，請稍後再試。":"AI 暫時無法回應，已改顯示範例判讀。");
+    if(!(e&&e.code==="rate_limited"))$("aiOut").innerHTML=exampleHTML();
+  }finally{$("btnAsk").disabled=false}
+});
+
+/* initial state: show a defect sample, auto-train so the page is complete at rest */
+renderTest();showSel();
+setTimeout(()=>$("btnTrain").click(),300);
+</script>
+</body>
+</html>
