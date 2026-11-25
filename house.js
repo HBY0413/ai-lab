@@ -517,9 +517,10 @@ fontsReady.then(()=>new Promise(r=>setTimeout(r,quick?100:900))).then(()=>{
   // rebuild labels now that fonts are loaded
   for(const id in labelMeshes){const old=labelMeshes[id];const st=ST.find(x=>x.id===id);const lab=makeSign(st);Rg.remove(old);old.children.forEach(c=>{const k=pickables.indexOf(c);if(k>=0)pickables.splice(k,1)});lab.children.forEach(c=>pickables.push(c));Rg.add(lab);labelMeshes[id]=lab}
   clearInterval(timer);lt.textContent="100%";$("loadMsg").textContent=tt("ld.done");
-  setTimeout(()=>{$("loader").classList.add("hide");mode="entrance";$("entryUI").classList.remove("hide");setStage();nameDrawT=1;document.body.classList.add("focus-in");setTimeout(()=>document.body.classList.add("focused"),60);if(!startHash&&!reduce){const v=views.entrance();cam.position.copy(v.pos.clone().add(new T.Vector3(1.5,2.2,10)));look.copy(v.look);cam.fov=v.fov+8;camT=1;flyTo(v,2.6)}
+  setTimeout(()=>{$("loader").classList.add("hide");mode="entrance";$("entryUI").classList.remove("hide");setStage();nameDrawT=1;document.body.classList.add("focus-in");setTimeout(()=>document.body.classList.add("focused"),60);if(!reduce){const v=views.entrance();cam.position.copy(v.pos.clone().add(new T.Vector3(1.5,2.2,10)));look.copy(v.look);cam.fov=v.fov+8;camT=1;flyTo(v,2.6)}
     if(startHash&&startHash!=="room"){pending=startHash;}
-    if(startHash){setTimeout(()=>enterRoom(true),quick?50:300)}
+    // never auto-enter: a topic in the URL is only remembered, the visitor still opens the door themselves
+    try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
   },500);
   requestAnimationFrame(frame);
 });
