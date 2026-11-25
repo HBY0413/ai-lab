@@ -93,7 +93,8 @@ add(E,new T.PlaneGeometry(3.5,5.0),new T.MeshBasicMaterial({map:tex(256,512,(x,w
 [[doorL,-.88],[doorR,.88]].forEach(([d,x0])=>{box(d,1.74,5.0,.05,glassMat,[0,2.5,0]);box(d,1.74,.08,.08,steel,[0,4.96,0]);box(d,1.74,.08,.08,steel,[0,.04,0]);box(d,.07,5.0,.08,steel,[x0>0?.84:-.84,2.5,0]);box(d,.05,1.1,.1,M(0xB9C0C6,{metalness:.8,roughness:.25}),[x0>0?-.72:.72,2.4,.08]);d.position.set(x0,0,x0<0?.37:.29)});
 // access-control reader beside the door
 box(E,.32,.5,.08,M(0x1B1F23,{metalness:.5,roughness:.4}),[2.35,2.3,.06]);box(E,.18,.06,.02,glow(0x5CC58C),[2.35,2.45,.11]);
-const signTex=tex(1024,256,(x,w,h)=>{x.fillStyle="#16191C";x.fillRect(0,0,w,h);x.fillStyle="#E8EAEC";x.font="300 116px Jost";x.textAlign="center";x.textBaseline="middle";x.fillText("A I   L A B",w/2,h/2+6);x.fillStyle="#F0A060";x.fillRect(w/2-60,h-34,120,4)});
+function drawLabSign(x,w,h){x.fillStyle="#16191C";x.fillRect(0,0,w,h);x.fillStyle="#F1ECE3";x.font="600 120px Jost, sans-serif";x.textAlign="center";x.textBaseline="middle";x.fillText("AI Lab",w/2,h/2+4);x.fillStyle="#F0A060";x.fillRect(w/2-60,h-34,120,4)}
+const signTex=tex(1024,256,drawLabSign);
 add(E,new T.PlaneGeometry(3.2,.8),new T.MeshBasicMaterial({map:signTex}),[0,6.15,.06],null,false);
 // equipment beside the entrance: server rack (left), cobot arm (right)
 const rack=new T.Group();rack.position.set(-5.4,0,1.2);E.add(rack);box(rack,1.3,3.2,1,M(0x1D2124,{metalness:.5,roughness:.4}),[0,1.6,0]);
@@ -418,7 +419,7 @@ function frame(now){
 
 /* ================= MOTION LAYER ================= */
 // 1) giant outline name painted on the facade, between wall and door (so the door/equipment overlap it)
-const NAME="SCOTT H.";
+const NAME="Scott H.";
 const nameCv=document.createElement("canvas");nameCv.width=2048;nameCv.height=560;const nameX=nameCv.getContext("2d");
 const nameTex=new T.CanvasTexture(nameCv);nameTex.encoding=T.sRGBEncoding;
 const namePlane=new T.Mesh(new T.PlaneGeometry(8.2,2.25),new T.MeshBasicMaterial({map:nameTex,transparent:true,depthWrite:false}));
@@ -426,10 +427,10 @@ namePlane.position.set(-65.55,3.5,.03);scene.add(namePlane);
 let nameDraw=0,nameDrawT=0,nameT0=0;
 function placeName(){if(narrow()){namePlane.position.set(-60,7.7,.03);namePlane.scale.setScalar(.74)}else{namePlane.position.set(-64.45,6.26,.03);namePlane.scale.setScalar(.49)}}placeName();addEventListener("resize",placeName);
 function paintName(p){
-  nameX.clearRect(0,0,2048,560);let fs=480;nameX.font=`200 ${fs}px Jost, "Helvetica Neue", Arial, sans-serif`;
-  const w=nameX.measureText(NAME).width;if(w>1990){fs*=1990/w;nameX.font=`200 ${fs}px Jost, "Helvetica Neue", Arial, sans-serif`}
+  nameX.clearRect(0,0,2048,560);let fs=430;const F=f=>`600 ${f}px Jost, sans-serif`;nameX.font=F(fs);
+  const w=nameX.measureText(NAME).width;if(w>1990){fs*=1990/w;nameX.font=F(fs)}
   nameX.save();nameX.beginPath();nameX.rect(0,0,2048*p,560);nameX.clip();
-  nameX.lineJoin="round";nameX.strokeStyle="rgba(244,246,248,.9)";nameX.lineWidth=narrow()?9:12;nameX.textBaseline="alphabetic";nameX.strokeText(NAME,20,505);
+  nameX.fillStyle="rgba(241,236,227,.94)";nameX.textBaseline="alphabetic";nameX.fillText(NAME,20,490);
   nameX.restore();
   if(p<1){nameX.fillStyle="rgba(240,160,96,.95)";nameX.fillRect(2048*p-3,40,6,500)}
   nameTex.needsUpdate=true;
@@ -516,6 +517,7 @@ const fontsReady=(document.fonts&&document.fonts.ready)?document.fonts.ready:Pro
 const quick=!!(window.I18N&&I18N.skipIntro);
 const timer=setInterval(()=>{pct=Math.min(pct+Math.ceil(Math.random()*9),96);lt.textContent=pct+"%"},90);
 fontsReady.then(()=>new Promise(r=>setTimeout(r,quick?100:900))).then(()=>{
+  {const c=signTex.image;drawLabSign(c.getContext("2d"),c.width,c.height);signTex.needsUpdate=true;if(nameDraw>=1)paintName(1)}
   // rebuild labels now that fonts are loaded
   for(const id in labelMeshes){const old=labelMeshes[id];const st=ST.find(x=>x.id===id);const lab=makeSign(st);Rg.remove(old);old.children.forEach(c=>{const k=pickables.indexOf(c);if(k>=0)pickables.splice(k,1)});lab.children.forEach(c=>pickables.push(c));Rg.add(lab);labelMeshes[id]=lab}
   clearInterval(timer);lt.textContent="100%";$("loadMsg").textContent=tt("ld.done");
