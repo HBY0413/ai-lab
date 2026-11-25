@@ -129,7 +129,7 @@ const D={
 "hint.k":{zh:"Tips",en:"Tips",th:"Tips"},
 "hint.t":{zh:"點任一塊標示牌或物件，就能打開那個主題；拖曳可以轉動視角，← → 逐一參觀，Esc 回到房間。",en:"Click any sign or object to open that topic. Drag to look around, use ← → to tour, Esc to step back.",th:"คลิกป้ายหรือวัตถุใดก็ได้เพื่อเปิดหัวข้อนั้น ลากเพื่อหมุนมุมมอง ใช้ ← → เพื่อเดินชม และ Esc เพื่อกลับ"},
 "cap.open":{zh:"打開",en:"Open",th:"เปิด"},
-"badge":{zh:"OPEN TO WORK · AI 導入 · THAILAND · ",en:"OPEN TO WORK · AI ADOPTION · THAILAND · ",th:"OPEN TO WORK · AI · พร้อมทำงานในไทย · "},
+"badge":{zh:"OPEN TO WORK · AI 導入 · AI AGENT · ",en:"OPEN TO WORK · AI ADOPTION · AI AGENT · ",th:"OPEN TO WORK · AI · AI AGENT · "},
 "panel.close":{zh:"返回房間 Esc",en:"Back to room  Esc",th:"กลับห้อง Esc"},
 "panel.about":{zh:"關於這間實驗室",en:"About this lab",th:"เกี่ยวกับห้องแล็บนี้"},
 "menu.close":{zh:"關閉 Esc",en:"Close  Esc",th:"ปิด Esc"},
