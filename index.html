@@ -213,6 +213,30 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .replay figcaption{margin-top:6px;color:#8A939B}
 
 .bench .lab-last{margin-top:22px}
+
+/* ===== case page: numbered blocks ===== */
+.secnav{position:sticky;top:0;z-index:3;display:flex;flex-wrap:wrap;gap:6px;margin:16px -2px 4px;padding:10px 2px;background:linear-gradient(#12151a 80%,rgba(18,21,26,0))}
+.secnav button{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.03);color:#C2C8CE;cursor:pointer}
+.secnav button b{color:#F0A060;font-weight:600}
+.secnav button:hover{border-color:#F0A060;color:#F7F8F9}
+.blk{margin-top:16px;padding:18px 20px 20px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.025);scroll-margin-top:64px}
+.bh{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+.bh span{color:#F0A060;font-weight:600;letter-spacing:.06em}
+.bh h3{margin:0;color:#F7F8F9!important;font-weight:600!important}
+.blk .evid{margin:0;padding:0;border:0;background:none}
+.case2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.cc{padding:14px 16px;border-radius:10px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.06)}
+.cc p{margin:6px 0 0}
+.cc.pain{border-left:3px solid #E2675A}
+.cc.sol{border-left:3px solid #39C97A}
+.cc.how{border-left:3px solid #E2B33B}
+.cc .steps{margin:8px 0 0}
+.blk-res .effect{margin:0 0 14px}
+.techrow .chips{margin-top:8px}
+.blk-lab{border-color:rgba(57,255,122,.22)}
+.blk-lab .lab-last{margin-top:0}
+.blk .replay{margin:0}
+@media (max-width:700px){.case2{grid-template-columns:1fr}.blk{padding:14px}}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -573,20 +597,12 @@ function renderAll(){EXPS.forEach((x,n)=>{
   <section class="bench" id="${x.id}">
     <div class="bench-head"><span class="no">EXP-${no}</span><h2>${x.title}</h2><span class="facet">${x.facet}</span></div>
     <div class="impact"><span>${I18N.t("sec.impact")}</span><strong>${x.gain}</strong></div>
-    ${x.evidence?evidenceHTML(x,true):""}
-    <div class="notes">
-      <div class="pain"><div class="label">${I18N.t("sec.pain")}</div><p>${x.pain}</p></div>
-      <div><div class="label">${I18N.t("sec.solution")}</div><p>${x.purpose}</p></div>
-      <div><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
-      <div class="effect"><div class="label">${I18N.t("sec.effect")}</div>${eff}</div>
-      <div><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>
-    </div>
-    <!-- live lab last: read the case and watch the run first, then try it yourself -->
-    <div class="lab lab-last" id="lab-${x.id}"></div>
+    ${blocksHTML(x,eff)}
   </section></div></div>`);
   buildLab(x,document.getElementById("lab-"+x.id));
 });}
 
+document.addEventListener("click",e=>{const j=e.target.closest("[data-jump]");if(!j)return;const t=document.getElementById(j.dataset.jump);if(t)t.scrollIntoView({behavior:"smooth",block:"start"})});
 function labShell(el,title){el.innerHTML=`<div class="lab-bar"><span>${title}</span><span class="live-ind"><i class="led"></i>LIVE LAB</span></div><div class="lab-body"></div>`;return el.querySelector(".lab-body")}
 
 function buildLab(x,el){
@@ -682,11 +698,24 @@ function drawTooltip(cv){
 }
 
 /* ---------- real skill evidence ---------- */
+const HAS_RUN=["report","manual","kb","maint","cases"];
+function replayHTML(x){return `<figure class="replay"><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t("ev.runNote")}</figcaption></figure>`}
+/* one clearly separated block per part of a case, numbered, with a jump bar at the top */
+function blocksHTML(x,eff){
+  const B=[];
+  if(HAS_RUN.includes(x.id))B.push(["run",I18N.t("ev.run"),replayHTML(x)]);
+  if(x.evidence)B.push(["out",I18N.t("blk.out"),evidenceHTML(x,true)]);
+  B.push(["case",I18N.t("blk.case"),`<div class="case2"><div class="cc pain"><div class="label">${I18N.t("sec.pain")}</div><p>${x.pain}</p></div><div class="cc sol"><div class="label">${I18N.t("sec.solution")}</div><p>${x.purpose}</p></div></div>
+     <div class="cc how"><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>`]);
+  B.push(["res",I18N.t("blk.res"),`<div class="effect">${eff}</div><div class="techrow"><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>`]);
+  B.push(["lab",I18N.t("blk.lab"),`<div class="lab lab-last" id="lab-${x.id}"></div>`]);
+  const nav=`<nav class="secnav" aria-label="${esc(x.title)}">${B.map(([k,t],i)=>`<button type="button" data-jump="blk-${x.id}-${k}"><b>${String(i+1).padStart(2,"0")}</b>${t}</button>`).join("")}</nav>`;
+  return nav+B.map(([k,t,html],i)=>`<div class="blk blk-${k}" id="blk-${x.id}-${k}"><div class="bh"><span>${String(i+1).padStart(2,"0")}</span><h3>${t}</h3></div>${html}</div>`).join("");
+}
 function evidenceHTML(x,top){
   const e=x.evidence;
-  if(e.layers){return `<div class="evid top"><div class="label">${esc(e.title)}</div><p class="hint" style="margin:0">${esc(e.note)}</p>${e.layers.map(l=>`<div class="layer"><div class="lt"><b>${esc(l.t)}</b><span>${esc(l.d)}</span></div><div class="lg">${l.imgs.map(src=>`<button type="button" data-lb="${x.id}" data-i="${e.flat.indexOf(src)}"><img src="${src}" loading="lazy" alt="${esc(l.t)}"></button>`).join("")}</div></div>`).join("")}</div>`}
-  let h=`<div class="evid${top?" top":""}"><div class="label">${REAL.t("ev.title")}</div>`;
-  if(["report","manual","kb","maint","cases"].includes(x.id)){h+=`<figure class="replay"><div class="label">${I18N.t("ev.run")}</div><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t("ev.runNote")}</figcaption></figure>`}
+  if(e.layers){return `<div class="evid top"><p class="hint" style="margin:0">${esc(e.note)}</p>${e.layers.map(l=>`<div class="layer"><div class="lt"><b>${esc(l.t)}</b><span>${esc(l.d)}</span></div><div class="lg">${l.imgs.map(src=>`<button type="button" data-lb="${x.id}" data-i="${e.flat.indexOf(src)}"><img src="${src}" loading="lazy" alt="${esc(l.t)}"></button>`).join("")}</div></div>`).join("")}</div>`}
+  let h=`<div class="evid${top?" top":""}">`;
   if(e.imgs){h+=`<p class="hint" style="margin:0">${REAL.t("ev.slides")}</p><div class="gal">${e.imgs.map((src,i)=>`<button type="button" data-lb="${x.id}" data-i="${i}" aria-label="${esc(x.title)} ${i+1}"><img src="${src}" loading="lazy" alt="${esc(x.title)} ${i+1}"></button>`).join("")}</div>`}
   h+=`<div class="sk"><div><div class="label">${REAL.t("ev.struct")}</div><pre class="tree">${esc(e.tree.join("\n"))}</pre></div><div><div class="label">${REAL.t("ev.excerpt")}</div><pre>${esc(e.excerpt)}</pre></div></div></div>`;
   return h;
