@@ -6,15 +6,15 @@
 <title>PCB 瑕疵 AI 檢測站</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+Thai:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout idea: an AOI inspection station console. Dark control-room surfaces,
    PCB green as the material, signal orange for anything rejected. Steps run top to bottom like a line. */
 :root{
   --bg:#0E1518; --panel:#152126; --panel-2:#1B2B31; --ink:#E4ECE8; --ink-2:#93A9A6; --line:#27393F;
   --accent:#F2814E; --accent-ink:#1A0D06; --ok:#5CC58C; --ng:#F2614E; --pcb:#2E6B47;
-  --display:"Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --display:"Jost","Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"Jost","Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -388,8 +388,8 @@ function drawHist(){
     if(bh[i]){x.fillStyle="rgba(242,97,78,.8)";x.fillRect(pad+i*bw+bw/2,H-pad-bh[i]*u,bw/2-1,bh[i]*u)}
   }
   const tx=pad+thr/mx*(W-pad*2);x.strokeStyle="#F2814E";x.lineWidth=3;x.beginPath();x.moveTo(tx,8);x.lineTo(tx,H-pad);x.stroke();
-  x.fillStyle="#E4ECE8";x.font="22px 'IBM Plex Mono',monospace";x.fillText(tv("門檻 ")+thr.toFixed(2),Math.min(tx+8,W-170),28);
-  x.fillStyle="#93A9A6";x.font="20px 'IBM Plex Mono',monospace";x.fillText("0",pad,H-8);x.fillText(mx.toFixed(1),W-pad-40,H-8);x.fillText(tv("異常分數 →"),W/2-60,H-8);
+  x.fillStyle="#E4ECE8";x.font="22px Jost,monospace";x.fillText(tv("門檻 ")+thr.toFixed(2),Math.min(tx+8,W-170),28);
+  x.fillStyle="#93A9A6";x.font="20px Jost,monospace";x.fillText("0",pad,H-8);x.fillText(mx.toFixed(1),W-pad-40,H-8);x.fillText(tv("異常分數 →"),W/2-60,H-8);
   x.fillStyle="#5CC58C";x.fillRect(pad,6,14,14);x.fillStyle="#E4ECE8";x.fillText(tv("良品"),pad+20,20);
   x.fillStyle="#F2614E";x.fillRect(pad+90,6,14,14);x.fillStyle="#E4ECE8";x.fillText(tv("瑕疵品"),pad+110,20);
 }

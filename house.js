@@ -52,7 +52,7 @@ function arcText(str,{size=.62,radius=4,color="#F3ECDF",bend=1}={}){
   const total=widths.reduce((a,b)=>a+b,0);let acc=-total/2;
   chars.forEach((ch,i)=>{
     const w=widths[i],mid=acc+w/2;acc+=w;if(ch===" ")return;
-    const t=tex(160,160,(x)=>{x.fillStyle=color;x.font=`${/[\x00-\x7F]/.test(ch)?"400 120px Jost":isThai(ch)?"500 112px 'Noto Sans Thai'":"500 118px 'Noto Sans TC'"},sans-serif`;x.textAlign="center";x.textBaseline="middle";x.fillText(ch,80,86)});
+    const t=tex(160,160,(x)=>{x.fillStyle=color;x.font=`${/[\x00-\x7F]/.test(ch)?"400 120px Jost":isThai(ch)?"500 112px 'Noto Sans Thai'":"500 118px Jost,'Noto Sans TC'"},sans-serif`;x.textAlign="center";x.textBaseline="middle";x.fillText(ch,80,86)});
     const p=new T.Mesh(new T.PlaneGeometry(size,size),new T.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,color:0xffffff}));
     const a=mid/radius*bend;p.position.set(Math.sin(a)*radius,(Math.cos(a)-1)*radius,0);p.rotation.z=-a;g.add(p);
   });
@@ -203,7 +203,7 @@ P.ocr=g=>{ // PC + monitor running the OCR item finder
   const desk=M(0x6B7177,{metalness:.6,roughness:.35});box(g,1.5,.07,.9,desk,[0,1.0,.55]);[[-.68,.15],[.68,.15],[-.68,.95],[.68,.95]].forEach(([x,z])=>box(g,.06,1.0,.06,M(0x2A2E33,{metalness:.6}),[x,.5,z]));
   box(g,.38,.9,.8,M(0x1B1E21,{metalness:.5,roughness:.4}),[.45,.45,.55]);box(g,.02,.6,.02,glow(0x7FD3FF),[.45,.55,.96]);
   box(g,.08,.4,.08,M(0x2A2E33),[0,1.23,.3]);box(g,1.1,.66,.05,M(0x15181B),[0,1.72,.3]);
-  add(g,new T.PlaneGeometry(1.02,.6),new T.MeshBasicMaterial({map:screenTex((x,w,h)=>{x.fillStyle="#7FD3FF";x.font="500 30px 'IBM Plex Mono',monospace";x.fillText("+7Siiver Sword",30,70);x.fillStyle="#9AA6AE";x.font="22px 'IBM Plex Mono'";x.fillText("fuzzy match 92%",30,115);x.fillStyle="#E8EAEC";x.font="700 70px 'Noto Sans TC'";x.fillText("銀劍",30,215);x.fillStyle="#F0A060";x.fillRect(30,250,300,8)})}),[0,1.72,.33],null,false);
+  add(g,new T.PlaneGeometry(1.02,.6),new T.MeshBasicMaterial({map:screenTex((x,w,h)=>{x.fillStyle="#7FD3FF";x.font="500 30px Jost,monospace";x.fillText("+7Siiver Sword",30,70);x.fillStyle="#9AA6AE";x.font="22px Jost";x.fillText("fuzzy match 92%",30,115);x.fillStyle="#E8EAEC";x.font="700 70px Jost,'Noto Sans TC'";x.fillText("銀劍",30,215);x.fillStyle="#F0A060";x.fillRect(30,250,300,8)})}),[0,1.72,.33],null,false);
   box(g,.7,.03,.22,M(0x23272B),[0,1.05,.85]);
 };
 P.gov=g=>{ // secure data gateway appliance on a plinth
@@ -212,7 +212,7 @@ P.gov=g=>{ // secure data gateway appliance on a plinth
   box(unit,1.0,1.2,.8,M(0x1B1E21,{metalness:.6,roughness:.3}),[0,0,0]);
   box(unit,.9,.06,.02,glow(0xF0A060),[0,.45,.41]);
   for(let i=0;i<4;i++)box(unit,.8,.14,.02,M(0x2A2E33,{metalness:.6}),[0,.15-i*.2,.41]);
-  add(unit,new T.PlaneGeometry(.5,.3),new T.MeshBasicMaterial({map:screenTex((x,w,h)=>{x.fillStyle="#5CC58C";x.font="600 64px 'IBM Plex Mono'";x.fillText("MASKED",40,130);x.fillStyle="#E8EAEC";x.font="500 46px 'IBM Plex Mono'";x.fillText("RAW OUT 0",40,230)})}),[0,-.38,.415],null,false);
+  add(unit,new T.PlaneGeometry(.5,.3),new T.MeshBasicMaterial({map:screenTex((x,w,h)=>{x.fillStyle="#5CC58C";x.font="600 64px Jost";x.fillText("MASKED",40,130);x.fillStyle="#E8EAEC";x.font="500 46px Jost";x.fillText("RAW OUT 0",40,230)})}),[0,-.38,.415],null,false);
   const ring=add(g,new T.TorusGeometry(1.0,.012,6,64),glow(0xF0A060),[0,1.6,0],[Math.PI/2,0,0],false);
   g.userData.spin=[];g.userData.ring=ring;
 };
@@ -225,11 +225,11 @@ P.demos=g=>{ // inspection table: PCB + camera on tripod + ring light
   add(camG,new T.TorusGeometry(.24,.035,10,32),glow(0xF3ECDF),[0,-.37,0],[Math.PI/2,0,0],false);
   const spot=new T.SpotLight(0xfff3e0,.8,4,.7,.5);spot.position.set(.95,2.3,.4);spot.target.position.set(-.15,1.1,.05);g.add(spot,spot.target);
   const mon=new T.Group();mon.position.set(-1.0,1.05,-.55);g.add(mon);box(mon,.05,.4,.05,M(0x2A2F36),[0,.2,0]);box(mon,.9,.58,.05,M(0x14181F),[0,.6,0],[0,.35,0]);
-  add(mon,new T.PlaneGeometry(.82,.5),new T.MeshBasicMaterial({map:screenTex((x,w,h)=>{x.fillStyle="#F2614E";x.font="700 64px 'IBM Plex Mono'";x.fillText("NG",30,90);x.fillStyle="#F3ECDF";x.font="500 34px 'IBM Plex Mono'";x.fillText("score 1.69",30,150);x.fillStyle="#5CC58C";x.fillText("recall 100%",30,205)})}),[.01,.6,.03],[0,.35,0],false);
+  add(mon,new T.PlaneGeometry(.82,.5),new T.MeshBasicMaterial({map:screenTex((x,w,h)=>{x.fillStyle="#F2614E";x.font="700 64px Jost";x.fillText("NG",30,90);x.fillStyle="#F3ECDF";x.font="500 34px Jost";x.fillText("score 1.69",30,150);x.fillStyle="#5CC58C";x.fillText("recall 100%",30,205)})}),[.01,.6,.03],[0,.35,0],false);
 };
 P.build=g=>{ // developer workstation: dual monitors + tower
   const desk=M(0x6B7177,{metalness:.6,roughness:.35});box(g,2.4,.07,1.1,desk,[0,1.0,0]);[[-1.1,-.45],[1.1,-.45],[-1.1,.45],[1.1,.45]].forEach(([x,z])=>box(g,.06,1.0,.06,M(0x2A2E33,{metalness:.6}),[x,.5,z]));
-  const scr=(c)=>screenTex((x,w,h)=>{x.font="24px 'IBM Plex Mono'";c.forEach((l,i)=>{x.fillStyle=l[1];x.fillText(l[0],26,50+i*40)})});
+  const scr=(c)=>screenTex((x,w,h)=>{x.font="24px Jost";c.forEach((l,i)=>{x.fillStyle=l[1];x.fillText(l[0],26,50+i*40)})});
   [[-.55,.28,[["> git push origin main","#9AA6AE"],["✓ deployed to Pages","#5CC58C"],["> build 3D lab","#9AA6AE"],["  three.js r128","#7FD3FF"]]],[.55,-.28,[["agent: plan → build","#E8EAEC"],["  1. scene  ✓","#5CC58C"],["  2. i18n   ✓","#5CC58C"],["  3. deploy …","#F0A060"]]]].forEach(([x0,ry,lines])=>{const m=new T.Group();m.position.set(x0,1.0,-.2);m.rotation.y=ry;g.add(m);box(m,.08,.38,.08,M(0x2A2E33),[0,.2,0]);box(m,1.0,.6,.05,M(0x15181B),[0,.62,0]);add(m,new T.PlaneGeometry(.94,.54),new T.MeshBasicMaterial({map:scr(lines)}),[0,.62,.03],null,false)});
   box(g,.7,.03,.22,M(0x23272B),[0,1.05,.3]);
   box(g,.32,.85,.75,M(0x1B1E21,{metalness:.5}),[1.45,.43,0]);box(g,.02,.5,.02,glow(0x5CC58C),[1.62,.6,.2]);

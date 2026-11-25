@@ -13,7 +13,7 @@ body.house #stage{display:block}
 #loader{position:fixed;inset:0;z-index:20;background:#0D0F11;color:#E6E9EC;display:none}
 body.house #loader{display:block}
 #loader .big{position:absolute;left:4vw;top:7vh;font:200 clamp(56px,13vw,170px)/.92 "Jost",sans-serif;letter-spacing:-.01em;text-transform:uppercase}
-#loader .big small{display:block;font:300 clamp(14px,1.6vw,20px) "Noto Sans TC",sans-serif;letter-spacing:.3em;margin-top:18px;color:#B9AE9C}
+#loader .big small{display:block;font:300 clamp(14px,1.6vw,20px) "Jost","Noto Sans TC",sans-serif;letter-spacing:.3em;margin-top:18px;color:#B9AE9C}
 #loader .arch{position:absolute;left:50%;top:50%;transform:translate(-50%,-38%);width:min(150px,30vw);aspect-ratio:1/1.45;border-radius:999px 999px 6px 6px;overflow:hidden;background:linear-gradient(#2C2457,#7A3B5E 55%,#E2622B 100%);box-shadow:0 0 0 6px #241F18,0 30px 80px rgba(226,98,43,.25)}
 #loader .arch i{position:absolute;left:50%;bottom:16%;width:62%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,#FFD7A6 0 30%,#F2814E 31% 46%,transparent 47%);animation:rise 2.4s ease-in-out infinite alternate}
 #loader .arch b{position:absolute;left:0;right:0;bottom:0;height:18%;background:#1A1530}
@@ -30,7 +30,7 @@ body.house .chrome{display:flex}
 #hdr .logo{font:600 20px "Jost",sans-serif;letter-spacing:.02em;text-decoration:none;color:inherit;cursor:pointer;background:none;border:none;padding:0}
 #hdr .logo sup{font-size:9px;margin-left:2px}
 #hdr nav{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
-#hdr nav button{background:none;border:none;color:#F1ECE3;font:400 14px "Noto Sans TC",sans-serif;padding:6px 10px;border-radius:999px;cursor:pointer;opacity:.85}
+#hdr nav button{background:none;border:none;color:#F1ECE3;font:400 14px "Jost","Noto Sans TC",sans-serif;padding:6px 10px;border-radius:999px;cursor:pointer;opacity:.85}
 #hdr nav button:hover,#hdr nav button[aria-current="true"]{opacity:1;text-decoration:underline;text-underline-offset:6px;text-decoration-color:#F2814E}
 #hdr .right{display:flex;align-items:center;gap:16px}
 #hdr .menu{border:1px solid rgba(241,236,227,.35);background:rgba(15,20,28,.35);backdrop-filter:blur(6px);color:#F1ECE3;font:500 14px "Jost","Noto Sans TC",sans-serif;padding:8px 16px;border-radius:999px;cursor:pointer;display:flex;gap:10px;align-items:center}
@@ -59,16 +59,16 @@ body.house .chrome{display:flex}
 /* room UI */
 #roomUI{inset:0;pointer-events:none;z-index:9}
 #roomUI>*{pointer-events:auto}
-#hint{position:absolute;right:24px;bottom:24px;max-width:340px;display:flex;gap:12px;align-items:center;padding:12px 16px;border-radius:16px;background:rgba(18,22,30,.82);backdrop-filter:blur(10px);font:400 13px/1.55 "Noto Sans TC",sans-serif;color:#E9E3D8;border:1px solid rgba(255,255,255,.08)}
+#hint{position:absolute;right:24px;bottom:24px;max-width:340px;display:flex;gap:12px;align-items:center;padding:12px 16px;border-radius:16px;background:rgba(18,22,30,.82);backdrop-filter:blur(10px);font:400 13px/1.55 "Jost","Noto Sans TC",sans-serif;color:#E9E3D8;border:1px solid rgba(255,255,255,.08)}
 #hint i{flex:0 0 34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.3);display:grid;place-items:center;font-style:normal;font-size:16px}
 #hint small{display:block;font:600 10px "Jost";letter-spacing:.2em;color:#F2B76A;text-transform:uppercase}
 #hint button{background:none;border:none;color:#9FA9B5;cursor:pointer;font-size:16px;align-self:flex-start}
-#cap{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);display:flex;align-items:center;gap:14px;padding:10px 12px 10px 20px;border-radius:999px;background:rgba(18,22,30,.86);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);white-space:nowrap;font:400 14px "Noto Sans TC",sans-serif;max-width:94vw}
+#cap{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);display:flex;align-items:center;gap:14px;padding:10px 12px 10px 20px;border-radius:999px;background:rgba(18,22,30,.86);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);white-space:nowrap;font:400 14px "Jost","Noto Sans TC",sans-serif;max-width:94vw}
 #cap .n{font:600 11px "Jost";letter-spacing:.18em;color:#F2B76A}
 #cap .t{overflow:hidden;text-overflow:ellipsis}
-#cap button{border:none;border-radius:999px;padding:8px 14px;cursor:pointer;font:600 13px "Noto Sans TC",sans-serif;background:rgba(255,255,255,.08);color:#F1ECE3}
+#cap button{border:none;border-radius:999px;padding:8px 14px;cursor:pointer;font:600 13px "Jost","Noto Sans TC",sans-serif;background:rgba(255,255,255,.08);color:#F1ECE3}
 #cap button.go{background:#F2814E;color:#1A0D06}
-#tip{position:fixed;z-index:11;pointer-events:none;padding:6px 12px;border-radius:999px;background:#F1ECE3;color:#14181F;font:500 13px "Noto Sans TC",sans-serif;transform:translate(14px,14px);white-space:nowrap;display:none}
+#tip{position:fixed;z-index:11;pointer-events:none;padding:6px 12px;border-radius:999px;background:#F1ECE3;color:#14181F;font:500 13px "Jost","Noto Sans TC",sans-serif;transform:translate(14px,14px);white-space:nowrap;display:none}
 #badge{position:absolute;left:22px;bottom:22px;width:86px;height:86px;border-radius:50%;background:#F1ECE3;color:#14181F;display:grid;place-items:center}
 #badge svg{position:absolute;inset:0;animation:spin 16s linear infinite}
 #badge b{font:700 12px "Jost";letter-spacing:.05em}
@@ -81,7 +81,7 @@ body.house .chrome{display:flex}
 @keyframes slidein{from{transform:translateX(-30px);opacity:0}to{transform:none;opacity:1}}
 #panel .ph{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-bottom:1px solid rgba(255,255,255,.08)}
 #panel .ph .k{font:600 11px "Jost";letter-spacing:.2em;color:#F2B76A;text-transform:uppercase}
-#panel .ph button{border:1px solid rgba(255,255,255,.25);background:none;color:#ECE7DE;border-radius:999px;padding:6px 14px;cursor:pointer;font:500 13px "Noto Sans TC",sans-serif}
+#panel .ph button{border:1px solid rgba(255,255,255,.25);background:none;color:#ECE7DE;border-radius:999px;padding:6px 14px;cursor:pointer;font:500 13px "Jost","Noto Sans TC",sans-serif}
 #panel .pb{overflow-y:auto;flex:1}
 #panel .slide{overflow:visible;height:auto}
 #panel .slide>.wrap{padding:22px 22px 40px;max-width:none}
@@ -103,7 +103,7 @@ body.house .chrome{display:flex}
 #menuOv li button{display:flex;gap:14px;align-items:baseline;width:100%;background:none;border:none;border-bottom:1px solid rgba(255,255,255,.1);color:inherit;text-align:left;padding:14px 0;cursor:pointer}
 #menuOv li button span{font:500 12px "Jost";color:#8F99A6;min-width:26px}
 #menuOv li button b{font:300 24px "Jost","Noto Sans TC",sans-serif}
-#menuOv li button small{display:block;color:#8F99A6;font:400 13px "Noto Sans TC",sans-serif}
+#menuOv li button small{display:block;color:#8F99A6;font:400 13px "Jost","Noto Sans TC",sans-serif}
 #menuOv li button:hover b{color:#F2814E}
 #menuOv .x{position:fixed;top:16px;right:26px;border:1px solid rgba(255,255,255,.35);background:none;color:#F1ECE3;border-radius:999px;padding:8px 16px;cursor:pointer;font:500 14px "Jost","Noto Sans TC",sans-serif}
 #veil{position:fixed;inset:0;z-index:14;background:#0B0A08;opacity:0;pointer-events:none;transition:opacity .55s ease}
@@ -135,11 +135,11 @@ body.popen #hint{display:none}
 
 /* entrance name card */
 #entryUI .head.card{top:14vh;left:5vw;right:auto;max-width:min(520px,44vw);text-align:left;background:rgba(14,17,20,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-left:4px solid #F0A060;padding:22px 24px}
-#entryUI .ck{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.16em;color:#F0A060;text-transform:uppercase}
+#entryUI .ck{font:600 11px "Jost",monospace;letter-spacing:.16em;color:#F0A060;text-transform:uppercase}
 #entryUI .cn{font:300 clamp(40px,5vw,62px)/1.05 "Jost",sans-serif;margin:6px 0 8px}
-#entryUI .cr{font:500 16px/1.55 "Noto Sans TC","Noto Sans Thai",sans-serif;color:#E6E9EC}
+#entryUI .cr{font:500 16px/1.55 "Jost","Noto Sans TC","Noto Sans Thai",sans-serif;color:#E6E9EC}
 #entryUI .cm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px;border-top:1px solid rgba(255,255,255,.1);padding-top:14px}
-#entryUI .cm span{display:flex;flex-direction:column;font:400 12.5px/1.45 "Noto Sans TC","Noto Sans Thai",sans-serif;color:#A9B2BA}
+#entryUI .cm span{display:flex;flex-direction:column;font:400 12.5px/1.45 "Jost","Noto Sans TC","Noto Sans Thai",sans-serif;color:#A9B2BA}
 #entryUI .cm b{font:500 20px/1.25 "Jost","Noto Sans TC",sans-serif;color:#F4F6F8;margin-bottom:2px}
 #entryUI a.pillbtn{text-decoration:none}
 #hdr a.menu{text-decoration:none}
@@ -238,3 +238,18 @@ body.focused #entryUI:not(.hide) .acts{animation:focusIn 1.1s 1.2s both}
 #pclose{white-space:nowrap}
 @media (max-width:860px){#doorBadge{display:none!important}#pclose{font-size:13px;padding:7px 12px}#panel .ph .k{font-size:10px}}
 @media (max-width:520px){#entryUI .head.card .cm{display:none}#entryUI .head.card .cn{font-size:30px;margin:4px 0 6px}#entryUI .head.card{padding:14px 16px}#entryUI .ck{font-size:10px}}
+/* ===== room UI layout: no overlap at any width ===== */
+#cap{max-width:calc(100vw - 2*130px);box-sizing:border-box}
+#cap .t{min-width:0}
+/* desktop & tablet: rules card sits top-right under the header; bottom row is badge | caption | stage no. */
+@media (min-width:861px){
+  #hint{top:84px;bottom:auto;right:24px;max-width:320px}
+  body.house:not(.at-entrance) #stageNo{right:28px;bottom:34px}
+}
+@media (min-width:861px) and (max-width:1180px){#cap{max-width:calc(100vw - 2*120px)}body.house:not(.at-entrance) #stageNo{display:none!important}}
+/* phones / narrow: caption bar spans the width; rules card stacks above it */
+@media (max-width:860px){
+  #badge{display:none}
+  #cap{left:12px;right:12px;bottom:14px;transform:none;max-width:none;justify-content:space-between}
+  #hint{left:12px;right:12px;top:auto;bottom:86px;max-width:none}
+}

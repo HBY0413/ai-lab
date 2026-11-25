@@ -6,14 +6,14 @@
 <title>Scott H. · AI 導入作品集</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="i18n.js"></script>
 <style>
 /* One-page profile for HR and hiring managers: who, what, impact, proof. Industrial palette matching the 3D lab. */
 :root{
   --bg:#0F1214;--panel:#171B1F;--panel2:#1D2227;--ink:#ECEEF0;--ink2:#A3ADB6;--line:#2A3137;
   --amber:#F0A060;--yellow:#E2B33B;--ok:#5CC58C;
-  --display:"Jost","Noto Sans TC","Noto Sans Thai",sans-serif;--body:"Noto Sans TC","Noto Sans Thai",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+  --display:"Jost","Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;--body:"Jost","Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;--mono:"Jost","Noto Sans TC","Noto Sans Thai","PingFang TC","Microsoft JhengHei",sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}html,body{margin:0}
@@ -76,7 +76,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offs
   <div class="hero">
     <div>
       <div class="k" data-t="k"></div>
-      <h1>Scott H.</h1>
+      <h1 data-t="h1"></h1>
       <p class="role" data-t="role"></p>
       <p class="lede" data-t="lede"></p>
       <div class="chips" id="chips"></div>
@@ -94,7 +94,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offs
 <script>
 const L=(window.I18N&&I18N.lang)||"zh";
 const T={
- k:{zh:"AI 導入 · 資料 · 系統整合",en:"AI adoption · Data · Systems integration",th:"การนำ AI มาใช้ · ข้อมูล · บูรณาการระบบ"},
+ k:{zh:"Scott H. · AI 導入 · 資料 · 系統整合",en:"Scott H. · AI adoption · Data · Systems integration",th:"Scott H. · การนำ AI มาใช้ · ข้อมูล · บูรณาการระบบ"},
+ h1:{zh:"AI 導入作品集",en:"AI Adoption Portfolio",th:"พอร์ตโฟลิโอการนำ AI มาใช้"},
  role:{zh:"把 AI 導入真實工作流程的人：從找出最耗工的作業，到做成可上線、可治理的 AI Agent。",en:"I bring AI into real workflows: from finding the most time-consuming work to shipping governed AI agents people actually use.",th:"ผมนำ AI เข้าสู่งานจริง ตั้งแต่ค้นหางานที่กินเวลามากที่สุด จนถึงสร้าง AI Agent ที่ใช้งานได้จริงและมีการกำกับดูแล"},
  lede:{zh:"超過 11 年 IT 資歷，做過機房與網路維運、客戶技術窗口、戰情室儀表板與資料整合，現在負責團隊的生成式 AI 導入。2026 年 9 月開始做 AI Agent，一個月內讓 5 支 Skill 上線。",en:"11+ years in IT: server-room and network operations, customer technical support, command-centre dashboards and data integration. I now lead my team's generative-AI adoption; I started building AI agents in September 2026 and had 5 skills live within a month.",th:"ประสบการณ์ไอทีมากกว่า 11 ปี ทั้งดูแลห้องเซิร์ฟเวอร์และเครือข่าย ผู้ประสานงานเทคนิคกับลูกค้า แดชบอร์ดศูนย์บัญชาการ และการเชื่อมต่อข้อมูล ปัจจุบันรับผิดชอบการนำ Generative AI มาใช้ในทีม เริ่มสร้าง AI Agent ในเดือนกันยายน 2026 และใช้งานจริงได้ 5 Skill ภายในหนึ่งเดือน"},
  chips:{zh:["11+ 年 IT","AI Agent 導入","資料治理","可長期派駐泰國","中文・英文讀寫"],en:["11+ years IT","AI agent adoption","Data governance","Open to long-term posting in Thailand","Chinese · English (reading/writing)"],th:["ไอที 11+ ปี","นำ AI Agent มาใช้","กำกับดูแลข้อมูล","พร้อมประจำในไทยระยะยาว","จีน · อังกฤษ (อ่าน/เขียน)"]},
