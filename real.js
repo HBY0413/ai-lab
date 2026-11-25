@@ -5,8 +5,8 @@
 const ZH={
  manual:{title:"AI 升級／保養紀錄簡報產生器",facet:"文件自動化",gain:"140–200 頁紀錄簡報：<strong>1 天 → 30 分鐘</strong>",
   pain:"每次到客戶現場做系統升級或保養健檢，工程師都得把動輒上百張截圖整理成給客戶的正式紀錄簡報。一份要花一整天，還常有錯字、截圖放錯頁、範本殘留舊圖，交付前要反覆檢查。",
-  purpose:"把公司範本和檢查清單做成 Agent Skill：依共通範本的頁序比對現場截圖，套用標準文字規範並跨環境比對重複句型，有疑問先問人；異常一律整理到最後的「請客戶協助確認事項」，再產出正式簡報。升級與保養兩種案子共用同一套引擎。",
-  steps:["確認本機連線與專案資料夾，讀入現場截圖","依範本頁序比對截圖、套用標準文字規範，不確定就停下來問人","產出封面、摘要、目錄、章節與 Q&A 頁，異常集中到最後一頁"],
+  purpose:"工程師只要把現場截圖整批丟進來，AI 會逐張看懂畫面內容，判斷這是哪個檢查項目（例如主機硬體規格、服務狀態），並從畫面讀出數值寫成說明，例如 CPU 核心數、記憶體與磁碟容量。背後是把公司範本和檢查清單做成 Agent Skill：依共通範本的頁序比對現場截圖，套用標準文字規範並跨環境比對重複句型，有疑問先問人；異常一律整理到最後的「請客戶協助確認事項」，再產出正式簡報。升級與保養兩種案子共用同一套引擎。",
+  steps:["工程師把現場截圖整批丟進專案資料夾","AI 逐張判讀畫面，對到範本的檢查項目；截圖日期不是本次作業日就排除","從畫面讀出規格與狀態（CPU、記憶體、磁碟、服務），套標準句型寫進說明；看不準就附圖問人","產出封面、摘要、目錄、章節與 Q&A 頁，異常集中到最後一頁"],
   effect:{type:"bar",before:["人工",480,"約 8 小時"],after:["Agent",30,"30 分鐘"],note:"經過 14 版迭代後上線；升級與保養共用同一套引擎"},
   tech:["Agent Skill","Python 產生 PPTX","YAML 檢查清單","文字規範比對"]},
  report:{title:"AI 部門月會報告產生器",gain:"給主管的 17 頁月會簡報：<strong>半天 → 15 分鐘</strong>，附核對明細",
@@ -83,8 +83,8 @@ ZH.kb.lab={prompt:KB_PROMPT};
 const EN={
  manual:{title:"AI Upgrade / Maintenance Record Deck Generator",facet:"Document automation",gain:"140–200-page record decks: <strong>1 day → 30 min</strong>",
   pain:"After every on-site upgrade or health check, engineers had to turn a hundred-plus screenshots into a formal record deck for the client. Each took a full day, and typos, screenshots on the wrong page and stale images left in the template meant checking everything again before delivery.",
-  purpose:"I turned the company template and checklists into an Agent Skill. It matches on-site screenshots to the template's page order, applies standard wording and compares repeated phrasing across environments, and asks a person when unsure. Every anomaly goes to a final \"items for the client to confirm\" page before the formal deck is rendered. Upgrades and maintenance share one engine.",
-  steps:["Check the local connection and project folder, then read the on-site screenshots","Match screenshots to the template page order and apply standard wording; stop and ask when unsure","Render cover, summary, contents, sections and Q&A, with anomalies collected on the last page"],
+  purpose:"Engineers just drop in the on-site screenshots. The AI reads each one, works out which check it belongs to (hardware specs, service status and so on), and writes the description from what is on screen, such as CPU cores, memory and disk size. Under the hood, I turned the company template and checklists into an Agent Skill. It matches on-site screenshots to the template's page order, applies standard wording and compares repeated phrasing across environments, and asks a person when unsure. Every anomaly goes to a final \"items for the client to confirm\" page before the formal deck is rendered. Upgrades and maintenance share one engine.",
+  steps:["Engineers drop the on-site screenshots into the project folder","The AI reads each screenshot and maps it to a template check; shots dated outside this visit are excluded","It reads specs and status off the screen (CPU, memory, disk, services) and writes them in the standard wording; when unsure it asks with the screenshot attached","Render cover, summary, contents, sections and Q&A, with anomalies collected on the last page"],
   effect:{type:"bar",before:["Manual",480,"~8 hours"],after:["Agent",30,"30 min"],note:"Live after 14 iterations; one engine for upgrades and maintenance"},
   tech:["Agent Skill","Python → PPTX","YAML checklists","Wording rules"]},
  report:{title:"AI Monthly Department Report Generator",gain:"17-slide monthly deck for managers: <strong>half a day → 15 min</strong>, with audit workbook",
@@ -137,8 +137,8 @@ This report only records observations and does not modify the skill; the owner d
 const TH={
  manual:{title:"ตัวสร้างสไลด์บันทึกการอัปเกรด/บำรุงรักษาด้วย AI",facet:"เอกสารอัตโนมัติ",gain:"สไลด์บันทึก 140–200 หน้า: <strong>1 วัน → 30 นาที</strong>",
   pain:"ทุกครั้งที่อัปเกรดระบบหรือตรวจสุขภาพระบบที่หน้างานลูกค้า วิศวกรต้องจัดภาพหน้าจอนับร้อยภาพเป็นสไลด์บันทึกฉบับทางการ ใช้เวลาทั้งวันต่อฉบับ และมักมีคำผิด ภาพผิดหน้า หรือภาพเก่าค้างในเทมเพลต ต้องตรวจซ้ำก่อนส่งมอบ",
-  purpose:"ผมนำเทมเพลตและเช็กลิสต์ของบริษัทมาทำเป็น Agent Skill ซึ่งจับคู่ภาพหน้าจอกับลำดับหน้าของเทมเพลต ใช้มาตรฐานการเขียนและเทียบประโยคซ้ำข้ามสภาพแวดล้อม หากไม่แน่ใจจะถามคนก่อน ความผิดปกติทั้งหมดจะรวมไว้ในหน้าสุดท้าย \"รายการที่ขอให้ลูกค้าช่วยยืนยัน\" แล้วจึงสร้างสไลด์ฉบับทางการ งานอัปเกรดและบำรุงรักษาใช้เอนจินเดียวกัน",
-  steps:["ตรวจการเชื่อมต่อเครื่องและโฟลเดอร์โปรเจกต์ แล้วอ่านภาพหน้าจอจากหน้างาน","จับคู่ภาพกับลำดับหน้าเทมเพลตและใช้มาตรฐานการเขียน หากไม่แน่ใจให้หยุดถามคน","สร้างหน้าปก สรุป สารบัญ บท และหน้า Q&A โดยรวมความผิดปกติไว้หน้าสุดท้าย"],
+  purpose:"วิศวกรแค่ใส่ภาพหน้าจอจากหน้างานทั้งหมดเข้ามา AI จะอ่านทีละภาพ ระบุว่าเป็นรายการตรวจใด (เช่น สเปกฮาร์ดแวร์ สถานะบริการ) แล้วเขียนคำอธิบายจากสิ่งที่เห็นบนหน้าจอ เช่น จำนวนคอร์ CPU หน่วยความจำ และขนาดดิสก์ เบื้องหลังคือการนำเทมเพลตและเช็กลิสต์ของบริษัทมาทำเป็น Agent Skill ซึ่งจับคู่ภาพหน้าจอกับลำดับหน้าของเทมเพลต ใช้มาตรฐานการเขียนและเทียบประโยคซ้ำข้ามสภาพแวดล้อม หากไม่แน่ใจจะถามคนก่อน ความผิดปกติทั้งหมดจะรวมไว้ในหน้าสุดท้าย \"รายการที่ขอให้ลูกค้าช่วยยืนยัน\" แล้วจึงสร้างสไลด์ฉบับทางการ งานอัปเกรดและบำรุงรักษาใช้เอนจินเดียวกัน",
+  steps:["วิศวกรใส่ภาพหน้าจอจากหน้างานทั้งหมดลงในโฟลเดอร์โปรเจกต์","AI อ่านทีละภาพและจับคู่กับรายการตรวจในเทมเพลต ภาพที่วันที่ไม่ตรงกับวันปฏิบัติงานจะถูกตัดออก","อ่านสเปกและสถานะจากหน้าจอ (CPU หน่วยความจำ ดิสก์ บริการ) แล้วเขียนด้วยรูปประโยคมาตรฐาน หากไม่แน่ใจจะแนบภาพถามคน","สร้างหน้าปก สรุป สารบัญ บท และหน้า Q&A โดยรวมความผิดปกติไว้หน้าสุดท้าย"],
   effect:{type:"bar",before:["คนทำ",480,"ประมาณ 8 ชม."],after:["Agent",30,"30 นาที"],note:"ใช้งานจริงหลังปรับปรุง 14 รอบ งานอัปเกรดและบำรุงรักษาใช้เอนจินเดียวกัน"},
   tech:["Agent Skill","Python สร้าง PPTX","เช็กลิสต์ YAML","มาตรฐานการเขียน"]},
  report:{title:"ตัวสร้างรายงานประชุมประจำเดือนของแผนกด้วย AI",gain:"สไลด์รายงาน 17 หน้าสำหรับหัวหน้า: <strong>ครึ่งวัน → 15 นาที</strong> พร้อม Excel ตรวจสอบ",

@@ -215,8 +215,9 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .bench .lab-last{margin-top:22px}
 
 /* ===== case page: numbered blocks ===== */
-.secnav{position:sticky;top:0;z-index:3;display:flex;flex-wrap:wrap;gap:6px;margin:16px -2px 4px;padding:10px 2px;background:linear-gradient(#12151a 80%,rgba(18,21,26,0))}
-.secnav button{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.03);color:#C2C8CE;cursor:pointer}
+.secnav{position:sticky;top:0;z-index:3;display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:6px;margin:16px -2px 4px;padding:10px 2px;background:linear-gradient(#12151a 80%,rgba(18,21,26,0))}
+.secnav::-webkit-scrollbar{display:none}
+.secnav button{flex:0 0 auto;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.03);color:#C2C8CE;cursor:pointer}
 .secnav button b{color:#F0A060;font-weight:600}
 .secnav button:hover{border-color:#F0A060;color:#F7F8F9}
 .blk{margin-top:16px;padding:18px 20px 20px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.025);scroll-margin-top:64px}
@@ -707,7 +708,7 @@ function drawTooltip(cv){
 /* one-line opener for each case: what it is, before anything else */
 const INTRO={
  report:{zh:"一支 AI Agent Skill：讀取部門總表與協銷進度，自動產出給主管的整份月會報告簡報，並附核對明細。",en:"An AI agent skill that reads the department's master and presales workbooks and produces the full monthly meeting deck for managers, with an audit workbook.",th:"AI Agent Skill ที่อ่านตารางหลักและตารางติดตามงานขายของแผนก แล้วสร้างสไลด์รายงานประชุมประจำเดือนทั้งฉบับให้หัวหน้า พร้อม Excel ตรวจสอบ"},
- manual:{zh:"一支 AI Agent Skill：把現場截圖和簡短標註，整理成格式統一的 140–200 頁系統升級／保養紀錄簡報。",en:"An AI agent skill that turns on-site screenshots and short notes into a consistent 140–200-page upgrade and maintenance record deck.",th:"AI Agent Skill ที่เปลี่ยนภาพหน้าจอหน้างานและบันทึกสั้น ๆ ให้เป็นสไลด์บันทึกอัปเกรด/บำรุงรักษา 140–200 หน้าในรูปแบบเดียวกัน"},
+ manual:{zh:"一支 AI Agent Skill：工程師只要丟進現場截圖，AI 會看懂每張畫面、對到檢查項目，並讀出 CPU、記憶體等規格寫成說明，整理成 140–200 頁的紀錄簡報。",en:"An AI agent skill where engineers just drop in on-site screenshots: the AI reads each screen, maps it to the right check, writes up specs such as CPU and memory, and builds a 140–200-page record deck.",th:"AI Agent Skill ที่วิศวกรแค่ใส่ภาพหน้าจอจากหน้างาน AI จะอ่านแต่ละหน้าจอ จับคู่กับรายการตรวจ เขียนสเปกอย่าง CPU และหน่วยความจำ แล้วสร้างสไลด์บันทึก 140–200 หน้า"},
  kb:{zh:"一支 AI Agent Skill：同仁問客戶維運問題時，先比對部門 FAQ 記錄，有出處才回答，而且只讀不寫。",en:"An AI agent skill that checks the department's FAQ records whenever colleagues ask support questions, and answers only with a cited source. Read-only.",th:"AI Agent Skill ที่ตรวจบันทึก FAQ ของแผนกเมื่อเพื่อนร่วมงานถามคำถามด้านซัพพอร์ต และตอบเฉพาะเมื่อมีแหล่งอ้างอิง อ่านอย่างเดียว"},
  maint:{zh:"一份所有 AI Skill 共用的存檔規範：AI 產出的檔案一律放到同一個出口、統一命名、絕不覆蓋。",en:"A filing standard shared by every AI skill: everything AI produces goes to one place, with consistent names, and nothing is ever overwritten.",th:"มาตรฐานการจัดเก็บที่ทุก AI Skill ใช้ร่วมกัน: ไฟล์ที่ AI สร้างไปอยู่ที่เดียว ตั้งชื่อแบบเดียวกัน และไม่เขียนทับ"},
  cases:{zh:"一支 AI Agent Skill：定期翻閱過去的升級案子，找出反覆出現的寫法與異常，提出規則修改建議給人審核。",en:"An AI agent skill that periodically reviews past upgrade projects, finds recurring wording and issues, and proposes rule changes for a person to approve.",th:"AI Agent Skill ที่ทบทวนโปรเจกต์อัปเกรดในอดีตเป็นระยะ หารูปแบบการเขียนและปัญหาที่เกิดซ้ำ แล้วเสนอการแก้กฎให้คนอนุมัติ"},
