@@ -170,7 +170,7 @@ const pick=o=>o[L]||o.zh;
 document.querySelectorAll("[data-t]").forEach(el=>el.innerHTML=t(el.dataset.t));
 document.getElementById("chips").innerHTML=pick(T.chips).map(c=>`<span class="chip">${c}</span>`).join("");
 document.getElementById("tiles").innerHTML=pick(TILES).map(([a,b])=>`<div class="tile"><strong>${a}</strong><span>${b}</span></div>`).join("");
-document.getElementById("rows").innerHTML=pick(ROWS).map(([id,n,p,g],i)=>`<tr><td class="case"><small>${id==="build"?"EXP-08":"EXP-0"+(["manual","report","maint","kb","cases","ocr","gov","build"].indexOf(id)+1)}</small><b>${n}</b></td><td>${p}</td><td class="gain">${g}</td><td class="ev"><a href="index.html#${id}">${t("ev")}</a></td></tr>`).join("");
+document.getElementById("rows").innerHTML=pick(ROWS).slice().sort((a,b)=>["report","manual","kb","maint","cases","gov","build","ocr"].indexOf(a[0])-["report","manual","kb","maint","cases","gov","build","ocr"].indexOf(b[0])).map(([id,n,p,g],i)=>`<tr><td class="case"><small>${"EXP-0"+(["report","manual","kb","maint","cases","gov","build","ocr"].indexOf(id)+1)}</small><b>${n}</b></td><td>${p}</td><td class="gain">${g}</td><td class="ev"><a href="index.html#${id}">${t("ev")}</a></td></tr>`).join("");
 document.getElementById("tl").innerHTML=pick(TL).map(([w,h,d])=>`<div class="it"><div class="when">${w}</div><div><b>${h}</b><p>${d}</p></div></div>`).join("");
 document.getElementById("cols").innerHTML=pick(COLS).map(([h,list])=>`<div class="col"><b>${h}</b><ul>${list.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("");
 document.getElementById("sw").innerHTML=I18N.switcher();

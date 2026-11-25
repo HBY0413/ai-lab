@@ -11,16 +11,16 @@ const track=$("track"),slides=[...track.querySelectorAll(".slide")];
 const slideById=id=>slides.find(s=>s.dataset.id===id);
 
 /* ---------------- stations ---------------- */
-const ST=[
-  {id:"demos",label:"專屬 DEMO",nav:"專屬 Demo",kind:"floor",signY:3.75,pos:[7.4,0,3.0],labelAt:[7.6,0.02,5.0],labelR:3.2,hot:true},
-  {id:"manual",label:"升級手冊",nav:"文件",kind:"wallB",pos:[2.0,0,0],labelAt:[2.1,4.55,0.03]},
-  {id:"report",label:"月會報告",nav:"報告",kind:"wallB",pos:[5.6,0,0],labelAt:[5.6,4.75,0.03]},
-  {id:"maint",label:"保養紀錄",nav:"紀錄",kind:"wallB",pos:[8.7,0,0],labelAt:[8.7,4.55,0.03]},
-  {id:"kb",label:"知識庫",nav:"知識庫",kind:"wallA",pos:[0,0,2.4],labelAt:[0.03,4.55,2.4]},
+const ST=[ // order = experiment number. Front row (floor, nearest the viewer) holds the most direct AI-agent applications.
+  {id:"report",label:"月會報告",nav:"報告",kind:"floor",signY:4.3,pos:[3.2,0,8.0],labelAt:[4.6,0.02,9.3],labelR:2.6,hot:true},
+  {id:"manual",label:"升級手冊",nav:"文件",kind:"floor",signY:3.45,pos:[3.9,0,4.4],labelAt:[5.0,0.02,5.9],labelR:2.6},
+  {id:"kb",label:"知識庫",nav:"知識庫",kind:"floor",signY:4.05,pos:[7.4,0,3.0],labelAt:[7.6,0.02,5.0],labelR:3.2},
+  {id:"maint",label:"保養紀錄",nav:"紀錄",kind:"wallA",pos:[0,0,8.6],labelAt:[0.03,4.55,8.6]},
   {id:"cases",label:"案件學習",nav:"案件",kind:"wallA",pos:[0,0,5.6],labelAt:[0.03,4.35,5.6]},
-  {id:"ocr",label:"OCR 辨識",nav:"OCR",kind:"wallA",pos:[0,0,8.6],labelAt:[0.03,4.55,8.6]},
-  {id:"gov",label:"資料治理",nav:"治理",kind:"floor",signY:3.35,pos:[3.9,0,4.4],labelAt:[5.0,0.02,5.9],labelR:2.6},
-  {id:"build",label:"AI 協作",nav:"作品",kind:"floor",signY:3.1,pos:[3.2,0,8.0],labelAt:[4.6,0.02,9.3],labelR:2.6}
+  {id:"gov",label:"資料治理",nav:"治理",kind:"wallA",pos:[0,0,2.4],labelAt:[0.03,4.55,2.4]},
+  {id:"build",label:"AI 協作",nav:"作品",kind:"wallB",pos:[2.1,0,0],labelAt:[2.1,4.55,0.03]},
+  {id:"ocr",label:"OCR 辨識",nav:"OCR",kind:"wallB",pos:[5.6,0,0],labelAt:[5.6,4.75,0.03]},
+  {id:"demos",label:"專屬 DEMO",nav:"專屬 Demo",kind:"wallB",pos:[8.6,0,0],labelAt:[8.6,4.55,0.03]}
 ];
 const tt=(k,v)=>window.I18N?I18N.t(k,v):k;
 ST.forEach(s=>{const nm=window.I18N&&I18N.station(s.id);if(nm){s.label=nm[0];s.nav=nm[1]}const LIST=(typeof EXPS!=="undefined")?EXPS:[];const x=LIST.find(e=>e.id===s.id);s.title=x?x.title:tt("demo1.t");s.no=x?"EXP-"+String(LIST.indexOf(x)+1).padStart(2,"0"):"DEMO";s.facet=x?x.facet:tt("demos.eyebrow")});
@@ -237,7 +237,13 @@ P.build=g=>{ // developer workstation: dual monitors + tower
 };
 
 ST.forEach(s=>{
-  const g=stationGroup(s);P[s.id](g);
+  const g=stationGroup(s);
+  // build the prop at the origin, then fit it to its slot: centred on the floor, or backed against the wall
+  const tmp=new T.Group();P[s.id](tmp);
+  if(s.kind==="floor"&&s.id==="report"){const st=M(0x2A2E33,{metalness:.6});[-1.1,1.1].forEach(x=>{box(tmp,.07,2.0,.07,st,[x,1.0,.0]);box(tmp,.12,.04,.7,st,[x,.02,.1])})}
+  tmp.updateMatrixWorld(true);const bb=new T.Box3().setFromObject(tmp);
+  const dz=s.kind==="floor"?-(bb.min.z+bb.max.z)/2:.06-bb.min.z;
+  tmp.children.slice().forEach(c=>{c.position.z+=dz;g.add(c)});Object.keys(tmp.userData).forEach(k=>g.userData[k]=tmp.userData[k]);
   g.traverse(o=>{if(o.isMesh){o.userData.station=s.id;pickables.push(o)}});
   const lab=makeSign(s);Rg.add(lab);labelMeshes[s.id]=lab;lab.children.forEach(c=>pickables.push(c));
 });

@@ -437,13 +437,13 @@ X.en.build={facet:"Building with AI",title:"Shipping Complete Systems with AI Ag
   steps:["Break the idea into small, testable steps","Direct the agent to build, testing and fixing step by step","Deploy and keep iterating"],
   effect:{type:"kpi",items:[["7","GitHub projects"],["3D · OCR · web","different stacks"]]},
   tech:["Three.js","OCR","GitHub Pages","Agent collaboration"],
-  lab:{items:[["3D role-playing game","A browser 3D RPG: village, characters and 48 models, 107 files in total."],["Okinawa road-trip site","7-day itinerary, intro animation and ocean sounds, deployed on GitHub Pages."],["LineageGoblin","Windows desktop tool: screen OCR plus item-database matching (experiment 06)."]]}};
+  lab:{items:[["3D role-playing game","A browser 3D RPG: village, characters and 48 models, 107 files in total."],["Okinawa road-trip site","7-day itinerary, intro animation and ocean sounds, deployed on GitHub Pages."],["LineageGoblin","Windows desktop tool: screen OCR plus item-database matching (experiment 08)."]]}};
 X.th.build={facet:"สร้างงานร่วมกับ AI",title:"สร้างระบบที่ใช้งานได้จริงด้วย AI Agent",gain:"ไอเดีย → <strong>ผลงานที่ใช้งานจริง</strong>",
   purpose:"นอกเวลางาน ผมใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเครื่องมือที่ใช้ได้จริง เพื่อฝึกแยกความต้องการ สั่งงาน Agent และตรวจสอบผลลัพธ์ ห้องแล็บนี้ก็สร้างด้วยวิธีเดียวกัน",
   steps:["แยกไอเดียเป็นขั้นตอนเล็ก ๆ ที่ตรวจสอบได้","สั่ง Agent ลงมือทำ ทดสอบและแก้ไขทีละขั้น","ปรับใช้จริงและพัฒนาต่อเนื่อง"],
   effect:{type:"kpi",items:[["7","โปรเจกต์บน GitHub"],["3D · OCR · เว็บ","เทคโนโลยีหลากหลาย"]]},
   tech:["Three.js","OCR","GitHub Pages","ทำงานร่วมกับ Agent"],
-  lab:{items:[["เกมเล่นตามบทบาท 3D","เกม RPG 3D บนเบราว์เซอร์: หมู่บ้าน ตัวละคร และโมเดล 48 ชิ้น รวม 107 ไฟล์"],["เว็บไซต์ทริปขับรถเที่ยวโอกินาวา","แผนเที่ยว 7 วัน แอนิเมชันเปิด และเสียงคลื่น ใช้งานบน GitHub Pages"],["LineageGoblin","เครื่องมือเดสก์ท็อป Windows: OCR หน้าจอและจับคู่ฐานข้อมูลไอเท็ม (การทดลองที่ 06)"]]}};
+  lab:{items:[["เกมเล่นตามบทบาท 3D","เกม RPG 3D บนเบราว์เซอร์: หมู่บ้าน ตัวละคร และโมเดล 48 ชิ้น รวม 107 ไฟล์"],["เว็บไซต์ทริปขับรถเที่ยวโอกินาวา","แผนเที่ยว 7 วัน แอนิเมชันเปิด และเสียงคลื่น ใช้งานบน GitHub Pages"],["LineageGoblin","เครื่องมือเดสก์ท็อป Windows: OCR หน้าจอและจับคู่ฐานข้อมูลไอเท็ม (การทดลองที่ 08)"]]}};
 
 
 /* pain point → solution framing */

@@ -522,10 +522,12 @@ ${i}`,
   lab:{kind:"projects",items:[
     ["3D 角色扮演遊戲","瀏覽器裡的 3D RPG：村莊、角色與 48 個模型，共 107 個檔案。","https://claude.ai/artifact/NECNGr5WUk2tu6J6zQeNDj"],
     ["沖繩自駕旅遊網站","7 天行程、開場動畫與海浪音效，部署在 GitHub Pages。","https://hby0413.github.io/okinawa-trip-2027/"],
-    ["LineageGoblin","Windows 桌面工具：螢幕 OCR 加上道具資料庫比對，就是第 06 號實驗。","#ocr"]
+    ["LineageGoblin","Windows 桌面工具：螢幕 OCR 加上道具資料庫比對，就是第 08 號實驗。","#ocr"]
   ]}
 }
 ];
+/* experiment numbering = this order: most direct AI-agent application first */
+const EXP_ORDER=["report","manual","kb","maint","cases","gov","build","ocr"];EXPS_ZH.sort((p,q)=>EXP_ORDER.indexOf(p.id)-EXP_ORDER.indexOf(q.id));
 const EXPS=REAL.apply(I18N.localizeExps(EXPS_ZH),I18N.lang);
 EXPS.forEach(x=>{if(x.evidence&&x.evidence.layers)x.evidence.flat=x.evidence.layers.flatMap(l=>l.imgs)});
 
