@@ -240,19 +240,19 @@ const EV={
 /* governance: five layers, each backed by real source screenshots */
 const GOV={
  zh:{title:"五層治理怎麼落實在 Skill 裡",note:"以下是 Skill 原始檔與實際產出的截圖（客戶與公司名稱已改為代號）。治理不是另外寫一份文件，而是直接寫進每支 Skill 的硬性規則。",
-  L:[["① 去識別化","共通範本由客戶真實手冊去識別化而來：截圖全部馬賽克，主機名、網域、帳號、IP、Email、客戶名改為佔位值；規定不可放未去識別化的客戶檔。"],
+  L:[["① 去識別化","代號對照表只存在使用者本機；AI 要讀必須在對話中取得同意，讀完不記憶，代號定期汰換。共通範本由客戶真實手冊去識別化而來：截圖全部馬賽克，主機名、網域、帳號、IP、Email、客戶名改為佔位值；規定不可放未去識別化的客戶檔。"],
      ["② 只讀原則","FAQ 助手只讀不寫、本機鏡像禁止寫入；檔案存放規範規定原始資料只讀不改。"],
      ["③ 人工確認","讀不準就附截圖問人、不要猜；存放位置判斷不出來就先問使用者。"],
      ["④ 驗證才交付","月會報告產出後必跑驗證步驟；核對明細用公式重算人天，程式比對全部 ✓ 才算通過。"],
      ["⑤ 不確定不硬掰","學習稽核禁止為了報告不空白而捏造發現；FAQ 找不到記錄時不能憑自己的知識瞎猜。"]]},
  en:{title:"How the five governance layers live inside the skills",note:"Screenshots of the skills' source files and real outputs (client and company names replaced with codes). Governance isn't a separate document; it is written into each skill as hard rules.",
-  L:[["① De-identification","The shared template was de-identified from a real client manual: every screenshot pixelated, host names, domains, accounts, IPs, emails and client names replaced; un-sanitised client files are forbidden."],
+  L:[["① De-identification","The code table stays only on the user's machine; the AI must get approval in the conversation to read it, remembers nothing, and codes are rotated regularly. The shared template was de-identified from a real client manual: every screenshot pixelated, host names, domains, accounts, IPs, emails and client names replaced; un-sanitised client files are forbidden."],
      ["② Read-only","The FAQ assistant only reads and must never write to its local mirror; the filing rules keep source data read-only."],
      ["③ Human confirmation","If a screenshot can't be read with confidence, ask with the screenshot instead of guessing; if the filing location is unclear, ask the user first."],
      ["④ Verify before delivery","The monthly report must pass its verification steps; the audit workbook recalculates person-days with formulas and every check must show ✓."],
      ["⑤ No made-up answers","The learning audit must never invent findings to fill a report; the FAQ assistant must not guess when no record exists."]]},
  th:{title:"การกำกับดูแล 5 ชั้นถูกฝังไว้ใน Skill อย่างไร",note:"ภาพหน้าจอของไฟล์ต้นฉบับและผลลัพธ์จริงของ Skill (ชื่อลูกค้าและบริษัทถูกแทนด้วยรหัส) การกำกับดูแลไม่ได้เป็นเอกสารแยก แต่เขียนเป็นกฎบังคับในทุก Skill",
-  L:[["① ปกปิดข้อมูล","เทมเพลตกลางทำจากคู่มือลูกค้าจริงที่ปกปิดข้อมูลแล้ว: ภาพหน้าจอเบลอทั้งหมด ชื่อโฮสต์ โดเมน บัญชี IP อีเมล และชื่อลูกค้าถูกแทนที่ และห้ามใช้ไฟล์ลูกค้าที่ยังไม่ปกปิด"],
+  L:[["① ปกปิดข้อมูล","ตารางเทียบรหัสอยู่บนเครื่องผู้ใช้เท่านั้น AI ต้องขออนุมัติในบทสนทนาก่อนอ่าน อ่านแล้วไม่จดจำ และเปลี่ยนรหัสเป็นระยะ เทมเพลตกลางทำจากคู่มือลูกค้าจริงที่ปกปิดข้อมูลแล้ว: ภาพหน้าจอเบลอทั้งหมด ชื่อโฮสต์ โดเมน บัญชี IP อีเมล และชื่อลูกค้าถูกแทนที่ และห้ามใช้ไฟล์ลูกค้าที่ยังไม่ปกปิด"],
      ["② อ่านอย่างเดียว","ผู้ช่วย FAQ อ่านอย่างเดียวและห้ามเขียนสำเนาในเครื่อง กฎการจัดเก็บกำหนดให้ข้อมูลต้นฉบับอ่านอย่างเดียว"],
      ["③ ให้คนยืนยัน","อ่านภาพไม่แน่ใจให้ถามพร้อมแนบภาพ ห้ามเดา หากไม่แน่ใจตำแหน่งจัดเก็บให้ถามผู้ใช้ก่อน"],
      ["④ ตรวจสอบก่อนส่งมอบ","รายงานประจำเดือนต้องผ่านขั้นตอนตรวจสอบ ไฟล์ตรวจสอบคำนวณ man-day ใหม่ด้วยสูตร และทุกรายการต้องเป็น ✓"],
@@ -261,9 +261,15 @@ const GOV={
 const GOV_IMG=[["l1a","l1b"],["l2a","l2b","l2c"],["l3a","l3b"],["l4a","l4b"],["l5a","l5b"]];
 
 ZH.gov={title:"AI 導入的五層治理",gain:"治理寫進每支 Skill，<strong>主管同意下完成驗證</strong>",
-  purpose:"把治理直接寫進每支 Skill 的硬性規則：去識別化、只讀原則、人工確認、驗證才交付、不確定不硬掰。下方是每一層在 Skill 原始檔裡的實際寫法；最後的實驗台示範第一層「去識別化」怎麼運作。"};
-EN.gov={title:"Five-Layer Governance for AI Adoption",gain:"Governance in every skill, <strong>validated with manager approval</strong>",purpose:"Governance is written into every skill as hard rules: de-identification, read-only, human confirmation, verify before delivery, no made-up answers. Below is how each layer is actually written in the skills' source files; the bench at the end shows layer one, de-identification, in action."};
-TH.gov={title:"การกำกับดูแล 5 ชั้นสำหรับการนำ AI มาใช้",gain:"ฝังการกำกับดูแลในทุก Skill <strong>ทดสอบภายใต้การอนุมัติของหัวหน้า</strong>",purpose:"การกำกับดูแลถูกเขียนเป็นกฎบังคับในทุก Skill: ปกปิดข้อมูล อ่านอย่างเดียว ให้คนยืนยัน ตรวจสอบก่อนส่งมอบ และไม่แต่งคำตอบ ด้านล่างคือวิธีเขียนแต่ละชั้นในไฟล์ต้นฉบับของ Skill จริง และสถานีทดลองท้ายสุดสาธิตชั้นแรก คือการปกปิดข้อมูล"};
+  purpose:"關鍵在第一層去識別化：客戶名稱、主機名、帳號等機敏資料先在本機換成代號，<b>代號對照表只存在使用者自己的電腦</b>，不上傳、不放進共用資料夾。AI 若需要讀對照表，Skill 有硬性條件：必須在對話中請使用者按「同意」才能讀取；讀完不留存、不記憶這次的內容；對照表的代號也會定期更新、汰換檔案。其餘四層（只讀原則、人工確認、驗證才交付、不確定不硬掰）同樣直接寫成每支 Skill 的硬性規則。",
+  steps:["在本機把個資、客戶名稱、主機名換成代號","代號對照表只存在使用者本機，不上傳、不共用","AI 要讀對照表時，必須在對話中取得使用者同意","讀完不留存、不記憶；對照表代號定期更新汰換","只把遮罩後的內容交給 AI 處理"],
+  tech:["本機對照表","使用者同意關卡","不留存・不記憶","代號定期汰換","只讀原則","人工確認"]};
+EN.gov={title:"Five-Layer Governance for AI Adoption",gain:"Governance in every skill, <strong>validated with manager approval</strong>",purpose:"The key is layer one, de-identification. Client names, host names, accounts and other sensitive data are swapped for codes on the user's machine, and <b>the code lookup table lives only on the user's own computer</b>: never uploaded, never put in a shared folder. If the AI needs to read the table, the skill has a hard condition: the user must click Approve in the conversation first; nothing is retained or remembered afterwards; and the codes are rotated and the table replaced on a regular schedule. The other four layers (read-only, human confirmation, verify before delivery, no made-up answers) are written into every skill as hard rules in the same way.",
+  steps:["Replace personal data, client names and host names with codes on the local machine","Keep the code lookup table only on the user's computer; never upload or share it","Before the AI reads the table, get the user's approval in the conversation","Retain and remember nothing afterwards; rotate the codes and replace the table regularly","Send only the masked content to the AI"],
+  tech:["Local lookup table","User approval gate","No retention or memory","Regular code rotation","Read-only","Human confirmation"]};
+TH.gov={title:"การกำกับดูแล 5 ชั้นสำหรับการนำ AI มาใช้",gain:"ฝังการกำกับดูแลในทุก Skill <strong>ทดสอบภายใต้การอนุมัติของหัวหน้า</strong>",purpose:"หัวใจอยู่ที่ชั้นแรก การปกปิดข้อมูล: ชื่อลูกค้า ชื่อโฮสต์ บัญชี และข้อมูลอ่อนไหวอื่น ๆ ถูกแทนด้วยรหัสบนเครื่องของผู้ใช้ และ<b>ตารางเทียบรหัสเก็บไว้บนคอมพิวเตอร์ของผู้ใช้เท่านั้น</b> ไม่อัปโหลดและไม่ใส่ในโฟลเดอร์ส่วนกลาง หาก AI ต้องอ่านตาราง Skill มีเงื่อนไขบังคับ: ผู้ใช้ต้องกด \"อนุมัติ\" ในบทสนทนาก่อน อ่านแล้วไม่เก็บและไม่จดจำ และรหัสในตารางจะถูกเปลี่ยนและแทนไฟล์ใหม่เป็นระยะ อีกสี่ชั้น (อ่านอย่างเดียว ให้คนยืนยัน ตรวจสอบก่อนส่งมอบ ไม่แต่งคำตอบ) ก็เขียนเป็นกฎบังคับในทุก Skill เช่นกัน",
+  steps:["แทนข้อมูลส่วนบุคคล ชื่อลูกค้า และชื่อโฮสต์ด้วยรหัสบนเครื่อง","ตารางเทียบรหัสเก็บไว้บนคอมพิวเตอร์ของผู้ใช้เท่านั้น ไม่อัปโหลดหรือแชร์","ก่อน AI อ่านตาราง ต้องได้รับอนุมัติจากผู้ใช้ในบทสนทนา","อ่านแล้วไม่เก็บไม่จดจำ และเปลี่ยนรหัส/แทนไฟล์เป็นระยะ","ส่งเฉพาะเนื้อหาที่ปกปิดแล้วให้ AI"],
+  tech:["ตารางเทียบในเครื่อง","ด่านขออนุมัติผู้ใช้","ไม่เก็บ·ไม่จดจำ","เปลี่ยนรหัสเป็นระยะ","อ่านอย่างเดียว","ให้คนยืนยัน"]};
 function merge(a,b){if(b===undefined)return a;if(Array.isArray(b)||typeof b!=="object"||b===null||typeof b==="function")return b;const o=Object.assign({},a);for(const k in b)o[k]=merge(a?a[k]:undefined,b[k]);return o}
 const TX={
  "ev.title":{zh:"實際畫面 · Skill 真實產出",en:"Real output · produced by the skill",th:"ภาพจริง · ผลลัพธ์ที่ Skill สร้าง"},
