@@ -2,7 +2,7 @@
 window.VD={
 "← 回到 AI 實驗室":{en:"← Back to the AI Lab",th:"← กลับห้องแล็บ AI"},
 "/ 專屬 Demo":{en:"/ Role demo",th:"/ เดโมตามตำแหน่ง"},
-"Target role · 泰國廠 AI 視覺／AOI 工程師":{en:"Target role · AI Vision / AOI Engineer, Thailand plant",th:"ตำแหน่งเป้าหมาย · วิศวกร AI Vision / AOI โรงงานในไทย"},
+"Target role · 製造業 AI 視覺／AOI 應用":{en:"Target role · AI vision / AOI for manufacturing",th:"ตำแหน่งเป้าหมาย · AI Vision / AOI สำหรับงานผลิต"},
 "PCB 外觀瑕疵 AI 檢測站":{en:"PCB Defect AI Inspection Station",th:"สถานีตรวจจับตำหนิ PCB ด้วย AI"},
 "工廠的瑕疵品很少，很難收集到大量「壞的」樣本。這個 Demo 只用良品訓練異常偵測模型，看到跟良品不一樣的地方就標出來。訓練、推論、門檻值調整都在你的瀏覽器裡即時運算，你也可以自己在板子上畫瑕疵來考它。":{en:"Factories have few defective parts, so collecting lots of \"bad\" samples is hard. This demo trains an anomaly-detection model on good boards only and flags anything that looks different. Training, inference and threshold tuning all run live in your browser, and you can draw your own defects on a board to test it.",th:"ในโรงงานมีชิ้นงานเสียน้อย จึงเก็บตัวอย่าง \"เสีย\" จำนวนมากได้ยาก เดโมนี้ฝึกโมเดลตรวจจับความผิดปกติด้วยบอร์ดดีเท่านั้น แล้วทำเครื่องหมายจุดที่ต่างจากบอร์ดดี การฝึก การอนุมาน และการปรับเกณฑ์ทำงานแบบเรียลไทม์ในเบราว์เซอร์ และคุณวาดตำหนิบนบอร์ดเพื่อทดสอบได้เอง"},
 "職缺需求":{en:"Job requirement",th:"คุณสมบัติที่ต้องการ"},
