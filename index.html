@@ -206,6 +206,11 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .live-ind .led{width:9px;height:9px;border-radius:50%;background:#39FF7A;box-shadow:0 0 6px #39FF7A,0 0 14px rgba(57,255,122,.65);animation:ledBlink 1.5s ease-in-out infinite}
 @keyframes ledBlink{0%,55%{opacity:1;box-shadow:0 0 6px #39FF7A,0 0 14px rgba(57,255,122,.65)}70%,90%{opacity:.18;box-shadow:none}100%{opacity:1}}
 @media (prefers-reduced-motion: reduce){.live-ind .led{animation:none}}
+
+/* execution replay GIF inside a case */
+.replay{margin:4px 0 14px}
+.replay img{display:block;width:100%;max-width:760px;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#0B0C0E}
+.replay figcaption{margin-top:6px;color:#8A939B}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -681,6 +686,7 @@ function evidenceHTML(x,top){
   const e=x.evidence;
   if(e.layers){return `<div class="evid top"><div class="label">${esc(e.title)}</div><p class="hint" style="margin:0">${esc(e.note)}</p>${e.layers.map(l=>`<div class="layer"><div class="lt"><b>${esc(l.t)}</b><span>${esc(l.d)}</span></div><div class="lg">${l.imgs.map(src=>`<button type="button" data-lb="${x.id}" data-i="${e.flat.indexOf(src)}"><img src="${src}" loading="lazy" alt="${esc(l.t)}"></button>`).join("")}</div></div>`).join("")}</div>`}
   let h=`<div class="evid${top?" top":""}"><div class="label">${REAL.t("ev.title")}</div>`;
+  if(["report","manual","kb","maint","cases"].includes(x.id)){h+=`<figure class="replay"><div class="label">${I18N.t("ev.run")}</div><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t("ev.runNote")}</figcaption></figure>`}
   if(e.imgs){h+=`<p class="hint" style="margin:0">${REAL.t("ev.slides")}</p><div class="gal">${e.imgs.map((src,i)=>`<button type="button" data-lb="${x.id}" data-i="${i}" aria-label="${esc(x.title)} ${i+1}"><img src="${src}" loading="lazy" alt="${esc(x.title)} ${i+1}"></button>`).join("")}</div>`}
   h+=`<div class="sk"><div><div class="label">${REAL.t("ev.struct")}</div><pre class="tree">${esc(e.tree.join("\n"))}</pre></div><div><div class="label">${REAL.t("ev.excerpt")}</div><pre>${esc(e.excerpt)}</pre></div></div></div>`;
   return h;

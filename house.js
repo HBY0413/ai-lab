@@ -325,6 +325,16 @@ $("capPrev").addEventListener("click",()=>{showCap(focus-1);flyTo(stationView(ST
 $("capNext").addEventListener("click",()=>{showCap(focus+1);flyTo(stationView(ST[focus].id),.9)});
 $("capGo").addEventListener("click",()=>openStation(ST[focus].id,{fly:false}));
 $("hintX").addEventListener("click",()=>$("hint").remove());
+/* drag the Tips card anywhere; it stays inside the window */
+(()=>{const h=$("hint");if(!h)return;let sx=0,sy=0,ox=0,oy=0,on=false;
+  const clamp=()=>{if(!h.isConnected||!h.classList.contains("moved"))return;const r=h.getBoundingClientRect();
+    h.style.left=Math.max(8,Math.min(innerWidth-r.width-8,r.left))+"px";h.style.top=Math.max(8,Math.min(innerHeight-r.height-8,r.top))+"px"};
+  h.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;e.stopPropagation();e.preventDefault();const r=h.getBoundingClientRect();
+    h.classList.add("moved","dragging");h.style.left=r.left+"px";h.style.top=r.top+"px";sx=e.clientX;sy=e.clientY;ox=r.left;oy=r.top;on=true;try{h.setPointerCapture(e.pointerId)}catch(_){}});
+  h.addEventListener("pointermove",e=>{if(!on)return;e.stopPropagation();h.style.left=(ox+e.clientX-sx)+"px";h.style.top=(oy+e.clientY-sy)+"px";clamp()});
+  const end=e=>{if(!on)return;on=false;h.classList.remove("dragging");clamp()};
+  h.addEventListener("pointerup",end);h.addEventListener("pointercancel",end);
+  h.addEventListener("click",e=>{if(!e.target.closest("button"))e.stopPropagation()});addEventListener("resize",clamp)})();
 // nav + menu
 const nav=$("hdrNav");
 nav.innerHTML=ST.map(s=>`<button type="button" data-id="${s.id}">${s.nav}</button>`).join("")+`<button type="button" data-id="home">${tt("menu.about")}</button>`;

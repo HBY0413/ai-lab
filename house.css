@@ -261,3 +261,20 @@ body.focused #entryUI:not(.hide) .acts{animation:focusIn 1.1s 1.2s both}
 #entryUI .head.card .cm{margin-top:8px;border-top:none;padding-top:0}
 @media (max-width:860px){#entryUI .head.card{max-width:none}}
 @media (max-width:520px){#entryUI .head.card .cp{display:none}#entryUI .mk{display:none}}
+
+/* ===== Tips card: bottom-centre above the caption bar, draggable, closable ===== */
+#hint{cursor:grab;touch-action:none;user-select:none}
+#hint.dragging{cursor:grabbing;transition:none}
+#hint button{cursor:pointer}
+@media (min-width:861px){
+  #hint{top:auto;right:auto;left:50%;bottom:108px;transform:translateX(-50%);max-width:min(540px,calc(100vw - 48px))}
+}
+#hint.moved{transform:none!important;right:auto!important;bottom:auto!important;max-width:min(540px,calc(100vw - 24px))}
+/* ===== header never wraps; it sheds parts as the window narrows ===== */
+#hdr,#hdr *{white-space:nowrap}
+@media (max-width:1360px){#hdr .sound span{display:none}}
+@media (max-width:1220px){#hdrNav{display:none}}
+/* caption bar sizes to its content (title included) and only truncates when the window is too narrow */
+#cap{width:max-content}
+#cap .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:860px){#cap{width:auto}}
