@@ -142,15 +142,15 @@ const D={
 
 /* station names: wall/floor arc label, nav label */
 const STN={
-  demos:{zh:["專屬 DEMO","專屬 Demo"],en:["ROLE DEMOS","Demos"],th:["เดโมเฉพาะงาน","เดโม"]},
-  manual:{zh:["升級保養紀錄","紀錄簡報"],en:["RECORD DECKS","Records"],th:["บันทึกอัปเกรด","บันทึก"]},
-  report:{zh:["月會報告","月會報告"],en:["MONTHLY REPORT","Report"],th:["รายงานประจำเดือน","รายงาน"]},
-  maint:{zh:["檔案歸檔","歸檔"],en:["FILING RULES","Filing"],th:["จัดเก็บไฟล์","จัดเก็บ"]},
-  kb:{zh:["FAQ 問答","FAQ"],en:["FAQ","FAQ"],th:["ถาม-ตอบ FAQ","FAQ"]},
-  cases:{zh:["案子學習","學習稽核"],en:["LEARNING AUDIT","Audit"],th:["เรียนรู้จากโปรเจกต์","ตรวจสอบ"]},
-  ocr:{zh:["OCR 辨識","OCR"],en:["OCR","OCR"],th:["OCR อ่านภาพ","OCR"]},
-  gov:{zh:["資料治理","治理"],en:["GOVERNANCE","Governance"],th:["กำกับข้อมูล","กำกับดูแล"]},
-  build:{zh:["AI 協作","作品"],en:["AI BUILDS","Builds"],th:["สร้างกับ AI","ผลงาน"]}
+  demos:{zh:["AI 檢測 DEMO","AI Demo"],en:["AI INSPECTION DEMO","AI Demo"],th:["เดโมตรวจจับด้วย AI","AI เดโม"]},
+  manual:{zh:["AI 紀錄簡報","AI 簡報"],en:["AI RECORD DECKS","AI Decks"],th:["AI สไลด์บันทึก","AI สไลด์"]},
+  report:{zh:["AI 月會報告","AI 報告"],en:["AI MONTHLY REPORT","AI Report"],th:["AI รายงานรายเดือน","AI รายงาน"]},
+  maint:{zh:["AI 檔案歸檔","AI 歸檔"],en:["AI FILING RULES","AI Filing"],th:["AI จัดเก็บไฟล์","AI จัดเก็บ"]},
+  kb:{zh:["AI FAQ 問答","AI FAQ"],en:["AI FAQ ASSISTANT","AI FAQ"],th:["AI ถาม-ตอบ FAQ","AI FAQ"]},
+  cases:{zh:["AI 學習稽核","AI 稽核"],en:["AI LEARNING AUDIT","AI Audit"],th:["AI ตรวจสอบบทเรียน","AI ตรวจสอบ"]},
+  ocr:{zh:["AI 開發 OCR","AI OCR"],en:["AI-BUILT OCR","AI OCR"],th:["OCR สร้างด้วย AI","AI OCR"]},
+  gov:{zh:["AI 導入治理","AI 治理"],en:["AI GOVERNANCE","AI Governance"],th:["กำกับดูแล AI","AI กำกับ"]},
+  build:{zh:["AI 協作開發","AI 作品"],en:["AI-BUILT PROJECTS","AI Builds"],th:["ผลงานสร้างด้วย AI","AI ผลงาน"]}
 };
 
 /* ---------- experiment content overlays (zh is the base in index.html) ---------- */
@@ -467,11 +467,11 @@ const PS={
   gov:["อยากใช้ AI บนคลาวด์ในงาน แต่ข้อมูลบริษัทมีชื่อลูกค้าและข้อมูลส่วนบุคคล นโยบายความปลอดภัยไม่อนุญาตให้ส่งออกโดยตรง การนำ AI มาใช้จึงติดอยู่ตั้งแต่ขั้นแรก","เพิ่มด่านปกปิดข้อมูลในเครื่องก่อนส่งออก: ชื่อ เบอร์โทร อีเมล เลขบัตรประชาชน และชื่อบริษัทลูกค้าจะถูกแทนด้วยรหัสพร้อมเก็บบันทึก AI จะเห็นเฉพาะข้อความที่ปกปิดแล้ว นี่คือชั้นแรกของการกำกับดูแล 5 ชั้นที่ผมออกแบบ"],
   build:["มีไอเดียมากมายแต่ไม่มีทีมวิศวกร ปกติต้องจ้างคนพัฒนาและรอนาน ไอเดียเล็ก ๆ จึงมักหายไป","ผมใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเครื่องมือที่ใช้งานได้ด้วยตัวเอง ตั้งแต่แยกความต้องการ สั่งงาน Agent และตรวจสอบทีละขั้นจนใช้งานจริง ห้องแล็บนี้ก็สร้างด้วยวิธีเดียวกัน"]}};
 for(const l of ["en","th"])for(const id in PS[l]){X[l][id]=X[l][id]||{};X[l][id].pain=PS[l][id][0];X[l][id].purpose=PS[l][id][1]}
-Object.assign(X.en.ocr,{title:"Item Finder for International Servers (OCR + Fuzzy Search)",gain:"Unreadable English → <strong>item details in Chinese</strong>",
+Object.assign(X.en.ocr,{title:"AI-built Item Finder for International Servers (OCR + Fuzzy Search)",gain:"Unreadable English → <strong>item details in Chinese</strong>",
   steps:["Text search: type an item name (misspelled or partial is fine) and fuzzy matching finds the closest item","OCR scan: capture the item tooltip on the game screen and read its text","Strip enchant levels (+7, t7, ＋9), prices and other noise, match against the item database, and show the Chinese name and details"],
   effect:{type:"kpi",items:[["2 ways","type or scan"],["8 kinds","of OCR/spelling errors tolerated"]]}});
 X.en.ocr.lab={hint:"Try both: type a name (typos welcome), or scan the sample game screen below or upload your own screenshot."};
-Object.assign(X.th.ocr,{title:"ตัวช่วยค้นหาไอเท็มเซิร์ฟเวอร์อินเตอร์ (OCR + ค้นหาแบบคลุมเครือ)",gain:"อ่านอังกฤษไม่ออก → <strong>ข้อมูลไอเท็มภาษาจีน</strong>",
+Object.assign(X.th.ocr,{title:"ตัวช่วยค้นหาไอเท็มเซิร์ฟเวอร์อินเตอร์ที่พัฒนาด้วย AI (OCR + ค้นหาแบบคลุมเครือ)",gain:"อ่านอังกฤษไม่ออก → <strong>ข้อมูลไอเท็มภาษาจีน</strong>",
   steps:["ค้นด้วยข้อความ: พิมพ์ชื่อไอเท็ม (สะกดผิดหรือไม่ครบก็ได้) แล้วจับคู่แบบคลุมเครือหาไอเท็มที่ใกล้ที่สุด","สแกนด้วย OCR: จับภาพกล่องคำอธิบายไอเท็มบนหน้าจอเกมแล้วอ่านข้อความ","ลบค่าตีบวก (+7, t7, ＋9) ราคา และสัญญาณรบกวน แล้วจับคู่กับฐานข้อมูลไอเท็ม แสดงชื่อภาษาจีนและรายละเอียด"],
   effect:{type:"kpi",items:[["2 วิธี","พิมพ์หรือสแกน"],["8 แบบ","ข้อผิดพลาด OCR/การสะกดที่รับมือได้"]]}});
 X.th.ocr.lab={hint:"ลองทั้ง 2 แบบ: พิมพ์ชื่อ (สะกดผิดได้) หรือสแกนภาพหน้าจอเกมตัวอย่างด้านล่าง หรืออัปโหลดภาพหน้าจอของคุณเอง"};
