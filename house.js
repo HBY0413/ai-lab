@@ -287,15 +287,17 @@ const panel=$("panel"),pbody=$("pbody"),veil=$("veil");
 let openSlide=null,openHome=null;
 function setNav(id){document.querySelectorAll("#hdr nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.id===id))}
 function showCap(i){focus=(i+ST.length)%ST.length;const s=ST[focus];$("capN").textContent=`${String(focus+1).padStart(2,"0")}/${String(ST.length).padStart(2,"0")} · ${s.no}`;$("capT").textContent=s.title;}
+/* every case opens at its first block (01), whatever was scrolled or jumped to before */
+function toTop(){const reset=()=>{pbody.scrollTop=0;pbody.querySelectorAll(".wrap,.slide,.bench").forEach(n=>{n.scrollTop=0})};reset();requestAnimationFrame(reset);setTimeout(reset,120);setTimeout(reset,700)}
 function openStation(id,{fly=true}={}){
   if(mode==="entrance"){$("entryUI").classList.add("hide")}
   const idx=ST.findIndex(s=>s.id===id);if(idx>=0)showCap(idx);
   closePanel(false);active=id;setNav(id);
   if(fly&&idx>=0)flyTo(stationView(id));
   const sl=slideById(id);if(!sl)return;
-  openHome=sl.nextSibling;openSlide=sl;pbody.appendChild(sl);pbody.scrollTop=0;
+  openHome=sl.nextSibling;openSlide=sl;pbody.appendChild(sl);toTop();
   const s=ST[idx];$("pk").textContent=s?`${s.no} · ${s.facet}`:tt("panel.about");
-  setTimeout(()=>{if(openSlide===sl){panel.classList.add("on");sfx("open");setStage();$("pclose").focus({preventScroll:true})}},fly&&idx>=0?650:0);
+  setTimeout(()=>{if(openSlide===sl){panel.classList.add("on");sfx("open");setStage();toTop();$("pclose").focus({preventScroll:true})}},fly&&idx>=0?650:0);
   $("cap").classList.add("hide");document.body.classList.add("popen");
   try{history.replaceState(null,"","#"+id)}catch(e){}
 }

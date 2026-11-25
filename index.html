@@ -253,6 +253,28 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .shotpick .on{outline:2px solid #F0A060;outline-offset:1px}
 .shotview{border:1px solid rgba(255,255,255,.1);border-radius:8px;overflow:hidden;background:#fff;margin-bottom:10px}
 .shotview img{display:block;width:100%;height:auto}
+
+.sh-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 14px}
+.sh-meta div{padding:10px 12px;border-radius:8px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.06);color:#F7F8F9}
+.sh-meta small{display:block;color:#8A939B;margin-bottom:2px}
+.slide169{position:relative;aspect-ratio:16/9;background:#fff;color:#1C2024;border-radius:6px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(0,0,0,.35);margin:6px 0 14px}
+.slide169::before{content:"";position:absolute;left:0;top:0;width:6px;height:100%;background:#2E7DC6}
+.slide169 .s-title{padding:4.5% 6% 2.5%;font-weight:700;text-align:center;color:#1C2024;font-size:clamp(14px,1.7vw,20px)!important;border-bottom:2px solid #E3E8EE;margin:0 4%}
+.slide169 .s-body{flex:1;display:grid;grid-template-columns:34% 1fr;gap:4%;padding:3.5% 5% 2%;min-height:0}
+.slide169 ul{margin:0;padding-left:1.1em;color:#2A3038;font-size:clamp(11px,1.15vw,14px)!important;line-height:1.7}
+.slide169 .s-img{position:relative;border:1px solid #D5DBE2;border-radius:3px;overflow:hidden;background:#F4F6F8;display:flex;align-items:center;justify-content:center}
+.slide169 .s-img img{max-width:100%;max-height:100%;display:block}
+.slide169.warn .s-img{outline:3px solid #F0A060;outline-offset:-3px}
+.slide169 .s-flag{position:absolute;right:6px;top:6px;width:22px;height:22px;border-radius:50%;background:#F0A060;color:#1C1006;font-weight:700;display:flex;align-items:center;justify-content:center}
+.slide169 .s-foot{display:flex;justify-content:space-between;padding:1.2% 5% 2%;color:#8A939B;font-size:11px!important}
+.slide169 .s-foot b{color:#fff;background:#2E7DC6;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px!important}
+.sh-warn{padding:12px 14px;border-radius:10px}
+.sh-warn.has{background:rgba(240,160,96,.10);border:1px solid rgba(240,160,96,.4)}
+.sh-warn.has .label{color:#F0A060}
+.sh-warn.ok{background:rgba(57,201,122,.08);border:1px solid rgba(57,201,122,.35)}
+.sh-warn ul{margin:6px 0 0;padding-left:1.2em;color:#F7F8F9;line-height:1.65}
+.sh-warn p{margin:6px 0 0;color:#C2C8CE}
+@media (max-width:700px){.sh-meta{grid-template-columns:1fr}}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -591,48 +613,60 @@ function labShell(el,title){el.innerHTML=`<div class="lab-bar"><span>${title}</s
 
 /* 02 live lab: pick (or upload) an on-site screenshot, let AI read it and write the record line */
 const SHOTS=[
-  {src:"ev/shot-cpu.jpg",k:"cpu",ex:{zh:"| 項目 | 內容 |\n|---|---|\n| 畫面 | Windows 工作管理員・效能頁 |\n| 對應檢查項目 | 主機檢查・伺服器資源 |\n| 讀出的數值 | CPU：Intel Xeon Gold，16 cores（32 邏輯處理器），2.90 GHz；記憶體 128 GB（使用中 38 GB）；C 槽 100 GB、D 槽 500 GB；CPU 使用率 12% |\n\n**紀錄說明（標準句型）**\n- C 槽：100 GB\n- D 槽：500 GB\n- CPU：16 cores\n- RAM：128 GB\n\n**需要確認**：無",en:"| Item | Detail |\n|---|---|\n| Screen | Windows Task Manager, Performance tab |\n| Check item | Host check · server resources |\n| Values read | CPU: Intel Xeon Gold, 16 cores (32 logical), 2.90 GHz; memory 128 GB (38 GB in use); C: 100 GB, D: 500 GB; CPU usage 12% |\n\n**Record text (standard wording)**\n- C drive: 100 GB\n- D drive: 500 GB\n- CPU: 16 cores\n- RAM: 128 GB\n\n**To confirm**: none"}},
-  {src:"ev/shot-ver.jpg",k:"ver",ex:{zh:"| 項目 | 內容 |\n|---|---|\n| 畫面 | 「關於 OO Server」視窗 |\n| 對應檢查項目 | 主機檢查・應用程式版本 |\n| 讀出的數值 | 版本 Version 2024.5.0 |\n\n**紀錄說明（標準句型）**\n- 目前安裝程式版本：OO Server 2024.5\n\n**需要確認**：這是升級後的版本；若是升級前檢查，版本應為升級前的舊版，請確認截圖時間點。",en:"| Item | Detail |\n|---|---|\n| Screen | About OO Server dialog |\n| Check item | Host check · application version |\n| Values read | Version 2024.5.0 |\n\n**Record text (standard wording)**\n- Installed version: OO Server 2024.5\n\n**To confirm**: this is the post-upgrade version; if this is meant to be the pre-upgrade check, please confirm when the screenshot was taken."}},
-  {src:"ev/shot-bak.jpg",k:"bak",ex:{zh:"| 項目 | 內容 |\n|---|---|\n| 畫面 | 命令提示字元・執行維護備份指令 |\n| 對應檢查項目 | 升級前・備份 |\n| 讀出的數值 | 進度 7% → 100%，備份檔寫入 D:\\backup\\backup_20260825.tsbak |\n\n**紀錄說明（標準句型）**\n- 以系統管理者身分執行備份指令，備份完成。\n\n**需要確認**：無",en:"| Item | Detail |\n|---|---|\n| Screen | Command prompt running the maintenance backup |\n| Check item | Pre-upgrade · backup |\n| Values read | Progress 7% → 100%, backup written to D:\\backup\\backup_20260825.tsbak |\n\n**Record text (standard wording)**\n- Ran the backup command as administrator; backup completed.\n\n**To confirm**: none"}},
-  {src:"ev/shot-ins.jpg",k:"ins",ex:{zh:"| 項目 | 內容 |\n|---|---|\n| 畫面 | OO Server 2024.5 安裝程式・歡迎頁 |\n| 對應檢查項目 | 升級流程・執行安裝檔 |\n| 讀出的數值 | 安裝目標版本 2024.5 |\n\n**紀錄說明（標準句型）**\n- 以系統管理者身分執行安裝檔。\n\n**需要確認**：無",en:"| Item | Detail |\n|---|---|\n| Screen | OO Server 2024.5 installer, welcome page |\n| Check item | Upgrade · run installer |\n| Values read | Target version 2024.5 |\n\n**Record text (standard wording)**\n- Ran the installer as administrator.\n\n**To confirm**: none"}}
+  {src:"ev/shot-cpu.jpg",ex:{
+    zh:{screen:"Windows 工作管理員・效能頁",item:"主機檢查・伺服器資源",title:"主機檢查 - 伺服器資源工作管理員",bullets:["C 槽：100 GB","D 槽：500 GB","CPU：16 cores","RAM：128 GB"],warnings:[]},
+    en:{screen:"Windows Task Manager, Performance tab",item:"Host check · server resources",title:"Host check - server resources (Task Manager)",bullets:["C drive: 100 GB","D drive: 500 GB","CPU: 16 cores","RAM: 128 GB"],warnings:[]}}},
+  {src:"ev/shot-ver.jpg",ex:{
+    zh:{screen:"「關於 OO Server」視窗",item:"主機檢查・應用程式版本",title:"主機檢查 - 應用程式版本",bullets:["目前安裝程式版本：OO Server 2024.5"],warnings:["畫面顯示 2024.5，是升級後的版本；如果這張要放在「升級前環境檢查」，版本應該是舊版，請確認截圖時間點。"]},
+    en:{screen:"About OO Server dialog",item:"Host check · application version",title:"Host check - application version",bullets:["Installed version: OO Server 2024.5"],warnings:["The screen shows 2024.5, the post-upgrade version. If this belongs in the pre-upgrade check, it should show the old version; please confirm when it was taken."]}}},
+  {src:"ev/shot-bak.jpg",ex:{
+    zh:{screen:"命令提示字元・執行維護備份指令",item:"升級前・備份",title:"升級前 - 備份",bullets:["以系統管理者身分執行備份指令","備份完成（100%），備份檔寫入 D 槽"],warnings:["視窗標題是系統管理員命令提示字元，但跟以往範本的 TSM 備份畫面不同（範本用 tsm maintenance backup 的輸出頁），請確認備份方式是否一致。"]},
+    en:{screen:"Command prompt running the maintenance backup",item:"Pre-upgrade · backup",title:"Pre-upgrade - backup",bullets:["Ran the backup command as administrator","Backup completed (100%), file written to D:"],warnings:["This differs from the backup screen in past templates (tsm maintenance backup output); please confirm the backup method is the same."]}}},
+  {src:"ev/shot-cut.jpg",ex:{
+    zh:{screen:"Windows 工作管理員・效能頁（不完整）",item:"主機檢查・伺服器資源",title:"主機檢查 - 伺服器資源工作管理員",bullets:["C 槽：100 GB","D 槽：500 GB","CPU：16 cores","RAM：128 GB"],warnings:["截圖沒截完整：右側與下方的使用率、速度、核心數區塊被切掉，核心數只能從左側摘要讀到。建議重截完整視窗。","畫面比範本小很多，放進簡報後文字可能看不清楚。"]},
+    en:{screen:"Windows Task Manager, Performance tab (incomplete)",item:"Host check · server resources",title:"Host check - server resources (Task Manager)",bullets:["C drive: 100 GB","D drive: 500 GB","CPU: 16 cores","RAM: 128 GB"],warnings:["The screenshot is cut off: the usage, speed and core-count panel on the right and bottom is missing, so cores were read from the side summary only. Please recapture the full window.","It is much smaller than the template shots, so text may be hard to read in the deck."]}}}
 ];
+function slideHTML(img,d,no){
+  const w=d.warnings&&d.warnings.length;
+  return `<div class="slide169${w?" warn":""}"><div class="s-title">${esc(d.title||d.item||"")}</div>
+    <div class="s-body"><ul>${(d.bullets||[]).map(t=>`<li>${esc(t)}</li>`).join("")}</ul><div class="s-img"><img src="${img}" alt="">${w?`<span class="s-flag">!</span>`:""}</div></div>
+    <div class="s-foot"><span>${I18N.t("sh.foot")}</span><b>${no}</b></div></div>`;
+}
+function resultHTML(img,d,live){
+  const w=d.warnings||[];
+  return `<span class="tag${live?" live":""}">${I18N.t(live?"tag.live":"tag.example")}</span>
+   <div class="sh-meta"><div><small>${I18N.t("sh.screen")}</small>${esc(d.screen||"")}</div><div><small>${I18N.t("sh.item")}</small>${esc(d.item||"")}</div></div>
+   <div class="label">${I18N.t("sh.slide")}</div>${slideHTML(img,d,"05")}
+   <div class="sh-warn ${w.length?"has":"ok"}"><div class="label">${I18N.t(w.length?"sh.warnT":"sh.okT")}</div>${w.length?`<ul>${w.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:`<p>${I18N.t("sh.ok")}</p>`}</div>`;
+}
 function buildShots(x,b){
-  let sel=0,upload=null;
+  let sel=0,upload=null,upURL=null;
   b.innerHTML=`<div class="hint">${I18N.t("sh.hint")}</div>
     <div class="label">${I18N.t("sh.pick")}</div>
     <div class="shotpick">${SHOTS.map((s,i)=>`<button type="button" data-i="${i}" class="${i?"":"on"}"><img src="${s.src}" alt=""></button>`).join("")}
       <label class="up"><input type="file" accept="image/*" hidden><span>＋ ${I18N.t("sh.upload")}</span></label></div>
-    <div class="shotview"><img alt=""></div>
     <div class="row"><button type="button" class="primary">${I18N.t("sh.run")}</button><button type="button" class="exb">${I18N.t("lab.example")}</button><span class="hint note"></span></div>
     <div class="out"></div>`;
-  const view=b.querySelector(".shotview img"),out=b.querySelector(".out"),note=b.querySelector(".note");
-  const show=()=>{view.src=upload?URL.createObjectURL(upload):SHOTS[sel].src;out.innerHTML="";note.textContent=""};
-  const example=()=>{if(upload){note.textContent=I18N.t("sh.noex");return}const e=SHOTS[sel].ex;out.innerHTML=`<span class="tag">${I18N.t("tag.example")}</span>`+md(I18N.lang==="zh"?e.zh:e.en)};
-  b.querySelectorAll(".shotpick button").forEach(bt=>bt.addEventListener("click",()=>{upload=null;sel=+bt.dataset.i;b.querySelectorAll(".shotpick button,.shotpick .up").forEach(z=>z.classList.remove("on"));bt.classList.add("on");show()}));
-  b.querySelector(".up input").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;upload=f;b.querySelectorAll(".shotpick button").forEach(z=>z.classList.remove("on"));b.querySelector(".up").classList.add("on");show()});
+  const out=b.querySelector(".out"),note=b.querySelector(".note");
+  const cur=()=>upload?upURL:SHOTS[sel].src;
+  const example=()=>{if(upload){note.textContent=I18N.t("sh.noex");out.innerHTML=`<div class="shotview"><img src="${upURL}" alt=""></div>`;return}
+    const e=SHOTS[sel].ex;out.innerHTML=resultHTML(cur(),I18N.lang==="zh"?e.zh:e.en,false)};
+  b.querySelectorAll(".shotpick button").forEach(bt=>bt.addEventListener("click",()=>{upload=null;sel=+bt.dataset.i;b.querySelectorAll(".shotpick button,.shotpick .up").forEach(z=>z.classList.remove("on"));bt.classList.add("on");note.textContent="";example()}));
+  b.querySelector(".up input").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;upload=f;upURL=URL.createObjectURL(f);b.querySelectorAll(".shotpick button").forEach(z=>z.classList.remove("on"));b.querySelector(".up").classList.add("on");note.textContent="";out.innerHTML=`<div class="shotview"><img src="${upURL}" alt=""></div>`});
   b.querySelector(".exb").addEventListener("click",example);
   b.querySelector(".primary").addEventListener("click",async()=>{
     let canImg=false;try{canImg=!!(sample&&(await sample.limits()).images)}catch(e){}
     if(!canImg){note.textContent=I18N.t("sh.noai");example();return}
-    note.textContent=I18N.t("sh.reading");out.innerHTML="";
+    note.textContent=I18N.t("sh.reading");
     try{
       const blob=upload||await (await fetch(SHOTS[sel].src)).blob();
-      const r=await sample(`你是 IT 系統升級／保養紀錄簡報的 AI Agent。工程師在客戶現場只截圖，沒有寫任何說明。請看這張截圖，用繁體中文、Markdown 輸出：
-| 項目 | 內容 |
-|---|---|
-| 畫面 | 這是什麼畫面 |
-| 對應檢查項目 | 從這些選一個最符合的：主機檢查・伺服器資源／主機檢查・應用程式版本／主機檢查・服務狀態／升級前・備份／升級前・停機／升級流程・執行安裝檔／升級流程・安裝進行中／升級後・服務啟動與檢查；都不符合就寫「規範外項目」 |
-| 讀出的數值 | 只寫畫面上看得到的規格、版本、狀態、時間等數值，不要推測 |
-
-**紀錄說明（標準句型）**
-- 用簡短條列寫成要放進紀錄簡報的說明，只填畫面上讀到的值
-
-**需要確認**
-- 看不清楚、前後矛盾或無法判斷的地方；沒有就寫「無」${I18N.t("out.note")}`,{images:[blob],cache:false});
-      out.innerHTML=`<span class="tag live">${I18N.t("tag.live")}</span>`+md(r.text||"");note.textContent=I18N.t("lab.done");
+      const r=await sample(`你是 IT 系統升級／保養紀錄簡報的 AI Agent。工程師在客戶現場只截圖、沒寫說明。看這張截圖，只回傳一個 JSON 物件，不要其他文字：
+{"screen":"這是什麼畫面","item":"從這些選最符合的一個：主機檢查・伺服器資源／主機檢查・應用程式版本／主機檢查・服務狀態／升級前・備份／升級前・停機／升級流程・執行安裝檔／升級流程・安裝進行中／升級後・服務啟動與檢查；都不符合寫「規範外項目」","title":"簡報頁標題，格式「大類 - 項目」","bullets":["要放進簡報左側的說明，每點一句，只填畫面上讀得到的值"],"warnings":["提醒使用者怪怪的地方：截圖不完整或被切掉、看不清楚、畫面跟一般範本的標準畫面不同、版本或時間前後可能矛盾、可能截錯畫面；沒有就給空陣列"]}${I18N.lang==="zh"?"":" Write every string value in "+(I18N.lang==="th"?"Thai":"English")+"."}`,{images:[blob],cache:false});
+      const t=(r.text||"").replace(/^[^{]*/,"").replace(/[^}]*$/,"");const d=JSON.parse(t);
+      out.innerHTML=resultHTML(cur(),d,true);note.textContent=I18N.t("lab.done");
     }catch(e){note.textContent=I18N.t("sh.fail");example()}
   });
-  show();example();
+  example();
 }
 function buildLab(x,el){
   const L=x.lab;
