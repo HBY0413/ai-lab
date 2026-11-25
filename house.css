@@ -284,3 +284,5 @@ body.focused #entryUI:not(.hide) .acts{animation:focusIn 1.1s 1.2s both}
 #hint .grip i{flex:none;width:34px;height:34px}
 #hint .grip em{font-style:normal;font-size:var(--fs-s,14px)!important;letter-spacing:.06em;color:#F0A060;white-space:nowrap}
 #hint:hover .grip i{border-color:#F0A060;color:#F0A060}
+/* stage counter removed: the bottom caption bar already shows where you are */
+#stageNo{display:none!important}
