@@ -2902,3 +2902,268 @@ window.PRESETS.kb.items.push(
         en: "The department FAQ has no record of this yet. Please add the question to the FAQ list and confirm the service scope and risks before replying to the client.",
         th: "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้ แนะนำให้เพิ่มคำถามนี้ในรายการ FAQ และยืนยันขอบเขตบริการและความเสี่ยงก่อนตอบลูกค้า" }, none: true }
 );
+/* ---- batch 10 ---- */
+window.PRESETS.report.items.push(
+ { label: { zh: "協銷日期格式不同", en: "Mixed date formats", th: "รูปแบบวันที่ไม่เหมือนกัน" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶A,顧問服務&開發,40
+客戶B,維護,16
+【協銷進度】客戶,活動,日期,狀態
+客戶C,產品展示,2026/10/12,已完成
+客戶D,技術簡報,10-20,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client A,Consulting & development,40
+Client B,Maintenance,16
+[Presales tracker] Client,Activity,Date,Status
+Client C,Product demo,2026/10/12,Done
+Client D,Technical briefing,10-20,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า A,ที่ปรึกษาและพัฒนา,40
+ลูกค้า B,บำรุงรักษา,16
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า C,สาธิตผลิตภัณฑ์,2026/10/12,เสร็จแล้ว
+ลูกค้า D,บรรยายเทคนิค,10-20,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶A | 40 | 5.0 |
+| 維護 | 客戶B | 16 | 2.0 |
+| 合計 | — | 56 | 7.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶C 產品展示（10/12，已完成）
+- **持續追蹤**：客戶D 技術簡報（日期只寫 10-20，已完成）
+#### 待主管確認
+- 客戶D 的日期只寫「10-20」沒有年份，無法確定是否在本月，先列在持續追蹤，請確認。
+- 協銷日期有 2026/10/12 和 10-20 兩種寫法，建議統一成 YYYY-MM-DD。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client A | 40 | 5.0 |
+| Maintenance | Client B | 16 | 2.0 |
+| Total | — | 56 | 7.0 |
+#### Presales progress
+- **This month**: Client C product demo (10/12, done)
+- **Ongoing**: Client D technical briefing (date given only as 10-20, done)
+#### For the manager to confirm
+- Client D's date is just "10-20" with no year, so it can't be confirmed as this month; it is listed under Ongoing for now. Please confirm.
+- Presales dates use two formats (2026/10/12 and 10-20); consider standardising on YYYY-MM-DD.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า A | 40 | 5.0 |
+| บำรุงรักษา | ลูกค้า B | 16 | 2.0 |
+| รวม | — | 56 | 7.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า C สาธิตผลิตภัณฑ์ (10/12 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ลูกค้า D บรรยายเทคนิค (ระบุวันที่แค่ 10-20 เสร็จแล้ว)
+#### รายการให้หัวหน้ายืนยัน
+- วันที่ของลูกค้า D เขียนแค่ "10-20" ไม่มีปี จึงยืนยันไม่ได้ว่าอยู่ในเดือนนี้ ตอนนี้จัดไว้ในติดตามต่อเนื่อง กรุณายืนยัน
+- วันที่ Presales มีสองรูปแบบ (2026/10/12 และ 10-20) ควรใช้รูปแบบ YYYY-MM-DD เหมือนกัน` } },
+
+ { label: { zh: "同一客戶的零散工時", en: "Scattered small entries for one client", th: "ชั่วโมงย่อยหลายรายการของลูกค้ารายเดียว" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶E,維護,2
+客戶E,維護,2
+客戶E,維護,4
+客戶F,教育訓練,8
+【協銷進度】客戶,活動,日期,狀態
+客戶G,報價追蹤,2026-10-08,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client E,Maintenance,2
+Client E,Maintenance,2
+Client E,Maintenance,4
+Client F,Training,8
+[Presales tracker] Client,Activity,Date,Status
+Client G,Quote follow-up,2026-10-08,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า E,บำรุงรักษา,2
+ลูกค้า E,บำรุงรักษา,2
+ลูกค้า E,บำรุงรักษา,4
+ลูกค้า F,ฝึกอบรม,8
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า G,ติดตามใบเสนอราคา,2026-10-08,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 維護 | 客戶E | 8 | 1.0 |
+| 教育訓練 | 客戶F | 8 | 1.0 |
+| 合計 | — | 16 | 2.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶G 報價追蹤（10/08，已完成）
+- **持續追蹤**：無
+#### 待主管確認
+- 客戶E 有 3 筆零散的維護工時（2、2、4 小時），已合併為 8 小時計算；其中兩筆都是 2 小時，若是重複填寫請告知。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Maintenance | Client E | 8 | 1.0 |
+| Training | Client F | 8 | 1.0 |
+| Total | — | 16 | 2.0 |
+#### Presales progress
+- **This month**: Client G quote follow-up (10/08, done)
+- **Ongoing**: none
+#### For the manager to confirm
+- Client E has three small maintenance entries (2, 2 and 4 hours), combined as 8 hours; two of them are 2 hours each, so let me know if one is a duplicate.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| บำรุงรักษา | ลูกค้า E | 8 | 1.0 |
+| ฝึกอบรม | ลูกค้า F | 8 | 1.0 |
+| รวม | — | 16 | 2.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า G ติดตามใบเสนอราคา (10/08 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- ลูกค้า E มีชั่วโมงบำรุงรักษาย่อย 3 รายการ (2, 2 และ 4 ชั่วโมง) รวมคำนวณเป็น 8 ชั่วโมง มีสองรายการที่เป็น 2 ชั่วโมงเท่ากัน หากกรอกซ้ำกรุณาแจ้ง` } }
+);
+
+window.PRESETS.cases.items.push(
+ { label: { zh: "緊急案跳過複核", en: "Rush jobs skipping review", th: "งานด่วนข้ามการตรวจทาน" },
+   input: {
+    zh: `W01 客戶甲 2026-07 Tableau 升級（緊急）：跳過內部複核直接交付，事後發現章節順序錯誤
+W02 客戶乙 2026-09 保養健檢（緊急）：跳過內部複核直接交付，事後發現章節順序錯誤
+W03 客戶丙 2026-10 Tableau 升級（緊急）：跳過內部複核直接交付，事後發現範本殘留舊截圖`,
+    en: `W01 Client A 2026-07 Tableau upgrade (rush): delivered without internal review; section order found wrong afterwards
+W02 Client B 2026-09 health check (rush): delivered without internal review; section order found wrong afterwards
+W03 Client C 2026-10 Tableau upgrade (rush): delivered without internal review; an old screenshot left in the template found afterwards`,
+    th: `W01 ลูกค้า A 2026-07 อัปเกรด Tableau (ด่วน): ส่งโดยไม่ผ่านการตรวจทานภายใน ภายหลังพบว่าลำดับบทผิด
+W02 ลูกค้า B 2026-09 ตรวจสุขภาพระบบ (ด่วน): ส่งโดยไม่ผ่านการตรวจทานภายใน ภายหลังพบว่าลำดับบทผิด
+W03 ลูกค้า C 2026-10 อัปเกรด Tableau (ด่วน): ส่งโดยไม่ผ่านการตรวจทานภายใน ภายหลังพบภาพเก่าค้างในเทมเพลต` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 緊急案跳過內部複核後出錯 | W01、W02、W03 | 3 | 未涵蓋（節錄中未見緊急案的處理流程） |
+| 章節順序錯誤 | W01、W02 | 2 | 節錄中未見章節順序的檢查 |
+| 範本殘留舊截圖 | W03 | 1 | 已涵蓋（已記錄的陷阱）；單次，不算模式 |
+#### 值得考慮寫進規則
+- 緊急案就算跳過人工複核，也保留自動檢查（已記錄的陷阱、章節順序），交付前至少跑一次。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Rush jobs go wrong after skipping internal review | W01, W02, W03 | 3 | Not covered (no rush-job process in the excerpt) |
+| Wrong section order | W01, W02 | 2 | No section-order check in the excerpt |
+| Old screenshot left in the template | W03 | 1 | Covered (recorded pitfall); single case, not a pattern |
+#### Worth adding to the rules
+- Even when a rush job skips manual review, keep the automatic checks (recorded pitfalls, section order) and run them at least once before delivery.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| งานด่วนข้ามการตรวจทานแล้วผิดพลาด | W01, W02, W03 | 3 | ยังไม่ครอบคลุม (ไม่พบขั้นตอนสำหรับงานด่วนในข้อความที่ยกมา) |
+| ลำดับบทผิด | W01, W02 | 2 | ไม่พบการตรวจลำดับบทในข้อความที่ยกมา |
+| ภาพเก่าค้างในเทมเพลต | W03 | 1 | ครอบคลุมแล้ว (บันทึกเป็นข้อควรระวัง) ครั้งเดียว ไม่นับเป็นรูปแบบ |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- แม้งานด่วนจะข้ามการตรวจทานโดยคน ให้คงการตรวจอัตโนมัติ (ข้อควรระวังที่บันทึกไว้ ลำดับบท) และรันอย่างน้อยหนึ่งครั้งก่อนส่ง
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } },
+
+ { label: { zh: "英文版簡報的問題", en: "Issues in English-language decks", th: "ปัญหาในสไลด์ฉบับภาษาอังกฤษ" },
+   input: {
+    zh: `X01 客戶乙 2026-06 保養健檢（英文版）：部分固定句型沒有翻譯，還是中文
+X02 客戶丁 2026-08 Tableau 升級（英文版）：部分固定句型沒有翻譯，還是中文
+X03 客戶戊 2026-10 保養健檢（英文版）：英文版授權句型的數字和中文版不一致`,
+    en: `X01 Client B 2026-06 health check (English edition): some fixed sentence patterns left untranslated, still in Chinese
+X02 Client D 2026-08 Tableau upgrade (English edition): some fixed sentence patterns left untranslated, still in Chinese
+X03 Client E 2026-10 health check (English edition): licence numbers in the English pattern differ from the Chinese edition`,
+    th: `X01 ลูกค้า B 2026-06 ตรวจสุขภาพระบบ (ฉบับภาษาอังกฤษ): รูปแบบประโยคตายตัวบางส่วนไม่ได้แปล ยังเป็นภาษาจีน
+X02 ลูกค้า D 2026-08 อัปเกรด Tableau (ฉบับภาษาอังกฤษ): รูปแบบประโยคตายตัวบางส่วนไม่ได้แปล ยังเป็นภาษาจีน
+X03 ลูกค้า E 2026-10 ตรวจสุขภาพระบบ (ฉบับภาษาอังกฤษ): ตัวเลขไลเซนส์ในฉบับอังกฤษไม่ตรงกับฉบับจีน` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 英文版的固定句型沒有翻譯 | X01、X02 | 2 | 未涵蓋（節錄中未見多語版本的規範） |
+| 英文版授權數字和中文版不一致 | X03 | 1 | 授權固定句型已涵蓋，但節錄中未見跨語言比對；單次，不算模式 |
+#### 值得考慮寫進規則
+- 為每個固定句型準備英文對照版本，產出英文版時直接套用。
+- 產出英文版後，自動比對中英文版本的數字是否一致。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Fixed sentence patterns left untranslated in the English edition | X01, X02 | 2 | Not covered (no multi-language rule in the excerpt) |
+| Licence numbers differ between English and Chinese editions | X03 | 1 | The fixed licence pattern is covered, but no cross-language comparison in the excerpt; single case, not a pattern |
+#### Worth adding to the rules
+- Prepare an English version of every fixed sentence pattern and apply it directly for English editions.
+- After producing an English edition, automatically compare its numbers with the Chinese edition.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| รูปแบบประโยคตายตัวในฉบับอังกฤษไม่ได้แปล | X01, X02 | 2 | ยังไม่ครอบคลุม (ไม่พบข้อกำหนดเรื่องหลายภาษาในข้อความที่ยกมา) |
+| ตัวเลขไลเซนส์ฉบับอังกฤษไม่ตรงกับฉบับจีน | X03 | 1 | รูปแบบประโยคไลเซนส์ครอบคลุมแล้ว แต่ไม่พบการเทียบข้ามภาษาในข้อความที่ยกมา ครั้งเดียว ไม่นับเป็นรูปแบบ |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- เตรียมรูปแบบประโยคตายตัวฉบับภาษาอังกฤษไว้ทุกข้อ แล้วใช้โดยตรงเมื่อทำฉบับอังกฤษ
+- หลังทำฉบับอังกฤษ ให้เทียบตัวเลขกับฉบับจีนโดยอัตโนมัติ
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } }
+);
+
+window.PRESETS.gov.items.push(
+ { label: { zh: "重複扣款退款", en: "Refund for a double charge", th: "ขอคืนเงินที่ถูกเรียกเก็บซ้ำ" },
+   input: {
+    zh: `沐川文創有限公司會計林佳慧小姐表示上月重複扣款，申請退款 NT$12,000。
+退款帳戶資料會另外提供，聯絡信箱 jiahui.lin@example.com，分機不通請打 0928-555-111。`,
+    en: `Ms. Joyce Lin, accountant at Muchuan Creative Ltd., says they were charged twice last month and requests a refund of NT$12,000.
+Bank details will follow separately. Email joyce.lin@example.com, or call 0928-555-111 if her extension doesn't answer.`,
+    th: `คุณพรทิพย์ ทองแท้ จากบริษัท มู่ชวนครีเอทีฟ จำกัด ฝ่ายบัญชี แจ้งว่าเดือนที่แล้วถูกเรียกเก็บเงินซ้ำ ขอคืนเงิน 12,000 บาท
+ข้อมูลบัญชีจะส่งแยกมาภายหลัง ติดต่อ porntip.t@example.com หรือโทร 092-855-5111` },
+   output: {
+    zh: `- 問題：〔客戶A〕的〔人員A〕表示上月重複扣款，申請退款 NT$12,000。
+- 期限：紀錄中沒有明確期限。
+- 下一步：先核對上月帳務，確認是否真的重複扣款；確認後依退款流程處理（帳戶資料由對方另外提供），再透過〔Email A〕或〔電話A〕回覆。`,
+    en: `- Issue: [Person A] from [Client A] says they were charged twice last month and requests a NT$12,000 refund.
+- Deadline: none stated in the record.
+- Next step: check last month's billing to confirm the double charge; if confirmed, follow the refund process (bank details will come separately), then reply via [Email A] or [Phone A].`,
+    th: `- ปัญหา: [บุคคล A] จาก [ลูกค้า A] แจ้งว่าเดือนที่แล้วถูกเรียกเก็บเงินซ้ำ ขอคืนเงิน 12,000 บาท
+- กำหนดเวลา: ในบันทึกไม่ได้ระบุ
+- ขั้นตอนถัดไป: ตรวจบัญชีเดือนที่แล้วเพื่อยืนยันว่าเรียกเก็บซ้ำจริง ถ้าใช่ให้ดำเนินการตามขั้นตอนคืนเงิน (ข้อมูลบัญชีจะส่งมาแยก) แล้วตอบกลับทาง [อีเมล A] หรือ [โทรศัพท์ A]` } },
+
+ { label: { zh: "新進人員開帳號", en: "Account for a new hire", th: "เปิดบัญชีให้พนักงานใหม่" },
+   input: {
+    zh: `霈恩國際股份有限公司新進人員鄧宇翔先生下週一報到，請先開立系統帳號。
+身分證字號 E123456789，公司信箱 yuxiang.deng@example.com。`,
+    en: `Mr. Leo Teng, a new hire at Peien International Co., Ltd., starts next Monday; please create his system account in advance.
+ID E123456789, company email leo.teng@example.com.`,
+    th: `คุณณัฐวุฒิ ใจกว้าง จากบริษัท เพ่ยเอินอินเตอร์เนชั่นแนล จำกัด พนักงานใหม่ เริ่มงานวันจันทร์หน้า กรุณาเปิดบัญชีระบบไว้ล่วงหน้า
+เลขประจำตัว 1-2233-44556-67-8 อีเมลบริษัท nattawut.j@example.com` },
+   output: {
+    zh: `- 問題：〔客戶A〕的新進人員〔人員A〕下週一報到，需要先開立系統帳號。
+- 期限：下週一報到前。
+- 下一步：請〔客戶A〕的系統管理員確認權限需求後開立帳號（授權數不足需先購買），帳號資訊寄到〔Email A〕；〔身分證A〕只用於核對身分，不寫進帳號資料。`,
+    en: `- Issue: [Person A], a new hire at [Client A], starts next Monday and needs a system account in advance.
+- Deadline: before he starts next Monday.
+- Next step: have [Client A]'s system administrator confirm the access needed and create the account (buy licences first if short), then send the details to [Email A]; use [ID A] only to verify identity, not in the account record.`,
+    th: `- ปัญหา: [บุคคล A] พนักงานใหม่ของ [ลูกค้า A] เริ่มงานวันจันทร์หน้า ต้องเปิดบัญชีระบบไว้ล่วงหน้า
+- กำหนดเวลา: ก่อนเริ่มงานวันจันทร์หน้า
+- ขั้นตอนถัดไป: ให้ผู้ดูแลระบบของ [ลูกค้า A] ยืนยันสิทธิ์ที่ต้องใช้แล้วเปิดบัญชี (ถ้าไลเซนส์ไม่พอต้องซื้อก่อน) ส่งข้อมูลบัญชีไปที่ [อีเมล A] และใช้ [เลขบัตร A] เพื่อยืนยันตัวตนเท่านั้น ไม่บันทึกลงในบัญชี` } }
+);
+
+window.PRESETS.kb.items.push(
+ { q: { zh: "服務啟動要等超過十分鐘", en: "The service takes over ten minutes to start", th: "เซอร์วิสใช้เวลาเริ่มทำงานเกินสิบนาที" },
+   a: { zh: "先檢查暫存目錄所在磁碟的剩餘空間是否低於 10 GB，清理後重新啟動【FAQ-027】。仍然逾時就收集 log 交給原廠【FAQ-027】。",
+        en: "Check whether the disk holding the temp directory has under 10 GB free, clean it up and restart [FAQ-027]. If it still times out, collect the logs and send them to the vendor [FAQ-027].",
+        th: "ให้ตรวจว่าดิสก์ที่เก็บโฟลเดอร์ชั่วคราวเหลือพื้นที่น้อยกว่า 10 GB หรือไม่ ล้างแล้วรีสตาร์ต [FAQ-027] ถ้ายังช้าอยู่ ให้เก็บ log ส่งให้ผู้ผลิต [FAQ-027]" } },
+ { q: { zh: "儀表板資料沒有每天更新", en: "Dashboard data isn't updating daily", th: "ข้อมูลแดชบอร์ดไม่อัปเดตทุกวัน" },
+   a: { zh: "先看排程紀錄有沒有失敗【FAQ-044】。常見原因是來源資料庫備份時鎖表，可以把排程時間往後調 1 小時【FAQ-044】。",
+        en: "Check the scheduled job's log for failures [FAQ-044]. A common cause is the source database locking tables during its backup; move the schedule an hour later [FAQ-044].",
+        th: "ให้ดูบันทึกงานตามกำหนดเวลาว่าล้มเหลวหรือไม่ [FAQ-044] สาเหตุที่พบบ่อยคือฐานข้อมูลต้นทางล็อกตารางระหว่างสำรองข้อมูล ให้เลื่อนเวลางานออกไป 1 ชั่วโมง [FAQ-044]" } },
+ { q: { zh: "續約報價要怎麼拿？", en: "How do we get a renewal quote?", th: "จะขอใบเสนอราคาต่ออายุได้อย่างไร" },
+   a: { zh: "續約報價由業務窗口提供【FAQ-031】。系統也會在授權到期前 30 天於管理頁提醒【FAQ-031】。",
+        en: "The sales contact provides the renewal quote [FAQ-031]. The system also shows a reminder on the admin page 30 days before the licence expires [FAQ-031].",
+        th: "ฝ่ายขายเป็นผู้ให้ใบเสนอราคาต่ออายุ [FAQ-031] และระบบจะแจ้งเตือนในหน้าผู้ดูแล 30 วันก่อนไลเซนส์หมดอายุ [FAQ-031]" } },
+ { q: { zh: "系統有手機 App 嗎？", en: "Is there a mobile app for the system?", th: "ระบบมีแอปบนมือถือไหม" },
+   a: { zh: "部門 FAQ 目前沒有這筆記錄。建議到 FAQ 總表新增這個問題，由負責的同事確認後再回覆客戶。",
+        en: "The department FAQ has no record of this yet. Please add the question to the FAQ list so the responsible colleague can confirm before replying to the client.",
+        th: "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้ แนะนำให้เพิ่มคำถามนี้ในรายการ FAQ เพื่อให้ผู้รับผิดชอบยืนยันก่อนตอบลูกค้า" }, none: true }
+);
