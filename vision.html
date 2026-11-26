@@ -414,9 +414,9 @@ function detectDraw(){
 newBoard();
 
 /* ---------- Claude judgement ---------- */
-let sample=null,canImg=false;
-(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}if(!sample&&window.relaySample)sample=relaySample();try{if(sample){const l=await sample.limits();canImg=!!(l&&l.images)}}catch(e){canImg=false}
-  $("askNote").textContent=tv(sample?(canImg?"會送出這一片的影像與熱力圖":"此環境的 AI 不支援圖片，將只送出檢測數據"):"此環境未開啟即時 AI，按下會顯示範例判讀");})();
+let sample=null,canImg=false,quotaCode=null;
+(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}let viaRelay=false;if(!sample&&window.relaySample){sample=relaySample();viaRelay=!!sample}if(viaRelay){const q=await relayCheck();if(q&&(q.left===0||q.mine===0)){quotaCode=q.left===0?"quota_all":"quota_mine";sample=null}}try{if(sample){const l=await sample.limits();canImg=!!(l&&l.images)}}catch(e){canImg=false}
+  $("askNote").textContent=quotaCode?I18N.t(quotaKey(quotaCode)):tv(sample?(canImg?"會送出這一片的影像與熱力圖":"此環境的 AI 不支援圖片，將只送出檢測數據"):"此環境未開啟即時 AI，按下會顯示範例判讀");})();
 const EXAMPLE=`#### 判讀結果
 - **瑕疵類型**：短路（Short），兩條相鄰線路之間出現殘銅相連。
 - **位置**：熱力圖最高點位於畫面左上方兩條水平線路之間，與框選位置一致。
@@ -432,7 +432,7 @@ $("aiOut").innerHTML=exampleHTML();
 let ctrl=null;
 $("btnAsk").addEventListener("click",async()=>{
   if(!model){$("askNote").textContent=tv("請先完成 STEP 1 訓練。");return}
-  if(!sample){$("aiOut").innerHTML=exampleHTML();return}
+  if(!sample){$("aiOut").innerHTML=exampleHTML();if(quotaCode)$("askNote").textContent=I18N.t(quotaKey(quotaCode));return}
   const ng=drawRes.score>thr;
   const prompt=`你是 PCB 廠 AOI 複判站的資深品保工程師。這是一片 PCB 的檢測結果（模擬影像）。
 異常偵測模型（只用良品訓練）給出異常分數 ${drawRes.score.toFixed(2)}，門檻 ${thr.toFixed(2)}，判定 ${ng?"NG":"OK"}；最異常的位置約在像素座標 (${drawRes.at.map(Math.round).join(", ")})，影像大小 192×192。
@@ -452,6 +452,7 @@ ${canImg?"附上兩張圖：第一張是原始影像（綠色為防焊、較亮�
     const r=await sample(prompt+I18N.t("out.note"),opts);$("aiStream").innerHTML=md(r.text);$("askNote").textContent=tv("完成。再畫一個瑕疵試試看。");
   }catch(e){
     if(e&&e.name==="AbortError")return;
+    if(e&&quotaKey(e.code)){quotaCode=e.code;sample=null;$("askNote").textContent=I18N.t(quotaKey(e.code));$("aiOut").innerHTML=exampleHTML();return}
     $("askNote").textContent=tv(e&&e.code==="rate_limited"?"使用次數暫時達上限，請稍後再試。":"AI 暫時無法回應，已改顯示範例判讀。");
     if(!(e&&e.code==="rate_limited"))$("aiOut").innerHTML=exampleHTML();
   }finally{$("btnAsk").disabled=false}

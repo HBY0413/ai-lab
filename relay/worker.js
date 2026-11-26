@@ -34,7 +34,13 @@ export default {
       new Response(JSON.stringify(obj), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
-    if (req.method === "GET") return json({ ok: true });            // health check
+    if (req.method === "GET") {                                     // health + remaining free quota
+      if (!env.COUNTER) return json({ ok: true });
+      const d = new Date().toISOString().slice(0, 10), ipg = req.headers.get("CF-Connecting-IP") || "unknown";
+      const [a, b] = await Promise.all([env.COUNTER.get(`all:${d}`), env.COUNTER.get(`ip:${d}:${ipg}`)]).then(v => v.map(x => +x || 0));
+      const flag = await env.COUNTER.get("out_of_credit");
+      return json({ ok: true, left: flag ? 0 : Math.max(0, (+env.DAILY_LIMIT || 300) - a), mine: Math.max(0, (+env.PER_IP_LIMIT || 20) - b) });
+    }
     if (req.method !== "POST") return json({ error: "method" }, 405);
     if (!okOrigin) return json({ error: "origin" }, 403);
     if (!env.ANTHROPIC_API_KEY || !env.COUNTER) return json({ error: "not_configured" }, 503);
@@ -56,7 +62,8 @@ export default {
     const kAll = `all:${day}`, kIp = `ip:${day}:${ip}`;
     const [nAll, nIp] = await Promise.all([env.COUNTER.get(kAll), env.COUNTER.get(kIp)]).then(v => v.map(x => +x || 0));
     if (nAll >= (+env.DAILY_LIMIT || 300)) return json({ error: "daily_cap" }, 429);
-    if (nIp >= (+env.PER_IP_LIMIT || 20)) return json({ error: "rate_limited" }, 429);
+    if (nIp >= (+env.PER_IP_LIMIT || 20)) return json({ error: "ip_cap" }, 429);
+    if (await env.COUNTER.get("out_of_credit")) return json({ error: "daily_cap" }, 429);
     await Promise.all([
       env.COUNTER.put(kAll, String(nAll + 1), { expirationTtl: 172800 }),
       env.COUNTER.put(kIp, String(nIp + 1), { expirationTtl: 172800 }),
@@ -75,7 +82,15 @@ export default {
       },
       body: JSON.stringify({ model: env.MODEL || "claude-haiku-5-5", max_tokens: MAX_TOKENS, messages: [{ role: "user", content }] }),
     });
-    if (!r.ok) return json({ error: r.status === 429 ? "rate_limited" : "upstream" }, r.status === 429 ? 429 : 502);
+    if (!r.ok) {
+      const t = await r.text();
+      // API account out of credit / over its spend limit: treat as "free quota used up" for the rest of the day
+      if (/credit|billing|spend|limit/i.test(t) && r.status !== 429) {
+        await env.COUNTER.put("out_of_credit", "1", { expirationTtl: 21600 });
+        return json({ error: "daily_cap" }, 429);
+      }
+      return json({ error: r.status === 429 ? "rate_limited" : "upstream" }, r.status === 429 ? 429 : 502);
+    }
     const data = await r.json();
     const text = (data.content || []).filter(c => c.type === "text").map(c => c.text).join("");
     return json({ text });

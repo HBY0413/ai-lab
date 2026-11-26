@@ -125,6 +125,10 @@ const D={
 "note.busy":{zh:"AI 處理中…",en:"AI is working…",th:"AI กำลังประมวลผล…"},
 "note.done":{zh:"完成。可以修改輸入再試一次。",en:"Done. Edit the input and try again.",th:"เสร็จแล้ว ลองแก้ไขข้อมูลแล้วทำอีกครั้งได้"},
 "note.denied":{zh:"未授權使用 AI，已改顯示範例結果。",en:"AI access was not granted, showing the sample result.",th:"ไม่ได้รับอนุญาตให้ใช้ AI จึงแสดงผลลัพธ์ตัวอย่าง"},
+"status.quota":{zh:"今日的免費 AI 用量已用完：實驗台改顯示預先產生的範例結果，明天自動恢復",en:"Today's free AI usage is used up: benches show pre-generated samples until it resets tomorrow",th:"โควตา AI ฟรีของวันนี้หมดแล้ว: สถานีทดลองจะแสดงผลลัพธ์ตัวอย่างที่เตรียมไว้ และจะกลับมาใช้ได้พรุ่งนี้"},
+"status.quotaMine":{zh:"你今天的免費 AI 試用次數已用完：改顯示範例結果，明天自動恢復",en:"You've used today's free AI tries: showing samples until it resets tomorrow",th:"คุณใช้สิทธิ์ทดลอง AI ฟรีของวันนี้ครบแล้ว: แสดงผลลัพธ์ตัวอย่างแทน และจะกลับมาใช้ได้พรุ่งนี้"},
+"note.quota":{zh:"今日的免費 AI 用量已用完，先顯示預先產生的範例結果，明天會自動恢復。",en:"Today's free AI usage is used up, so this shows the pre-generated sample. It resets tomorrow.",th:"โควตา AI ฟรีของวันนี้หมดแล้ว จึงแสดงผลลัพธ์ตัวอย่างที่เตรียมไว้ จะกลับมาใช้ได้พรุ่งนี้"},
+"note.quotaMine":{zh:"你今天的免費 AI 試用次數已用完，先顯示範例結果，明天會自動恢復。",en:"You've used today's free AI tries, so this shows the sample result. It resets tomorrow.",th:"คุณใช้สิทธิ์ทดลอง AI ฟรีของวันนี้ครบแล้ว จึงแสดงผลลัพธ์ตัวอย่าง จะกลับมาใช้ได้พรุ่งนี้"},
 "note.rate":{zh:"使用次數暫時達上限，請稍後再試。",en:"Usage limit reached for now, please try again later.",th:"ถึงขีดจำกัดการใช้งานชั่วคราว กรุณาลองใหม่ภายหลัง"},
 "note.fail":{zh:"AI 暫時無法回應，已改顯示範例結果。",en:"AI is unavailable right now, showing the sample result.",th:"AI ไม่สามารถตอบได้ในขณะนี้ จึงแสดงผลลัพธ์ตัวอย่าง"},
 /* fuzzy */

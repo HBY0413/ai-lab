@@ -50,6 +50,7 @@ h1 em{font-style:normal;color:var(--accent)}
 .status{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-size:13px;font-family:var(--mono)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--warn)}
 .status.on .dot{background:var(--good)}
+.status.quota .dot{background:#F0A060}.status.quota{border-color:rgba(240,160,96,.55)}
 
 /* index */
 .index{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:26px 0 10px}
@@ -599,12 +600,18 @@ EXPS.forEach(x=>{if(x.evidence&&x.evidence.layers)x.evidence.flat=x.evidence.lay
 /* ---------- AI connection ---------- */
 let sample=null;
 const statusEl=document.getElementById("aiStatus");
-function setStatus(on){
-  statusEl.classList.toggle("on",on);
-  statusEl.children[1].setAttribute("data-i18n",on?"status.on":"status.off");statusEl.children[1].textContent=I18N.t(on?"status.on":"status.off");
+function setStatus(on,key){
+  statusEl.classList.toggle("on",on);statusEl.classList.toggle("quota",!!key);
+  const k=key||(on?"status.on":"status.off");statusEl.children[1].setAttribute("data-i18n",k);statusEl.children[1].textContent=I18N.t(k);
 }
+/* free relay quota used up: tell visitors, then fall back to the pre-generated samples */
+let quotaCode=null;
+function quotaHit(code){quotaCode=code;sample=null;setStatus(false,code==="quota_mine"?"status.quotaMine":"status.quota")}
+const noAI=k=>I18N.t((quotaCode&&window.quotaKey&&quotaKey(quotaCode))||k);
+const isQuota=e=>!!(e&&window.quotaKey&&quotaKey(e.code));
 setStatus(false);
-(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}if(!sample&&window.relaySample)sample=relaySample();setStatus(!!sample)})();
+(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}let viaRelay=false;if(!sample&&window.relaySample){sample=relaySample();viaRelay=!!sample}setStatus(!!sample);
+  if(viaRelay){const q=await relayCheck();if(q&&q.left===0)quotaHit("quota_all");else if(q&&q.mine===0)quotaHit("quota_mine")}})();
 
 /* ---------- render ---------- */
 const idx=document.getElementById("index"),track=document.getElementById("track");
@@ -677,7 +684,7 @@ function buildShots(x,b){
   b.querySelector(".exb").addEventListener("click",example);
   b.querySelector(".primary").addEventListener("click",async()=>{
     let canImg=false;try{canImg=!!(sample&&(await sample.limits()).images)}catch(e){}
-    if(!canImg){note.textContent=I18N.t("sh.noai");example();return}
+    if(!canImg){note.textContent=noAI("sh.noai");example();return}
     note.textContent=I18N.t("sh.reading");
     try{
       const blob=upload||await (await fetch(SHOTS[sel].src)).blob();
@@ -685,7 +692,7 @@ function buildShots(x,b){
 {"screen":"這是什麼畫面","item":"從這些選最符合的一個：主機檢查・伺服器資源／主機檢查・應用程式版本／主機檢查・服務狀態／升級前・備份／升級前・停機／升級流程・執行安裝檔／升級流程・安裝進行中／升級後・服務啟動與檢查；都不符合寫「規範外項目」","title":"簡報頁標題，格式「大類 - 項目」","bullets":["要放進簡報左側的說明，每點一句，只填畫面上讀得到的值"],"warnings":["提醒使用者怪怪的地方：截圖不完整或被切掉、看不清楚、畫面跟一般範本的標準畫面不同、版本或時間前後可能矛盾、可能截錯畫面；沒有就給空陣列"]}${I18N.lang==="zh"?"":" Write every string value in "+(I18N.lang==="th"?"Thai":"English")+"."}`+(I18N.lang==="en"?"\n\nWrite every JSON value in English (translate the check item names).":I18N.lang==="th"?"\n\nเขียนค่าทุกช่องใน JSON เป็นภาษาไทย (แปลชื่อรายการตรวจด้วย)":""),{images:[blob],cache:false});
       const t=(r.text||"").replace(/^[^{]*/,"").replace(/[^}]*$/,"");const d=JSON.parse(t);
       out.innerHTML=resultHTML(cur(),d,true);note.textContent=I18N.t("lab.done");
-    }catch(e){note.textContent=I18N.t("sh.fail");example()}
+    }catch(e){if(isQuota(e)){quotaHit(e.code);note.textContent=noAI("sh.fail")}else note.textContent=I18N.t("sh.fail");example()}
   });
   example();
 }
@@ -719,7 +726,7 @@ function buildLab(x,el){
   showExample();
   let ctrl=null;
   btn.addEventListener("click",async()=>{
-    if(!sample){showExample();note.textContent=I18N.t("note.noai");return}
+    if(!sample){showExample();note.textContent=noAI("note.noai");return}
     const payload=isGov?deidentify(inp.value).text:inp.value;
     if(!payload.trim()){note.textContent=I18N.t("note.empty");return}
     if(ctrl)ctrl.abort();ctrl=new AbortController();
@@ -732,7 +739,8 @@ function buildLab(x,el){
       st.innerHTML=md(r.text);note.textContent=I18N.t("note.done");
     }catch(e){
       if(e&&e.name==="AbortError")return;
-      if(e&&e.code==="not_granted"){note.textContent=I18N.t("note.denied");showExample()}
+      if(isQuota(e)){quotaHit(e.code);note.textContent=noAI("note.noai");showExample()}
+      else if(e&&e.code==="not_granted"){note.textContent=I18N.t("note.denied");showExample()}
       else if(e&&e.code==="rate_limited"){note.textContent=I18N.t("note.rate")}
       else{note.textContent=I18N.t("note.fail");showExample()}
     }finally{btn.disabled=false}
@@ -803,12 +811,12 @@ function buildGoblin(b){
     b.querySelector(".lg-file").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const img=new Image();img.onload=()=>{const x=cv.getContext("2d"),r=Math.min(cv.width/img.width,cv.height/img.height);x.fillStyle="#000";x.fillRect(0,0,cv.width,cv.height);x.drawImage(img,(cv.width-img.width*r)/2,(cv.height-img.height*r)/2,img.width*r,img.height*r);uploaded=f};img.src=URL.createObjectURL(f)});
     b.querySelector(".lg-scan").addEventListener("click",async()=>{
       let canImg=false;try{canImg=!!(sample&&(await sample.limits()).images)}catch(e){}
-      if(!canImg){if(uploaded){drawTooltip(cv);uploaded=null;note.textContent=I18N.t("fz.scanNeedSample")}else note.textContent=I18N.t("fz.scanNoAI");inp.value=SAMPLE_OCR;run();return}
+      if(!canImg){if(uploaded){drawTooltip(cv);uploaded=null;note.textContent=noAI("fz.scanNeedSample")}else note.textContent=noAI("fz.scanNoAI");inp.value=SAMPLE_OCR;run();return}
       note.textContent=I18N.t("fz.scanning");
       try{const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
         const r=await sample("This is a screenshot from an MMORPG. Find the item name line in the item tooltip and copy it exactly as it appears, including any enchant prefix like +7 and any spelling as shown. Reply with that single line only, nothing else.",{images:[blob],modelTier:"quick",cache:false});
         const line=(r.text||"").split("\n").map(t=>t.trim()).filter(Boolean)[0]||"";if(!line)throw 0;inp.value=line;note.textContent=I18N.t("fz.scanRead")+line;run();
-      }catch(e){note.textContent=I18N.t("fz.scanFail")}});
+      }catch(e){if(isQuota(e)){quotaHit(e.code);note.textContent=noAI("fz.scanFail");inp.value=SAMPLE_OCR;run()}else note.textContent=I18N.t("fz.scanFail")}});
     run();
   }).catch(()=>{list.innerHTML=`<p class="hint">${I18N.t("lg.fail")}</p>`});
 }
