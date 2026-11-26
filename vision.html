@@ -99,6 +99,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:20px 0 50px;colo
 <script src="i18n.js"></script>
 <script src="vision-i18n.js"></script>
 <script src="relay.js"></script>
+<script src="vision-presets.js"></script>
 <style>.langsw{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-left:10px;vertical-align:middle}.langsw button{background:none;border:none;color:var(--ink-2);font:500 12px "Jost","Noto Sans TC",sans-serif;padding:4px 10px;cursor:pointer}.langsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}</style>
 <link rel="stylesheet" href="type.css">
 </head>
@@ -397,14 +398,14 @@ function drawHist(){
 }
 
 /* ---------- draw-your-own ---------- */
-const dc=$("drawCv"),dx=dc.getContext("2d");let tool="copper",boardSeed=9000,drawRes=null;
-function newBoard(){drawBoard(dx,boardSeed++);detectDraw()}
+const dc=$("drawCv"),dx=dc.getContext("2d");let tool="copper",boardSeed=9000,drawRes=null,used={copper:0,cut:0,dirt:0};
+function newBoard(){drawBoard(dx,boardSeed++);used={copper:0,cut:0,dirt:0};detectDraw()}
 document.querySelectorAll("[data-tool]").forEach(b=>b.addEventListener("click",()=>{tool=b.dataset.tool;document.querySelectorAll("[data-tool]").forEach(o=>o.setAttribute("aria-pressed",o===b))}));
 $("btnClear").addEventListener("click",()=>{newBoard();$("aiOut").innerHTML=exampleHTML()});
 let drawing=false,last=null;
 function pos(e){const r=dc.getBoundingClientRect();return[(e.clientX-r.left)/r.width*S,(e.clientY-r.top)/r.height*S]}
 function stroke(a,b){dx.lineCap="round";if(tool==="copper"){dx.strokeStyle=TRACE;dx.lineWidth=3}else if(tool==="cut"){dx.strokeStyle=MASK;dx.lineWidth=6}else{dx.strokeStyle="#2A2420";dx.lineWidth=5}dx.beginPath();dx.moveTo(...a);dx.lineTo(...b);dx.stroke()}
-dc.addEventListener("pointerdown",e=>{drawing=true;dc.setPointerCapture(e.pointerId);last=pos(e);stroke(last,last)});
+dc.addEventListener("pointerdown",e=>{drawing=true;used[tool]=(used[tool]||0)+1;dc.setPointerCapture(e.pointerId);last=pos(e);stroke(last,last)});
 dc.addEventListener("pointermove",e=>{if(!drawing)return;const p=pos(e);stroke(last,p);last=p});
 dc.addEventListener("pointerup",()=>{drawing=false;detectDraw()});
 function detectDraw(){
@@ -427,12 +428,19 @@ const EXAMPLE=`#### 判讀結果
 - 此片判 NG，送人工複判確認是否導通。
 - 回查同批號蝕刻線的藥水濃度與輸送速度紀錄；若同批多片出現，暫停並開立異常單（8D D2 問題描述可直接引用本判讀）。`;
 function md(s){return s.split("\n").map(l=>{const e=l.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");if(/^####\s/.test(l))return`<h4>${e.slice(5)}</h4>`;if(/^\s*[-*]\s/.test(l))return`<ul><li>${e.replace(/^\s*[-*]\s/,"")}</li></ul>`;return l.trim()?`<p>${e}</p>`:""}).join("").replace(/<\/ul><ul>/g,"")}
+/* no live AI: pick the pre-run judgement that matches what the visitor drew */
+function preHTML(){const V=window.VPRE,L=I18N.lang,pick=o=>o[L]||o.en||o.zh;if(!V)return exampleHTML();
+  const ng=drawRes&&drawRes.score>thr,kinds=Object.keys(used).filter(k=>used[k]>0).sort((a,b)=>used[b]-used[a]);
+  if(!ng||!kinds.length){$("askNote").textContent=pick(V.note.pre);return`<span class="tag">${pick(V.tag.ok)}</span>`+md(pick(V.ok))}
+  const k=kinds[0],kn=pick(V.kindName[k]);$("askNote").textContent=kinds.length>1?pick(V.note.mixed).replace("{k}",kn):pick(V.note.pre);
+  const body=V[k]?pick(V[k]):(L!=="zh"&&window.VEX[L]?window.VEX[L]:EXAMPLE);
+  return`<span class="tag">${pick(V.tag.kind).replace("{k}",kn)}</span>`+md(body)}
 function exampleHTML(){const L=I18N.lang;return`<span class="tag">${tv("範例判讀（預先產生，對應一片短路瑕疵）")}</span>`+md(L!=="zh"&&window.VEX[L]?window.VEX[L]:EXAMPLE)}
 $("aiOut").innerHTML=exampleHTML();
 let ctrl=null;
 $("btnAsk").addEventListener("click",async()=>{
   if(!model){$("askNote").textContent=tv("請先完成 STEP 1 訓練。");return}
-  if(!sample){$("aiOut").innerHTML=exampleHTML();if(quotaCode)$("askNote").textContent=I18N.t(quotaKey(quotaCode));return}
+  if(!sample){$("aiOut").innerHTML=preHTML();if(quotaCode)$("askNote").textContent=I18N.t(quotaKey(quotaCode))+" "+$("askNote").textContent;return}
   const ng=drawRes.score>thr;
   const prompt=`你是 PCB 廠 AOI 複判站的資深品保工程師。這是一片 PCB 的檢測結果（模擬影像）。
 異常偵測模型（只用良品訓練）給出異常分數 ${drawRes.score.toFixed(2)}，門檻 ${thr.toFixed(2)}，判定 ${ng?"NG":"OK"}；最異常的位置約在像素座標 (${drawRes.at.map(Math.round).join(", ")})，影像大小 192×192。
