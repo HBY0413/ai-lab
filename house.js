@@ -27,8 +27,8 @@ ST.forEach(s=>{const nm=window.I18N&&I18N.station(s.id);if(nm){s.label=nm[0];s.n
 
 /* ---------------- renderer ---------------- */
 const stage=$("stage"),renderer=new T.WebGLRenderer({antialias:true});
-renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+renderer.setPixelRatio(Math.min(1.5,window.devicePixelRatio||1));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true; // static scene: bake shadows, refresh only when something that casts them moves
 renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
 stage.appendChild(renderer.domElement);
 const cv=renderer.domElement;
@@ -286,7 +286,9 @@ function fadeOccluders(id,v){
     g.traverse(o=>{if(!o.material)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
       if(m.userData.op0===undefined){m.userData.op0=m.opacity;m.userData.tr0=m.transparent}
       m.userData.fadeTo=fade?.12:m.userData.op0})})})});
+  fadeUntil=performance.now()+1600;
 }
+let fadeUntil=0;
 function tickFade(dt){ST.forEach(s=>[labelMeshes[s.id],stationGroups[s.id]].forEach(g=>g&&g.traverse(o=>{if(!o.material)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
   const t=m.userData.fadeTo;if(t===undefined)return;m.opacity+=(t-m.opacity)*Math.min(1,dt*7);m.transparent=m.userData.tr0||m.opacity<.99;m.depthWrite=m.opacity>.5})})))}
 function stationView(id,centered){
@@ -434,6 +436,7 @@ function placeBadge(){const p=new T.Vector3(-60,2.5,.4).project(cam);const b=$("
 
 /* ================= loop ================= */
 let doorOpen=0,doorAmt=0,last=performance.now(),tm=0;
+let lastRender=0,lastFov=0,lastDoor=-1,lastHoverR=null,signsMoving=false;const lastCam=new T.Vector3(),lastLook=new T.Vector3();
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 function frame(now){
   const dt=Math.min(.05,(now-last)/1000);last=now;tm+=dt;
@@ -441,7 +444,8 @@ function frame(now){
   if(camT<1&&camFrom){camT=reduce?1:Math.max(0,Math.min(1,(now-camStart)/(camDur*1000)));const k=ease(camT);cam.position.lerpVectors(camFrom.pos,camTo.pos,k);look.lerpVectors(camFrom.look,camTo.look,k);cam.fov=camFrom.fov+(camTo.fov-camFrom.fov)*k}
   // gentle look-around: drag offsets + pointer parallax
   yaw+=(yawT-yaw)*Math.min(1,dt*5);pitch+=(pitchT-pitch)*Math.min(1,dt*5);
-  if(!down){yawT*=active?.9:.995;pitchT*=active?.9:.995}
+  if(!down){yawT*=active?.9:.995;pitchT*=active?.9:.995;if(Math.abs(yawT)<2e-4)yawT=0;if(Math.abs(pitchT)<2e-4)pitchT=0}
+  if(Math.abs(yaw-yawT)<2e-4)yaw=yawT;if(Math.abs(pitch-pitchT)<2e-4)pitch=pitchT;
   const base=cam.position.clone(),off=base.clone().sub(look);
   const rot=new T.Matrix4().makeRotationY(yaw);off.applyMatrix4(rot);off.y+=pitch*off.length();
   const px=reduce?0:parallax.x*.35,py=reduce?0:parallax.y*.2;
@@ -451,6 +455,7 @@ function frame(now){
   const realPos=cam.position.clone();cam.position.copy(camPos);cam.lookAt(look);cam.updateProjectionMatrix();
   // door
   doorAmt+=((mode==="entrance"&&hover==="door"?.18:0)+doorOpen*1.5-doorAmt)*Math.min(1,dt*4);
+  {const dT=(mode==="entrance"&&hover==="door"?.18:0)+doorOpen*1.5;if(Math.abs(dT-doorAmt)<2e-3)doorAmt=dT}
   doorL.position.x=-.83-doorAmt;doorR.position.x=.83+doorAmt;
   // ambient motion
   if(!reduce){const gv=stationGroups.gov;if(gv){gv.userData.spin.forEach(o=>o.rotation.y=Math.sin(tm*.9)*.5);gv.userData.ring.rotation.z=tm*.8}
@@ -461,8 +466,18 @@ function frame(now){
   for(const id in labelMeshes){const on=hover===id||active===id,f=labelMeshes[id].userData.frame;f.material.opacity+=((on?1:0)-f.material.opacity)*Math.min(1,dt*10)}
   if(mode==="entrance"||mode==="loading")placeBadge();
   motionPost(dt);
-  tickFade(dt);
-  renderer.render(scene,cam);cam.position.copy(realPos);
+  if(now<fadeUntil)tickFade(dt);
+  // power saving: full frame rate only while something is actually moving; otherwise ~15 fps for ambient motion (~8 fps behind an open panel)
+  const camMoved=camPos.distanceToSquared(lastCam)>1e-8||look.distanceToSquared(lastLook)>1e-8||Math.abs(cam.fov-lastFov)>1e-4;
+  const doorMoving=Math.abs(doorAmt-lastDoor)>1e-4;
+  const busy=camMoved||doorMoving||mode!=="room"&&mode!=="entrance"||now<fadeUntil||down||hover!==lastHoverR||(nameDraw>0&&nameDraw<1)||signsMoving;
+  const gap=busy?0:(document.body.classList.contains("popen")?120:66);
+  if(now-lastRender>=gap){
+    if(!reduce&&now-lastRender>=66){driftDust(dustRoom,(now-lastRender)/1000);driftDust(dustDoor,(now-lastRender)/1000)}
+    if(doorMoving)renderer.shadowMap.needsUpdate=true;
+    renderer.render(scene,cam);lastRender=now;lastCam.copy(camPos);lastLook.copy(look);lastFov=cam.fov;lastDoor=doorAmt;lastHoverR=hover;
+  }
+  cam.position.copy(realPos);
   requestAnimationFrame(frame);
 }
 
@@ -523,7 +538,7 @@ const dustRoom=dust(110,[.3,.2,.3,10,5.6,10],0xFFE7C8),dustDoor=dust(60,[-69,.2,
 function driftDust(d,dt){const a=d.geometry.attributes.position,b=d.userData.box,sd=d.userData.sd;for(let i=0;i<a.count;i++){let y=a.getY(i)+dt*.08,x=a.getX(i)+Math.sin(tm*.3+sd[i])*dt*.05;if(y>b[1]+b[4])y=b[1];a.setXY(i,x,y)}a.needsUpdate=true}
 // 4) signs lift toward the viewer on hover
 const NORM={wallB:new T.Vector3(0,0,1),wallA:new T.Vector3(1,0,0),floor:new T.Vector3(.7071,0,.7071)};
-function liftSigns(dt){for(const id in labelMeshes){const g=labelMeshes[id],s=ST.find(x=>x.id===id);if(!g.userData.base)g.userData.base=g.position.clone();g.userData.l=(g.userData.l||0)+(((hover===id||active===id)?.16:0)-(g.userData.l||0))*Math.min(1,dt*8);g.position.copy(g.userData.base).addScaledVector(NORM[s.kind],g.userData.l);
+function liftSigns(dt){signsMoving=false;for(const id in labelMeshes){if(Math.abs((((hover===id||active===id)?.16:0))-(labelMeshes[id].userData.l||0))>.003)signsMoving=true;const g=labelMeshes[id],s=ST.find(x=>x.id===id);if(!g.userData.base)g.userData.base=g.position.clone();g.userData.l=(g.userData.l||0)+(((hover===id||active===id)?.16:0)-(g.userData.l||0))*Math.min(1,dt*8);g.position.copy(g.userData.base).addScaledVector(NORM[s.kind],g.userData.l);
   if(s.kind==="floor"&&!reduce)g.rotation.z=Math.sin(tm*.9+g.userData.base.x)*.012}}
 // 5) custom cursor with contextual labels
 const cur=document.createElement("div");cur.id="cursor";cur.innerHTML="<i></i><span></span>";document.body.appendChild(cur);
@@ -551,7 +566,6 @@ $("soundBtn").addEventListener("click",toggleSound);
 function setStage(){document.body.classList.toggle("at-entrance",mode==="entrance"||mode==="loading");const el=$("stageNo");if(!el)return;const st=mode==="entrance"||mode==="loading"?["01","ENTRANCE"]:active?["03",(ST.find(s=>s.id===active)||{no:"ABOUT"}).no]:["02","LAB"];el.innerHTML=`<div><b>${st[0]}</b><i></i><b>03</b></div><small>${st[1]}</small>`}
 let lastHover=null;
 function motionPost(dt){
-  if(!reduce){driftDust(dustRoom,dt);driftDust(dustDoor,dt)}
   liftSigns(dt);moveCursor(dt);
   if(hover!==lastHover){if(hover&&hover!=="door")sfx("hover");lastHover=hover}
   if(nameDrawT&&nameDraw<1){if(!nameT0)nameT0=performance.now();nameDraw=reduce?1:Math.min(1,(performance.now()-nameT0)/2400);paintName(ease(nameDraw))}
