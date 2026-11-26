@@ -1878,3 +1878,383 @@ window.PRESETS.kb.items.push(
         en: "The department FAQ has no record of this yet. Please add the question to the FAQ list so the responsible colleague can fill in the unlock procedure.",
         th: "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้ แนะนำให้เพิ่มคำถามนี้ในรายการ FAQ เพื่อให้ผู้รับผิดชอบเติมวิธีปลดล็อก" }, none: true }
 );
+/* ---- batch 7 ---- */
+window.PRESETS.report.items.push(
+ { label: { zh: "協銷狀態寫法不統一", en: "Inconsistent status wording", th: "เขียนสถานะไม่เหมือนกัน" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶A,維護,8
+客戶B,顧問服務&開發,24
+【協銷進度】客戶,活動,日期,狀態
+客戶C,產品展示,2026-10-03,完成
+客戶D,技術簡報,2026-10-17,已完成
+客戶E,POC 規劃,2026-10-25,done`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client A,Maintenance,8
+Client B,Consulting & development,24
+[Presales tracker] Client,Activity,Date,Status
+Client C,Product demo,2026-10-03,Complete
+Client D,Technical briefing,2026-10-17,Done
+Client E,POC planning,2026-10-25,finished`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า A,บำรุงรักษา,8
+ลูกค้า B,ที่ปรึกษาและพัฒนา,24
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า C,สาธิตผลิตภัณฑ์,2026-10-03,เสร็จ
+ลูกค้า D,บรรยายเทคนิค,2026-10-17,เสร็จแล้ว
+ลูกค้า E,วางแผน POC,2026-10-25,done` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶B | 24 | 3.0 |
+| 維護 | 客戶A | 8 | 1.0 |
+| 合計 | — | 32 | 4.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶C 產品展示（10/03，完成）；客戶D 技術簡報（10/17，已完成）；客戶E POC 規劃（10/25，done）
+- **持續追蹤**：無
+#### 待主管確認
+- 協銷狀態有「完成」「已完成」「done」三種寫法，報告照原文呈現；建議統一用詞，方便之後統計。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client B | 24 | 3.0 |
+| Maintenance | Client A | 8 | 1.0 |
+| Total | — | 32 | 4.0 |
+#### Presales progress
+- **This month**: Client C product demo (10/03, complete); Client D technical briefing (10/17, done); Client E POC planning (10/25, finished)
+- **Ongoing**: none
+#### For the manager to confirm
+- Presales status is written three ways ("Complete", "Done", "finished"); the report keeps the original wording. Consider standardising it to make later counts easier.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า B | 24 | 3.0 |
+| บำรุงรักษา | ลูกค้า A | 8 | 1.0 |
+| รวม | — | 32 | 4.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า C สาธิตผลิตภัณฑ์ (10/03 เสร็จ); ลูกค้า D บรรยายเทคนิค (10/17 เสร็จแล้ว); ลูกค้า E วางแผน POC (10/25 done)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- สถานะ Presales เขียนไว้ 3 แบบ ("เสร็จ" "เสร็จแล้ว" "done") รายงานแสดงตามต้นฉบับ ควรใช้คำเดียวกันเพื่อให้นับสถิติภายหลังได้ง่าย` } },
+
+ { label: { zh: "有一筆工時是 0", en: "A zero-hour entry", th: "มีรายการ 0 ชั่วโมง" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶F,維護,0
+客戶G,顧問服務&開發,40
+客戶H,教育訓練,16
+【協銷進度】客戶,活動,日期,狀態
+客戶I,技術簡報,2026-10-19,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client F,Maintenance,0
+Client G,Consulting & development,40
+Client H,Training,16
+[Presales tracker] Client,Activity,Date,Status
+Client I,Technical briefing,2026-10-19,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า F,บำรุงรักษา,0
+ลูกค้า G,ที่ปรึกษาและพัฒนา,40
+ลูกค้า H,ฝึกอบรม,16
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า I,บรรยายเทคนิค,2026-10-19,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶G | 40 | 5.0 |
+| 維護 | 客戶F | 0 | 0.0 |
+| 教育訓練 | 客戶H | 16 | 2.0 |
+| 合計 | — | 56 | 7.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶I 技術簡報（10/19，已完成）
+- **持續追蹤**：無
+#### 待主管確認
+- 客戶F 的維護工時是 0 小時，請確認是本月沒有作業、這列可以刪除，還是漏填了時數。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client G | 40 | 5.0 |
+| Maintenance | Client F | 0 | 0.0 |
+| Training | Client H | 16 | 2.0 |
+| Total | — | 56 | 7.0 |
+#### Presales progress
+- **This month**: Client I technical briefing (10/19, done)
+- **Ongoing**: none
+#### For the manager to confirm
+- Client F's maintenance entry is 0 hours; please confirm whether there was no work this month and the row can be removed, or the hours are missing.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า G | 40 | 5.0 |
+| บำรุงรักษา | ลูกค้า F | 0 | 0.0 |
+| ฝึกอบรม | ลูกค้า H | 16 | 2.0 |
+| รวม | — | 56 | 7.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า I บรรยายเทคนิค (10/19 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- งานบำรุงรักษาของลูกค้า F มี 0 ชั่วโมง กรุณายืนยันว่าเดือนนี้ไม่มีงานและลบแถวนี้ได้ หรือยังไม่ได้กรอกชั่วโมง` } },
+
+ { label: { zh: "專案類型寫法不同", en: "Project type spelled two ways", th: "เขียนประเภทโครงการสองแบบ" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶J,顧問服務&開發,32
+客戶K,顧問服務與開發,24
+客戶L,維護,8
+【協銷進度】客戶,活動,日期,狀態
+客戶M,產品展示,2026-10-09,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client J,Consulting & development,32
+Client K,Consulting and development,24
+Client L,Maintenance,8
+[Presales tracker] Client,Activity,Date,Status
+Client M,Product demo,2026-10-09,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า J,ที่ปรึกษาและพัฒนา,32
+ลูกค้า K,ที่ปรึกษา/พัฒนา,24
+ลูกค้า L,บำรุงรักษา,8
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า M,สาธิตผลิตภัณฑ์,2026-10-09,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶J | 32 | 4.0 |
+| 顧問服務與開發 | 客戶K | 24 | 3.0 |
+| 維護 | 客戶L | 8 | 1.0 |
+| 合計 | — | 64 | 8.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶M 產品展示（10/09，已完成）
+- **持續追蹤**：無
+#### 待主管確認
+- 客戶K 的專案類型寫成「顧問服務與開發」，和「顧問服務&開發」寫法不同，表格照原文分開列出；若是同一類，合計為 56 小時、7.0 人天，請確認並統一寫法。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client J | 32 | 4.0 |
+| Consulting and development | Client K | 24 | 3.0 |
+| Maintenance | Client L | 8 | 1.0 |
+| Total | — | 64 | 8.0 |
+#### Presales progress
+- **This month**: Client M product demo (10/09, done)
+- **Ongoing**: none
+#### For the manager to confirm
+- Client K's project type is written "Consulting and development", unlike "Consulting & development", so the table lists them separately as written. If they are the same category, together they come to 56 hours, 7.0 person-days; please confirm and standardise the name.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า J | 32 | 4.0 |
+| ที่ปรึกษา/พัฒนา | ลูกค้า K | 24 | 3.0 |
+| บำรุงรักษา | ลูกค้า L | 8 | 1.0 |
+| รวม | — | 64 | 8.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า M สาธิตผลิตภัณฑ์ (10/09 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- ประเภทโครงการของลูกค้า K เขียนว่า "ที่ปรึกษา/พัฒนา" ต่างจาก "ที่ปรึกษาและพัฒนา" ตารางจึงแยกแสดงตามต้นฉบับ หากเป็นประเภทเดียวกัน รวมเป็น 56 ชั่วโมง 7.0 แมนเดย์ กรุณายืนยันและใช้ชื่อเดียวกัน` } }
+);
+
+window.PRESETS.cases.items.push(
+ { label: { zh: "客戶反映看不懂", en: "Clients find the deck hard to follow", th: "ลูกค้าอ่านไม่เข้าใจ" },
+   input: {
+    zh: `O01 客戶甲 2026-05 保養健檢：客戶反映簡報用詞太專業，主管看不懂
+O02 客戶乙 2026-07 Tableau 升級：客戶反映簡報用詞太專業，主管看不懂
+O03 客戶丙 2026-09 保養健檢：客戶反映簡報用詞太專業，主管看不懂
+O04 客戶丁 2026-10 Tableau 升級：客戶要求附上原始 log 檔`,
+    en: `O01 Client A 2026-05 health check: client says the deck is too technical for their managers
+O02 Client B 2026-07 Tableau upgrade: client says the deck is too technical for their managers
+O03 Client C 2026-09 health check: client says the deck is too technical for their managers
+O04 Client D 2026-10 Tableau upgrade: client asked for the original log files to be attached`,
+    th: `O01 ลูกค้า A 2026-05 ตรวจสุขภาพระบบ: ลูกค้าแจ้งว่าสไลด์ใช้ศัพท์เทคนิคมากจนผู้บริหารอ่านไม่เข้าใจ
+O02 ลูกค้า B 2026-07 อัปเกรด Tableau: ลูกค้าแจ้งว่าสไลด์ใช้ศัพท์เทคนิคมากจนผู้บริหารอ่านไม่เข้าใจ
+O03 ลูกค้า C 2026-09 ตรวจสุขภาพระบบ: ลูกค้าแจ้งว่าสไลด์ใช้ศัพท์เทคนิคมากจนผู้บริหารอ่านไม่เข้าใจ
+O04 ลูกค้า D 2026-10 อัปเกรด Tableau: ลูกค้าขอให้แนบไฟล์ log ต้นฉบับ` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 客戶反映用詞太專業 | O01、O02、O03 | 3 | 未涵蓋（節錄中未見針對非技術讀者的寫法） |
+| 客戶要求附原始 log 檔 | O04 | 1 | 節錄中未見；單次，不算模式 |
+#### 值得考慮寫進規則
+- 摘要頁加一段給非技術主管看的白話結論（做了什麼、結果是否正常、需要客戶做什麼）。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Client says the deck is too technical | O01, O02, O03 | 3 | Not covered (nothing in the excerpt on writing for non-technical readers) |
+| Client asked for original log files | O04 | 1 | Not in the excerpt; single case, not a pattern |
+#### Worth adding to the rules
+- Add a plain-language conclusion for non-technical managers on the summary page: what was done, whether the result is normal, and what the client needs to do.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| ลูกค้าแจ้งว่าใช้ศัพท์เทคนิคมากเกินไป | O01, O02, O03 | 3 | ยังไม่ครอบคลุม (ไม่พบแนวทางการเขียนสำหรับผู้อ่านที่ไม่ใช่สายเทคนิคในข้อความที่ยกมา) |
+| ลูกค้าขอให้แนบไฟล์ log ต้นฉบับ | O04 | 1 | ไม่พบในข้อความที่ยกมา ครั้งเดียว ไม่นับเป็นรูปแบบ |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- เพิ่มบทสรุปภาษาง่ายสำหรับผู้บริหารที่ไม่ใช่สายเทคนิคในหน้าสรุป: ทำอะไรไป ผลปกติหรือไม่ และลูกค้าต้องทำอะไรต่อ
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } },
+
+ { label: { zh: "交付時間拖延", en: "Late delivery", th: "ส่งมอบล่าช้า" },
+   input: {
+    zh: `P01 客戶甲 2026-04 Tableau 升級：簡報在現場作業後 5 天才交付
+P02 客戶乙 2026-06 保養健檢：簡報在現場作業後 6 天才交付
+P03 客戶丙 2026-08 保養健檢：等待內部複核，交付延後 3 天
+P04 客戶丁 2026-09 Tableau 升級：等待內部複核，交付延後 3 天`,
+    en: `P01 Client A 2026-04 Tableau upgrade: deck delivered 5 days after the on-site work
+P02 Client B 2026-06 health check: deck delivered 6 days after the on-site work
+P03 Client C 2026-08 health check: waiting for internal review delayed delivery by 3 days
+P04 Client D 2026-09 Tableau upgrade: waiting for internal review delayed delivery by 3 days`,
+    th: `P01 ลูกค้า A 2026-04 อัปเกรด Tableau: ส่งสไลด์หลังทำงานหน้างาน 5 วัน
+P02 ลูกค้า B 2026-06 ตรวจสุขภาพระบบ: ส่งสไลด์หลังทำงานหน้างาน 6 วัน
+P03 ลูกค้า C 2026-08 ตรวจสุขภาพระบบ: รอตรวจทานภายใน ทำให้ส่งช้าไป 3 วัน
+P04 ลูกค้า D 2026-09 อัปเกรด Tableau: รอตรวจทานภายใน ทำให้ส่งช้าไป 3 วัน` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 現場作業後 5 天以上才交付 | P01、P02 | 2 | 未涵蓋（節錄中未見交付時限） |
+| 等待內部複核造成延後 | P03、P04 | 2 | 未涵蓋（節錄中未見複核流程的規範） |
+#### 值得考慮寫進規則
+- 訂出現場作業後的交付時限，並在產出時提醒剩餘天數。
+- 送內部複核前，先自動檢查已記錄的陷阱，減少複核來回修改的次數。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Delivered 5+ days after on-site work | P01, P02 | 2 | Not covered (no delivery deadline in the excerpt) |
+| Delivery delayed by internal review | P03, P04 | 2 | Not covered (no review-process rule in the excerpt) |
+#### Worth adding to the rules
+- Set a delivery deadline after on-site work and show the days remaining when the deck is generated.
+- Before internal review, automatically check the recorded pitfalls to cut down review back-and-forth.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| ส่งมอบหลังทำงานหน้างาน 5 วันขึ้นไป | P01, P02 | 2 | ยังไม่ครอบคลุม (ไม่พบกำหนดเวลาส่งมอบในข้อความที่ยกมา) |
+| รอตรวจทานภายในทำให้ส่งช้า | P03, P04 | 2 | ยังไม่ครอบคลุม (ไม่พบมาตรฐานขั้นตอนตรวจทานในข้อความที่ยกมา) |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- กำหนดเวลาส่งมอบหลังทำงานหน้างาน และแสดงจำนวนวันที่เหลือตอนสร้างสไลด์
+- ก่อนส่งตรวจทานภายใน ให้ตรวจข้อควรระวังที่บันทึกไว้โดยอัตโนมัติ เพื่อลดการแก้ไขไปมา
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } },
+
+ { label: { zh: "這段期間都沒有問題", en: "No issues in this period", th: "ช่วงนี้ไม่มีปัญหา" },
+   input: {
+    zh: `Q01 客戶甲 2026-07 保養健檢：複核通過，沒有發現問題
+Q02 客戶乙 2026-08 Tableau 升級：複核通過，沒有發現問題
+Q03 客戶丙 2026-09 保養健檢：複核通過，沒有發現問題
+Q04 客戶丁 2026-10 Tableau 升級：複核通過，沒有發現問題`,
+    en: `Q01 Client A 2026-07 health check: passed review, no issues found
+Q02 Client B 2026-08 Tableau upgrade: passed review, no issues found
+Q03 Client C 2026-09 health check: passed review, no issues found
+Q04 Client D 2026-10 Tableau upgrade: passed review, no issues found`,
+    th: `Q01 ลูกค้า A 2026-07 ตรวจสุขภาพระบบ: ผ่านการตรวจทาน ไม่พบปัญหา
+Q02 ลูกค้า B 2026-08 อัปเกรด Tableau: ผ่านการตรวจทาน ไม่พบปัญหา
+Q03 ลูกค้า C 2026-09 ตรวจสุขภาพระบบ: ผ่านการตรวจทาน ไม่พบปัญหา
+Q04 ลูกค้า D 2026-10 อัปเกรด Tableau: ผ่านการตรวจทาน ไม่พบปัญหา` },
+   output: {
+    zh: `#### 觀察到的重複模式
+- 這段期間 4 個案子都通過複核，沒有發現問題，因此沒有重複模式。
+#### 值得考慮寫進規則
+- 目前規則運作正常，不建議修改；下次回顧時繼續觀察。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+- All four projects in this period passed review with no issues, so there are no recurring patterns.
+#### Worth adding to the rules
+- The current rules are working; no change is suggested. Keep watching at the next review.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+- ทั้ง 4 โปรเจกต์ในช่วงนี้ผ่านการตรวจทานและไม่พบปัญหา จึงไม่มีรูปแบบที่เกิดซ้ำ
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- กฎปัจจุบันทำงานได้ดี ไม่แนะนำให้แก้ไข ให้ติดตามต่อในการทบทวนครั้งหน้า
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } }
+);
+
+window.PRESETS.gov.items.push(
+ { label: { zh: "索取擴充報價", en: "Expansion quote request", th: "ขอใบเสนอราคาขยายผู้ใช้" },
+   input: {
+    zh: `霧川生技股份有限公司的周美華小姐想索取擴充 50 個使用者的報價單，
+請寄到 meihua.chou@example.com，週三前需要。`,
+    en: `Ms. May Chou from Wuchuan Biotech Co., Ltd. would like a quote for adding 50 users.
+Please send it to may.chou@example.com; she needs it by Wednesday.`,
+    th: `คุณรัตนา ศรีสุข จากบริษัท อู่ชวนไบโอเทค จำกัด ขอใบเสนอราคาสำหรับเพิ่มผู้ใช้ 50 คน
+กรุณาส่งไปที่ rattana.s@example.com ภายในวันพุธ` },
+   output: {
+    zh: `- 問題：〔客戶A〕的〔人員A〕想索取擴充 50 個使用者的報價單。
+- 期限：週三前。
+- 下一步：請業務窗口準備 50 個使用者的擴充報價，週三前寄到〔Email A〕。`,
+    en: `- Issue: [Person A] from [Client A] wants a quote for adding 50 users.
+- Deadline: by Wednesday.
+- Next step: ask the sales contact to prepare the 50-user expansion quote and send it to [Email A] before Wednesday.`,
+    th: `- ปัญหา: [บุคคล A] จาก [ลูกค้า A] ขอใบเสนอราคาสำหรับเพิ่มผู้ใช้ 50 คน
+- กำหนดเวลา: ภายในวันพุธ
+- ขั้นตอนถัดไป: ให้ฝ่ายขายเตรียมใบเสนอราคาเพิ่มผู้ใช้ 50 คน แล้วส่งไปที่ [อีเมล A] ก่อนวันพุธ` } },
+
+ { label: { zh: "教育訓練換場地", en: "Training venue change", th: "เปลี่ยนสถานที่อบรม" },
+   input: {
+    zh: `下週二的教育訓練地點改到：澄峰製藥股份有限公司三樓會議室。聯絡人是何建明先生，分機不通的話打 0921-456-789。`,
+    en: `Next Tuesday's training moves to the 3rd-floor meeting room at Chengfeng Pharma Co., Ltd. The contact is Mr. Jimmy Ho; if his extension doesn't answer, call 0921-456-789.`,
+    th: `การอบรมวันอังคารหน้าย้ายไปห้องประชุมชั้น 3 ของบริษัท เฉิงเฟิงฟาร์มา จำกัด ผู้ติดต่อคือคุณชัยวัฒน์ บุญมา โทร 092-145-6789` },
+   output: {
+    zh: `- 問題：下週二的教育訓練改到〔客戶A〕三樓會議室舉行。
+- 期限：下週二上課前。
+- 下一步：通知所有學員新地點，並在前一天透過〔電話A〕向聯絡人〔人員A〕確認場地與設備。`,
+    en: `- Issue: next Tuesday's training moves to the 3rd-floor meeting room at [Client A].
+- Deadline: before the class next Tuesday.
+- Next step: tell all attendees the new venue, and the day before, confirm the room and equipment with the contact [Person A] via [Phone A].`,
+    th: `- ปัญหา: การอบรมวันอังคารหน้าย้ายไปห้องประชุมชั้น 3 ของ [ลูกค้า A]
+- กำหนดเวลา: ก่อนเริ่มอบรมวันอังคารหน้า
+- ขั้นตอนถัดไป: แจ้งสถานที่ใหม่ให้ผู้เข้าอบรมทุกคน และวันก่อนอบรมให้ยืนยันห้องและอุปกรณ์กับผู้ติดต่อ [บุคคล A] ทาง [โทรศัพท์ A]` } },
+
+ { label: { zh: "月底系統變慢", en: "Slow system at month end", th: "ระบบช้าช่วงสิ้นเดือน" },
+   input: {
+    zh: `青禾電機有限公司王建國經理說，月底結算時系統很慢，附上的截圖檔名是 IMG_0458.png。
+回覆請寄 jianguo.wang@example.com，並打 0952-321-654 通知他。`,
+    en: `Mr. Jason Wang from Qinghe Electric Ltd. says the system is very slow during month-end closing; the attached screenshot is IMG_0458.png.
+Please reply to jason.wang@example.com and call 0952-321-654 to let him know.`,
+    th: `คุณสมพร ใจงาม จากบริษัท ชิงเหอเทคโนโลยี จำกัด แจ้งว่าช่วงปิดยอดสิ้นเดือนระบบช้ามาก แนบภาพหน้าจอชื่อไฟล์ IMG_0458.png
+กรุณาตอบกลับที่ somporn.j@example.com และโทรแจ้งที่ 095-232-1654` },
+   output: {
+    zh: `- 問題：〔客戶A〕的〔人員A〕反映月底結算時系統很慢，附有截圖 IMG_0458.png。
+- 期限：紀錄中沒有明確期限；月底結算期間影響較大，建議優先處理。
+- 下一步：查看截圖與月底時段的效能紀錄，找出變慢的原因，回覆寄到〔Email A〕，並打〔電話A〕通知〔人員A〕。`,
+    en: `- Issue: [Person A] from [Client A] says the system is very slow during month-end closing; screenshot IMG_0458.png attached.
+- Deadline: none stated; month-end closing is when it hurts most, so prioritise it.
+- Next step: review the screenshot and performance logs for the month-end period to find the cause, reply to [Email A], and call [Person A] at [Phone A].`,
+    th: `- ปัญหา: [บุคคล A] จาก [ลูกค้า A] แจ้งว่าระบบช้ามากช่วงปิดยอดสิ้นเดือน แนบภาพหน้าจอ IMG_0458.png
+- กำหนดเวลา: ในบันทึกไม่ได้ระบุ แต่ช่วงปิดยอดสิ้นเดือนได้รับผลกระทบมาก ควรจัดการก่อน
+- ขั้นตอนถัดไป: ดูภาพหน้าจอและบันทึกประสิทธิภาพช่วงสิ้นเดือนเพื่อหาสาเหตุ ตอบกลับที่ [อีเมล A] และโทรแจ้ง [บุคคล A] ที่ [โทรศัพท์ A]` } }
+);
+
+window.PRESETS.kb.items.push(
+ { q: { zh: "PDF 匯不出來", en: "Can't export to PDF", th: "ส่งออก PDF ไม่ได้" },
+   a: { zh: "先確認匯出元件的版本和系統版本一致【FAQ-012】。不一致的話，重新部署匯出元件後重啟服務【FAQ-012】。",
+        en: "Check that the export component version matches the system version [FAQ-012]. If not, redeploy the export component and restart the service [FAQ-012].",
+        th: "ให้ตรวจว่าเวอร์ชันคอมโพเนนต์ส่งออกตรงกับเวอร์ชันระบบ [FAQ-012] ถ้าไม่ตรง ให้ติดตั้งคอมโพเนนต์ส่งออกใหม่แล้วรีสตาร์ตเซอร์วิส [FAQ-012]" } },
+ { q: { zh: "服務起不來", en: "The service won't start", th: "เซอร์วิสไม่ยอมเริ่มทำงาน" },
+   a: { zh: "先檢查暫存目錄所在磁碟的剩餘空間是否低於 10 GB，清理後重新啟動【FAQ-027】。還是不行就收集 log 交給原廠【FAQ-027】。",
+        en: "Check whether the disk holding the temp directory has less than 10 GB free, clean it up and restart [FAQ-027]. If it still fails, collect the logs and send them to the vendor [FAQ-027].",
+        th: "ให้ตรวจว่าดิสก์ที่เก็บโฟลเดอร์ชั่วคราวเหลือพื้นที่น้อยกว่า 10 GB หรือไม่ ล้างแล้วรีสตาร์ต [FAQ-027] ถ้ายังไม่ได้ให้เก็บ log ส่งให้ผู้ผลิต [FAQ-027]" } },
+ { q: { zh: "授權要續約要找誰？", en: "Who handles licence renewals?", th: "ต่ออายุไลเซนส์ต้องติดต่อใคร" },
+   a: { zh: "續約由業務窗口提供報價【FAQ-031】。系統會在到期前 30 天於管理頁提醒【FAQ-031】。",
+        en: "Renewals are quoted by the sales contact [FAQ-031]. The system shows a reminder on the admin page 30 days before expiry [FAQ-031].",
+        th: "การต่ออายุให้ฝ่ายขายเป็นผู้เสนอราคา [FAQ-031] ระบบจะแจ้งเตือนในหน้าผู้ดูแล 30 วันก่อนหมดอายุ [FAQ-031]" } },
+ { q: { zh: "外掛廠商還沒出支援新版的版本怎麼辦？", en: "The plug-in vendor hasn't released a compatible version yet. Now what?", th: "ผู้ผลิตปลั๊กอินยังไม่ออกเวอร์ชันที่รองรับ ต้องทำอย่างไร" },
+   a: { zh: "不支援新版本的外掛要先停用，並持續和外掛廠商聯繫，取得相容的版本【FAQ-068】。",
+        en: "Disable any plug-in that doesn't support the new release and keep in touch with the vendor for a compatible version [FAQ-068].",
+        th: "ให้ปิดปลั๊กอินที่ไม่รองรับเวอร์ชันใหม่ไว้ก่อน และติดต่อผู้ผลิตเพื่อขอเวอร์ชันที่รองรับ [FAQ-068]" } },
+ { q: { zh: "可以幫忙寫報表的計算公式嗎？", en: "Can you write report formulas for us?", th: "ช่วยเขียนสูตรคำนวณในรายงานให้ได้ไหม" },
+   a: { zh: "部門 FAQ 目前沒有這筆記錄。建議到 FAQ 總表新增這個問題，先確認是否在部門的服務範圍內再回覆。",
+        en: "The department FAQ has no record of this yet. Please add the question to the FAQ list and confirm whether it's within the department's service scope before replying.",
+        th: "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้ แนะนำให้เพิ่มคำถามนี้ในรายการ FAQ และยืนยันว่าอยู่ในขอบเขตบริการของแผนกหรือไม่ก่อนตอบ" }, none: true }
+);
