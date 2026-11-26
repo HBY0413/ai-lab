@@ -576,6 +576,19 @@ ${i}`,
   }
 },
 {
+  id:"site",facet:"AI 產品開發",title:"這個作品集網站本身",
+  gain:"從定位到上線，<strong>依回饋迭代 57 版</strong>",
+  pain:"作品集如果只是一頁頁截圖和文字，看的人很難判斷你是真的做過，還是只會寫。對 AI Product Builder 來說，最有說服力的證明，是一個真的能用、能互動的產品。",
+  purpose:"把作品集本身當成一個產品來做：先定義使用者（HR 一分鐘看懂、主管能親手驗證），再設計資訊架構（每個案例都是「這是什麼 → 痛點 → 效益 → 實際樣貌 → 親手試試」），加上 3D 互動入口、中英泰三語、手機版與去識別化。全程由我定規格、看畫面驗收、提出修正，AI Agent 負責實作，一輪一輪迭代到上線。",
+  steps:["定義使用者與目標：HR 一分鐘看懂做過什麼，主管能親手驗證","設計資訊架構與互動：3D 實驗室、編號分區、Live Lab","AI Agent 實作，我逐輪看畫面、提出修正、再驗證","所有證據去識別化，部署到 GitHub Pages 與 Claude 兩個版本"],
+  effect:{type:"kpi",items:[["57 版","依回饋迭代上線"],["3 語系","中文・English・ไทย"],["9 個","可互動的案例"]]},
+  tech:["Three.js","多語系 i18n","RWD","GitHub Pages","Agent 協作"],
+  lab:{kind:"projects",items:[
+    ["GitHub 原始碼","整個網站的原始檔與每次修改的紀錄。","https://github.com/HBY0413/ai-lab"],
+    ["1 分鐘看重點","給 HR 的一頁式摘要。","https://hby0413.github.io/ai-lab/profile.html"]
+  ]}
+},
+{
   id:"build",facet:"AI 協作開發",title:"用 AI 開發的其他作品",
   gain:"想法 → <strong>可上線的作品</strong>",
   pain:"想法很多，但沒有工程團隊；傳統做法要找人開發、等很久，小想法常常就不了了之。",
@@ -590,7 +603,7 @@ ${i}`,
 }
 ];
 /* experiment numbering = this order: most direct AI-agent application first */
-const EXP_ORDER=["report","manual","kb","maint","cases","gov","build","ocr"];EXPS_ZH.sort((p,q)=>EXP_ORDER.indexOf(p.id)-EXP_ORDER.indexOf(q.id));
+const EXP_ORDER=["report","manual","kb","maint","cases","gov","build","ocr","site"];EXPS_ZH.sort((p,q)=>EXP_ORDER.indexOf(p.id)-EXP_ORDER.indexOf(q.id));
 const EXPS=REAL.apply(I18N.localizeExps(EXPS_ZH),I18N.lang);
 EXPS.forEach(x=>{if(x.evidence&&x.evidence.layers)x.evidence.flat=x.evidence.layers.flatMap(l=>l.imgs)});
 
@@ -831,6 +844,7 @@ const INTRO={
  cases:{zh:"一支 AI Agent Skill：定期翻閱過去的升級案子，找出反覆出現的寫法與異常，提出規則修改建議給人審核。",en:"An AI agent skill that periodically reviews past upgrade projects, finds recurring wording and issues, and proposes rule changes for a person to approve.",th:"AI Agent Skill ที่ทบทวนโปรเจกต์อัปเกรดในอดีตเป็นระยะ หารูปแบบการเขียนและปัญหาที่เกิดซ้ำ แล้วเสนอการแก้กฎให้คนอนุมัติ"},
  gov:{zh:"一套讓 AI 能放心導入的治理做法：機敏資料先換成代號，對照表只留在使用者本機，AI 要讀必須經使用者同意、讀完不記憶，並分五層寫進每一支 Skill。",en:"A governance approach that makes AI safe to adopt: sensitive data becomes codes, the lookup table stays on the user's machine, the AI may read it only with the user's approval and remembers nothing, all built into every skill as five layers.",th:"แนวทางกำกับดูแลที่ทำให้นำ AI มาใช้ได้อย่างมั่นใจ: ข้อมูลอ่อนไหวถูกแทนด้วยรหัส ตารางเทียบอยู่บนเครื่องผู้ใช้ AI อ่านได้เมื่อผู้ใช้อนุมัติและไม่จดจำ ทั้งหมดฝังไว้ในทุก Skill เป็น 5 ชั้น"},
  build:{zh:"用 AI 開發的其他作品：沒有工程團隊，靠 AI Agent 把想法做成可以上線使用的網站與遊戲。",en:"Other things I built with AI: with no engineering team, I used AI agents to turn ideas into a live website and a game.",th:"ผลงานอื่นที่พัฒนาด้วย AI: ไม่มีทีมวิศวกร แต่ใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเกมที่ใช้งานได้จริง"},
+ site:{zh:"一個由我定規格、AI Agent 實作的產品：把作品集做成可以走進去、親手操作的 3D 實驗室，支援三種語言與手機。",en:"A product I specified and an AI agent built: a portfolio you can walk into and use, as a 3D lab in three languages that works on phones.",th:"ผลิตภัณฑ์ที่ผมกำหนดสเปกและให้ AI Agent สร้าง: พอร์ตโฟลิโอที่เดินเข้าไปและทดลองใช้ได้ในรูปแบบห้องแล็บ 3D รองรับสามภาษาและมือถือ"},
  ocr:{zh:"一個用 AI 協作開發的 Windows 小工具：幫亞洲玩家在國際英文伺服器上，用打字或掃描畫面查到道具的中文資料。",en:"A small Windows tool I built with AI: it helps Asian players on international English servers look up items in Chinese by typing or scanning the screen.",th:"เครื่องมือ Windows เล็ก ๆ ที่พัฒนาร่วมกับ AI: ช่วยผู้เล่นชาวเอเชียบนเซิร์ฟเวอร์ภาษาอังกฤษค้นข้อมูลไอเท็มเป็นภาษาจีนด้วยการพิมพ์หรือสแกนหน้าจอ"}
 };
 /* where else the same pattern applies: keeps each case about the industry, not one employer */
@@ -842,6 +856,7 @@ const APPLY={
  cases:{zh:"任何累積大量歷史紀錄的流程：讓 AI 從過去的案子找出重複問題，再由人決定要不要寫成新規則，持續改善。",en:"Any process with a long history of records: AI surfaces recurring issues from past work, and people decide which ones become new rules.",th:"กระบวนการใดก็ตามที่มีบันทึกย้อนหลังมาก: AI หาปัญหาที่เกิดซ้ำจากงานในอดีต แล้วให้คนตัดสินใจว่าจะเขียนเป็นกฎใหม่หรือไม่"},
  gov:{zh:"任何想導入雲端 AI、但資料含個資或客戶資訊的企業：金融、醫療、製造、IT 服務都適用的導入前提。",en:"Any company that wants cloud AI but holds personal or client data: a starting point that works in finance, healthcare, manufacturing and IT services alike.",th:"องค์กรใดก็ตามที่อยากใช้ AI บนคลาวด์แต่มีข้อมูลส่วนบุคคลหรือข้อมูลลูกค้า: ใช้ได้ทั้งการเงิน การแพทย์ การผลิต และบริการไอที"},
  build:{zh:"把想法快速做成可用原型：內部小工具、互動展示、概念驗證，不必等排進開發時程。",en:"Turning an idea into a working prototype fast: internal tools, interactive demos and proofs of concept, without waiting for a development slot.",th:"เปลี่ยนไอเดียเป็นต้นแบบที่ใช้งานได้อย่างรวดเร็ว: เครื่องมือภายใน เดโมแบบโต้ตอบ และ PoC โดยไม่ต้องรอคิวพัฒนา"},
+site:{zh:"任何需要「讓人看得懂又能親手試」的展示：產品 Demo、內部工具推廣頁、提案展示網站。",en:"Anything that must be understood at a glance and tried hands-on: product demos, internal tool launch pages, pitch sites.",th:"งานนำเสนอใดก็ตามที่ต้องเข้าใจง่ายและลองใช้ได้: เดโมผลิตภัณฑ์ หน้าเปิดตัวเครื่องมือภายใน เว็บไซต์นำเสนอ"},
  ocr:{zh:"同樣的「螢幕擷取 → 文字辨識 → 模糊比對資料庫」流程，可以用在料號查詢、設備畫面讀值、多語系介面翻譯對照。",en:"The same screen capture → text recognition → fuzzy database match pipeline works for part-number lookup, reading values off equipment screens, and multilingual UI reference.",th:"ขั้นตอนเดียวกัน จับภาพหน้าจอ → อ่านข้อความ → จับคู่ฐานข้อมูลแบบคลุมเครือ ใช้ได้กับการค้นรหัสชิ้นส่วน การอ่านค่าจากหน้าจอเครื่องจักร และการเทียบคำแปลหน้าจอหลายภาษา"}
 };
 const HAS_RUN=["report","manual","kb","maint","cases","ocr"];

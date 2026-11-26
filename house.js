@@ -20,6 +20,7 @@ const ST=[ // order = experiment number. Front row (floor, nearest the viewer) h
   {id:"gov",label:"資料治理",nav:"治理",kind:"wallA",pos:[0,0,2.4],labelAt:[0.03,4.55,2.4]},
   {id:"build",label:"AI 協作",nav:"作品",kind:"wallB",pos:[2.1,0,0],labelAt:[2.1,4.55,0.03]},
   {id:"ocr",label:"OCR 辨識",nav:"OCR",kind:"wallB",pos:[5.6,0,0],labelAt:[5.6,4.75,0.03]},
+  {id:"site",label:"作品集網站",nav:"網站",kind:"floor",signY:2.75,pos:[8.9,0,6.7],labelAt:[9.4,0.02,7.6],labelR:1.6},
   {id:"demos",label:"AI 檢測 DEMO",nav:"AI Demo",kind:"wallB",pos:[8.6,0,0],labelAt:[8.6,4.55,0.03]}
 ];
 const tt=(k,v)=>window.I18N?I18N.t(k,v):k;
@@ -203,6 +204,16 @@ P.cases=g=>{ // steel filing cabinet + pinned incident sheets
   const pin=new T.Group();pin.position.set(0,3.1,.03);g.add(pin);box(pin,1.6,1.0,.03,M(0x2A2E33,{metalness:.4}),[0,0,0]);
   [[-.5,.2],[.1,.22],[.5,-.15],[-.2,-.25]].forEach(([x,y],i)=>box(pin,.36,.3,.01,M(i===1?0xF0A060:0xE6E9EC),[x,y,.03]));
 };
+P.site=g=>{ // kiosk showing this portfolio: pedestal + angled touch screen
+  const st=M(0x2A2E33,{metalness:.6,roughness:.4});
+  box(g,.9,.06,.9,st,[0,.03,0]);box(g,.16,1.05,.16,st,[0,.56,0]);
+  const head=new T.Group();head.position.set(0,1.18,0);head.rotation.x=-.55;g.add(head);
+  box(head,1.25,.82,.07,M(0x15181B),[0,0,0]);
+  add(head,new T.PlaneGeometry(1.17,.74),new T.MeshBasicMaterial({map:screenTex((x,w,h)=>{x.fillStyle="#0B0C0E";x.fillRect(0,0,w,h);
+    x.fillStyle="#3B3F44";x.fillRect(34,70,170,210);x.fillStyle="#E9CFA6";x.fillRect(80,140,78,140);
+    x.fillStyle="#F7F8F9";x.font="600 46px Jost";x.fillText("HB",240,140);x.font="600 34px Jost";x.fillText("AI Lab",240,190);
+    x.fillStyle="#F0A060";x.fillRect(240,214,110,5);x.fillStyle="#9AA6AE";x.font="22px Jost";x.fillText("中文 · EN · ไทย",240,258)})}),[0,0,.04],null,false);
+};
 P.ocr=g=>{ // PC + monitor running the OCR item finder
   const desk=M(0x6B7177,{metalness:.6,roughness:.35});box(g,1.5,.07,.9,desk,[0,1.0,.55]);[[-.68,.15],[.68,.15],[-.68,.95],[.68,.95]].forEach(([x,z])=>box(g,.06,1.0,.06,M(0x2A2E33,{metalness:.6}),[x,.5,z]));
   box(g,.38,.9,.8,M(0x1B1E21,{metalness:.5,roughness:.4}),[.45,.45,.55]);box(g,.02,.6,.02,glow(0x7FD3FF),[.45,.55,.96]);
@@ -348,6 +359,7 @@ $("enterBtn2").addEventListener("click",enterRoom);
 $("doorBadge").addEventListener("click",enterRoom);
 
 $("logo").addEventListener("click",()=>{if(mode==="room")closePanel(true)});
+showCap(0);
 $("capPrev").addEventListener("click",()=>{showCap(focus-1);{const v=stationView(ST[focus].id,true);fadeOccluders(ST[focus].id,v);flyTo(v,.9)}});
 $("capNext").addEventListener("click",()=>{showCap(focus+1);{const v=stationView(ST[focus].id,true);fadeOccluders(ST[focus].id,v);flyTo(v,.9)}});
 $("capGo").addEventListener("click",()=>openStation(ST[focus].id,{fly:false}));
