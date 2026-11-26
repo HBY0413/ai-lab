@@ -53,6 +53,7 @@ const D={
 "ev.run":{zh:"執行過程",en:"How it runs",th:"ขั้นตอนการทำงาน"},
 "ev.runNote":{zh:"以模擬資料重現一次 Skill 的執行過程；公司、客戶與內部路徑都已移除。畫面文字為中文。",en:"A replay of one skill run on mock data, with company, client and internal path names removed. On-screen text is in Chinese.",th:"การจำลองการทำงานของ Skill หนึ่งรอบด้วยข้อมูลจำลอง ตัดชื่อบริษัท ลูกค้า และพาธภายในออกแล้ว ข้อความบนหน้าจอเป็นภาษาจีน"},
 "hint.drag":{zh:"可拖曳",en:"Drag",th:"ลากได้"},
+"blk.apply":{zh:"也可以應用在",en:"Also applies to",th:"นำไปใช้กับ"},
 "blk.what":{zh:"這是什麼",en:"What it is",th:"นี่คืออะไร"},
 "blk.pain":{zh:"為了解決什麼痛點",en:"The pain it solves",th:"ปัญหาที่แก้"},
 "blk.gain":{zh:"帶來的效益",en:"What it delivered",th:"ผลลัพธ์ที่ได้"},

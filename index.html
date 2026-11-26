@@ -292,6 +292,8 @@ body{display:flex;flex-direction:column;overflow:hidden}
 .lgpop a{color:#7FB8FF;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .lgpop small{color:#8A939B}
 @media (max-width:700px){.lg-grid{grid-template-columns:1fr}}
+
+.cc.apply{border-left:3px solid #7FB8FF}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -831,13 +833,24 @@ const INTRO={
  build:{zh:"用 AI 開發的其他作品：沒有工程團隊，靠 AI Agent 把想法做成可以上線使用的網站與遊戲。",en:"Other things I built with AI: with no engineering team, I used AI agents to turn ideas into a live website and a game.",th:"ผลงานอื่นที่พัฒนาด้วย AI: ไม่มีทีมวิศวกร แต่ใช้ AI Agent เปลี่ยนไอเดียเป็นเว็บไซต์และเกมที่ใช้งานได้จริง"},
  ocr:{zh:"一個用 AI 協作開發的 Windows 小工具：幫亞洲玩家在國際英文伺服器上，用打字或掃描畫面查到道具的中文資料。",en:"A small Windows tool I built with AI: it helps Asian players on international English servers look up items in Chinese by typing or scanning the screen.",th:"เครื่องมือ Windows เล็ก ๆ ที่พัฒนาร่วมกับ AI: ช่วยผู้เล่นชาวเอเชียบนเซิร์ฟเวอร์ภาษาอังกฤษค้นข้อมูลไอเท็มเป็นภาษาจีนด้วยการพิมพ์หรือสแกนหน้าจอ"}
 };
+/* where else the same pattern applies: keeps each case about the industry, not one employer */
+const APPLY={
+ report:{zh:"任何需要定期彙整多份表單、做成管理報告的團隊：專案管理、業務週報、營運月報、PMO。",en:"Any team that regularly rolls several spreadsheets into a management report: project management, sales weeklies, operations monthlies, PMOs.",th:"ทีมใดก็ตามที่ต้องรวมหลายตารางเป็นรายงานผู้บริหารเป็นประจำ: บริหารโครงการ รายงานยอดขายรายสัปดาห์ รายงานปฏิบัติการรายเดือน PMO"},
+ manual:{zh:"任何「現場只拍照、回來才補文件」的工作：IT 維運與升級、設備保養、廠務巡檢、施工與稽核紀錄。",en:"Any work where people capture screenshots or photos on site and write it up later: IT operations and upgrades, equipment maintenance, plant inspections, construction and audit records.",th:"งานใดก็ตามที่ถ่ายภาพหน้างานแล้วค่อยมาเขียนเอกสารทีหลัง: ดูแลและอัปเกรดระบบไอที บำรุงรักษาเครื่องจักร ตรวจโรงงาน บันทึกงานก่อสร้างและการตรวจสอบ"},
+ kb:{zh:"任何有內部 SOP、FAQ 的組織：客服、技術支援、IT 服務台、新人訓練。",en:"Any organisation with internal SOPs or FAQs: customer service, technical support, IT help desks, onboarding.",th:"องค์กรใดก็ตามที่มี SOP หรือ FAQ ภายใน: บริการลูกค้า ซัพพอร์ตด้านเทคนิค IT help desk การฝึกพนักงานใหม่"},
+ maint:{zh:"任何開始大量使用 AI 產出文件的團隊：讓 AI 產出可追溯、可稽核，不和人工文件混在一起。",en:"Any team starting to produce lots of documents with AI: keeps AI output traceable and auditable, separate from human-written files.",th:"ทีมใดก็ตามที่เริ่มใช้ AI สร้างเอกสารจำนวนมาก: ทำให้ผลงานของ AI ตรวจย้อนและตรวจสอบได้ ไม่ปนกับเอกสารที่คนเขียน"},
+ cases:{zh:"任何累積大量歷史紀錄的流程：讓 AI 從過去的案子找出重複問題，再由人決定要不要寫成新規則，持續改善。",en:"Any process with a long history of records: AI surfaces recurring issues from past work, and people decide which ones become new rules.",th:"กระบวนการใดก็ตามที่มีบันทึกย้อนหลังมาก: AI หาปัญหาที่เกิดซ้ำจากงานในอดีต แล้วให้คนตัดสินใจว่าจะเขียนเป็นกฎใหม่หรือไม่"},
+ gov:{zh:"任何想導入雲端 AI、但資料含個資或客戶資訊的企業：金融、醫療、製造、IT 服務都適用的導入前提。",en:"Any company that wants cloud AI but holds personal or client data: a starting point that works in finance, healthcare, manufacturing and IT services alike.",th:"องค์กรใดก็ตามที่อยากใช้ AI บนคลาวด์แต่มีข้อมูลส่วนบุคคลหรือข้อมูลลูกค้า: ใช้ได้ทั้งการเงิน การแพทย์ การผลิต และบริการไอที"},
+ build:{zh:"把想法快速做成可用原型：內部小工具、互動展示、概念驗證，不必等排進開發時程。",en:"Turning an idea into a working prototype fast: internal tools, interactive demos and proofs of concept, without waiting for a development slot.",th:"เปลี่ยนไอเดียเป็นต้นแบบที่ใช้งานได้อย่างรวดเร็ว: เครื่องมือภายใน เดโมแบบโต้ตอบ และ PoC โดยไม่ต้องรอคิวพัฒนา"},
+ ocr:{zh:"同樣的「螢幕擷取 → 文字辨識 → 模糊比對資料庫」流程，可以用在料號查詢、設備畫面讀值、多語系介面翻譯對照。",en:"The same screen capture → text recognition → fuzzy database match pipeline works for part-number lookup, reading values off equipment screens, and multilingual UI reference.",th:"ขั้นตอนเดียวกัน จับภาพหน้าจอ → อ่านข้อความ → จับคู่ฐานข้อมูลแบบคลุมเครือ ใช้ได้กับการค้นรหัสชิ้นส่วน การอ่านค่าจากหน้าจอเครื่องจักร และการเทียบคำแปลหน้าจอหลายภาษา"}
+};
 const HAS_RUN=["report","manual","kb","maint","cases","ocr"];
 function replayHTML(x){return `<figure class="replay"><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t(x.id==="ocr"?"ev.runNoteOcr":"ev.runNote")}</figcaption></figure>`}
 /* one clearly separated block per part of a case, numbered, with a jump bar at the top */
 function blocksHTML(x,eff){
   // story order: what it is -> the pain it was built for -> what it delivered -> what it really looks like -> try it
   const B=[];
-  B.push(["what",I18N.t("blk.what"),`${INTRO[x.id]?`<p class="intro">${INTRO[x.id][I18N.lang]||INTRO[x.id].zh}</p>`:""}<div class="cc sol"><p>${x.purpose}</p></div>
+  B.push(["what",I18N.t("blk.what"),`${INTRO[x.id]?`<p class="intro">${INTRO[x.id][I18N.lang]||INTRO[x.id].zh}</p>`:""}<div class="cc sol"><p>${x.purpose}</p></div>${APPLY[x.id]?`<div class="cc apply"><div class="label">${I18N.t("blk.apply")}</div><p>${APPLY[x.id][I18N.lang]||APPLY[x.id].zh}</p></div>`:""}
      <div class="cc how"><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
      <div class="techrow"><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>`]);
   B.push(["pain",I18N.t("blk.pain"),`<div class="cc pain"><p>${x.pain}</p></div>`]);
