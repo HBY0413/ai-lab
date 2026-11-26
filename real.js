@@ -406,7 +406,7 @@ Question: ${q}`,
 ${docs}
 คำถาม: ${q}`};
 const KB_LAB={
- zh:{hint:"下方是 8 筆模擬的部門 FAQ 記錄（客戶維運與技術支援）。試著問一個記錄裡有的問題，再問一個記錄裡沒有的（例如「客戶要怎麼申請 VPN？」），看它會不會編答案。",
+ zh:{hint:"下方是 12 筆模擬的部門 FAQ 記錄（客戶維運與技術支援）。試著問一個記錄裡有的問題，再問一個記錄裡沒有的（例如「客戶要怎麼申請 VPN？」），看它會不會編答案。",
   docs:`[FAQ-012 報表匯出失敗] 問題：系統升級後，報表匯出 PDF 出現錯誤。處理：確認匯出元件版本與升級後的版本一致，重新部署匯出元件後重啟服務。出處：2026/05 升級案。
 [FAQ-027 服務啟動逾時] 問題：升級後服務啟動超過 10 分鐘仍未完成。處理：先檢查暫存目錄所在磁碟的剩餘空間是否低於 10 GB，清理後重新啟動；仍失敗就收集 log 交給原廠。出處：2026/07 保養案。
 [FAQ-031 授權到期提醒] 問題：客戶詢問授權到期前多久會收到提醒。處理：系統會在到期前 30 天於管理頁顯示提醒；續約由業務窗口提供報價。出處：2026/08 客戶詢問。
@@ -414,10 +414,14 @@ const KB_LAB={
 [FAQ-040 憑證過期] 問題：瀏覽器顯示憑證過期，使用者無法登入。處理：向客戶取得新憑證，在系統管理頁更新並重啟服務；更新前先確認新憑證包含完整的中繼憑證鏈。出處：2026/06 保養案。
 [FAQ-044 排程資料沒有更新] 問題：儀表板資料停在前一天。處理：先看排程紀錄是否失敗；常見原因是來源資料庫備份時鎖表，可把排程時間往後調 1 小時。出處：2026/09 客戶詢問。
 [FAQ-048 新增使用者] 問題：客戶要新增系統使用者。處理：由客戶的系統管理員在管理頁新增；授權數不足時要先購買授權，由業務窗口報價。出處：2026/10 客戶詢問。
-[FAQ-052 升級停機時間] 問題：客戶問升級要停機多久。處理：一般升級停機約 1～2 小時，依資料量而定；建議安排在非上班時段，並提前一週通知使用者。出處：2026/04 升級案。`,
+[FAQ-052 升級停機時間] 問題：客戶問升級要停機多久。處理：一般升級停機約 1～2 小時，依資料量而定；建議安排在非上班時段，並提前一週通知使用者。出處：2026/04 升級案。
+[FAQ-056 備份檔太大] 問題：備份檔過大，磁碟空間不足。處理：清理 30 天以前的舊備份，並把備份目錄移到容量較大的磁碟；清理前確認至少保留最近 3 份。出處：2026/08 保養案。
+[FAQ-060 通知信寄不出去] 問題：系統的訂閱信或通知信寄不出去。處理：確認 SMTP 伺服器位址、連接埠與帳號沒有變更；客戶若更換郵件伺服器，要在管理頁更新設定並寄測試信。出處：2026/09 保養案。
+[FAQ-064 儀表板開啟很慢] 問題：使用者反映儀表板開啟很慢。處理：先看是否為即時連線；資料量大的儀表板建議改用萃取並設定排程更新，同時減少單頁的圖表數量。出處：2026/10 客戶詢問。
+[FAQ-068 升級後外掛失效] 問題：升級後原本的外掛或擴充功能不能用。處理：確認外掛版本是否支援新版本；不支援就先停用，並聯繫外掛廠商取得相容版本。出處：2026/07 升級案。`,
   input:"客戶升級後服務一直啟動不起來，要先檢查什麼？",single:true,btn:"詢問部門 FAQ",prompt:KB_P.zh,
   example:`先檢查暫存目錄所在磁碟的剩餘空間是否低於 10 GB，清理後再重新啟動服務【FAQ-027】。如果還是啟動失敗，就收集 log 交給原廠處理【FAQ-027】。`},
- en:{hint:"Below are 8 mock department FAQ records (client support and maintenance). Ask one question the records cover, then one they don't (e.g. \"How does a client request VPN access?\") and see whether it makes anything up.",
+ en:{hint:"Below are 12 mock department FAQ records (client support and maintenance). Ask one question the records cover, then one they don't (e.g. \"How does a client request VPN access?\") and see whether it makes anything up.",
   docs:`[FAQ-012 Report export fails] Issue: after a system upgrade, exporting a report to PDF throws an error. Fix: check that the export component version matches the upgraded version, redeploy the export component and restart the service. Source: 2026/05 upgrade project.
 [FAQ-027 Service start times out] Issue: after an upgrade the service is still starting after 10 minutes. Fix: first check whether the disk holding the temp directory has less than 10 GB free; clean it up and restart. If it still fails, collect the logs and send them to the vendor. Source: 2026/07 maintenance project.
 [FAQ-031 Licence expiry reminder] Issue: a client asks how early they are reminded before the licence expires. Answer: the system shows a reminder on the admin page 30 days before expiry; renewals are quoted by the sales contact. Source: 2026/08 client question.
@@ -425,10 +429,14 @@ const KB_LAB={
 [FAQ-040 Expired certificate] Issue: the browser shows an expired certificate and users can't log in. Fix: get the new certificate from the client, update it on the system admin page and restart the service; first check it includes the full intermediate chain. Source: 2026/06 maintenance project.
 [FAQ-044 Scheduled data not refreshing] Issue: dashboard data is stuck at the previous day. Fix: check whether the scheduled job failed; a common cause is the source database locking tables during its backup, so move the schedule one hour later. Source: 2026/09 client question.
 [FAQ-048 Adding users] Issue: a client wants to add system users. Answer: the client's own system administrator adds them on the admin page; if licences run short, buy more first, quoted by the sales contact. Source: 2026/10 client question.
-[FAQ-052 Upgrade downtime] Issue: a client asks how long an upgrade takes offline. Answer: about 1–2 hours, depending on data volume; schedule it outside working hours and notify users a week ahead. Source: 2026/04 upgrade project.`,
+[FAQ-052 Upgrade downtime] Issue: a client asks how long an upgrade takes offline. Answer: about 1–2 hours, depending on data volume; schedule it outside working hours and notify users a week ahead. Source: 2026/04 upgrade project.
+[FAQ-056 Backup files too large] Issue: backups are filling the disk. Fix: delete backups older than 30 days and move the backup directory to a larger disk; keep at least the three most recent backups. Source: 2026/08 maintenance project.
+[FAQ-060 Notification emails not sending] Issue: subscription or notification emails aren't going out. Fix: check the SMTP server address, port and account haven't changed; if the client switched mail servers, update the settings on the admin page and send a test email. Source: 2026/09 maintenance project.
+[FAQ-064 Dashboards slow to open] Issue: users say dashboards take a long time to open. Fix: first check whether it uses a live connection; for large data, switch to an extract with a scheduled refresh and reduce the number of charts per page. Source: 2026/10 client question.
+[FAQ-068 Plug-in broken after upgrade] Issue: an existing plug-in or extension stops working after the upgrade. Fix: check whether the plug-in version supports the new release; if not, disable it and get a compatible version from the plug-in vendor. Source: 2026/07 upgrade project.`,
   input:"After the upgrade the client's service won't start. What should I check first?",btn:"Ask the department FAQ",prompt:KB_P.en,
   example:`First check whether the disk holding the temp directory has less than 10 GB free, clean it up and restart the service [FAQ-027]. If it still won't start, collect the logs and send them to the vendor [FAQ-027].`},
- th:{hint:"ด้านล่างคือบันทึก FAQ ของแผนก (ข้อมูลจำลอง เรื่องดูแลระบบและซัพพอร์ตลูกค้า) 8 รายการ ลองถามคำถามที่บันทึกมีคำตอบ แล้วถามคำถามที่ไม่มี (เช่น \"ลูกค้าขอใช้ VPN อย่างไร\") ดูว่า AI จะแต่งคำตอบเองหรือไม่",
+ th:{hint:"ด้านล่างคือบันทึก FAQ ของแผนก (ข้อมูลจำลอง เรื่องดูแลระบบและซัพพอร์ตลูกค้า) 12 รายการ ลองถามคำถามที่บันทึกมีคำตอบ แล้วถามคำถามที่ไม่มี (เช่น \"ลูกค้าขอใช้ VPN อย่างไร\") ดูว่า AI จะแต่งคำตอบเองหรือไม่",
   docs:`[FAQ-012 ส่งออกรายงานไม่ได้] ปัญหา: หลังอัปเกรดระบบ ส่งออกรายงานเป็น PDF แล้วเกิดข้อผิดพลาด วิธีแก้: ตรวจว่าเวอร์ชันคอมโพเนนต์ส่งออกตรงกับเวอร์ชันหลังอัปเกรด ติดตั้งคอมโพเนนต์ใหม่แล้วรีสตาร์ตเซอร์วิส ที่มา: โปรเจกต์อัปเกรด 2026/05
 [FAQ-027 เซอร์วิสเริ่มทำงานนานเกินไป] ปัญหา: หลังอัปเกรด เซอร์วิสเริ่มทำงานเกิน 10 นาทีแล้วยังไม่เสร็จ วิธีแก้: ตรวจก่อนว่าดิสก์ที่เก็บโฟลเดอร์ชั่วคราวเหลือพื้นที่น้อยกว่า 10 GB หรือไม่ ล้างแล้วรีสตาร์ต ถ้ายังไม่ได้ให้เก็บ log ส่งให้ผู้ผลิต ที่มา: โปรเจกต์บำรุงรักษา 2026/07
 [FAQ-031 แจ้งเตือนไลเซนส์หมดอายุ] ปัญหา: ลูกค้าถามว่าจะได้รับแจ้งเตือนก่อนไลเซนส์หมดอายุนานเท่าไร คำตอบ: ระบบแสดงแจ้งเตือนในหน้าผู้ดูแล 30 วันก่อนหมดอายุ การต่ออายุให้ฝ่ายขายเสนอราคา ที่มา: คำถามจากลูกค้า 2026/08
@@ -436,7 +444,11 @@ const KB_LAB={
 [FAQ-040 ใบรับรองหมดอายุ] ปัญหา: เบราว์เซอร์ขึ้นว่าใบรับรองหมดอายุ ผู้ใช้เข้าสู่ระบบไม่ได้ วิธีแก้: ขอใบรับรองใหม่จากลูกค้า อัปเดตในหน้าผู้ดูแลระบบแล้วรีสตาร์ตเซอร์วิส ก่อนอัปเดตให้ตรวจว่ามีสายใบรับรองตัวกลางครบ ที่มา: โปรเจกต์บำรุงรักษา 2026/06
 [FAQ-044 ข้อมูลตามกำหนดเวลาไม่อัปเดต] ปัญหา: ข้อมูลแดชบอร์ดค้างที่วันก่อน วิธีแก้: ดูบันทึกงานตามกำหนดเวลาว่าล้มเหลวหรือไม่ สาเหตุที่พบบ่อยคือฐานข้อมูลต้นทางล็อกตารางระหว่างสำรองข้อมูล ให้เลื่อนเวลางานออกไป 1 ชั่วโมง ที่มา: คำถามจากลูกค้า 2026/09
 [FAQ-048 เพิ่มผู้ใช้] ปัญหา: ลูกค้าต้องการเพิ่มผู้ใช้ในระบบ วิธีทำ: ผู้ดูแลระบบของลูกค้าเพิ่มเองในหน้าผู้ดูแล หากไลเซนส์ไม่พอต้องซื้อเพิ่มก่อน โดยฝ่ายขายเสนอราคา ที่มา: คำถามจากลูกค้า 2026/10
-[FAQ-052 เวลาหยุดระบบเพื่ออัปเกรด] ปัญหา: ลูกค้าถามว่าอัปเกรดต้องหยุดระบบนานเท่าไร คำตอบ: ประมาณ 1–2 ชั่วโมง ขึ้นอยู่กับปริมาณข้อมูล ควรทำนอกเวลาทำงานและแจ้งผู้ใช้ล่วงหน้าหนึ่งสัปดาห์ ที่มา: โปรเจกต์อัปเกรด 2026/04`,
+[FAQ-052 เวลาหยุดระบบเพื่ออัปเกรด] ปัญหา: ลูกค้าถามว่าอัปเกรดต้องหยุดระบบนานเท่าไร คำตอบ: ประมาณ 1–2 ชั่วโมง ขึ้นอยู่กับปริมาณข้อมูล ควรทำนอกเวลาทำงานและแจ้งผู้ใช้ล่วงหน้าหนึ่งสัปดาห์ ที่มา: โปรเจกต์อัปเกรด 2026/04
+[FAQ-056 ไฟล์สำรองใหญ่เกินไป] ปัญหา: ไฟล์สำรองใหญ่จนดิสก์ใกล้เต็ม วิธีแก้: ลบไฟล์สำรองที่เก่ากว่า 30 วัน และย้ายโฟลเดอร์สำรองไปดิสก์ที่ใหญ่กว่า ก่อนลบให้เก็บไฟล์ล่าสุดไว้อย่างน้อย 3 ชุด ที่มา: โปรเจกต์บำรุงรักษา 2026/08
+[FAQ-060 ส่งอีเมลแจ้งเตือนไม่ได้] ปัญหา: อีเมลสมัครรับหรืออีเมลแจ้งเตือนของระบบส่งไม่ออก วิธีแก้: ตรวจว่าที่อยู่เซิร์ฟเวอร์ SMTP พอร์ต และบัญชีไม่ได้เปลี่ยน หากลูกค้าเปลี่ยนเมลเซิร์ฟเวอร์ ให้อัปเดตการตั้งค่าในหน้าผู้ดูแลแล้วส่งอีเมลทดสอบ ที่มา: โปรเจกต์บำรุงรักษา 2026/09
+[FAQ-064 แดชบอร์ดเปิดช้า] ปัญหา: ผู้ใช้แจ้งว่าแดชบอร์ดเปิดช้ามาก วิธีแก้: ตรวจก่อนว่าใช้การเชื่อมต่อแบบสดหรือไม่ ถ้าข้อมูลเยอะให้เปลี่ยนเป็น Extract พร้อมตั้งเวลารีเฟรช และลดจำนวนกราฟต่อหน้า ที่มา: คำถามจากลูกค้า 2026/10
+[FAQ-068 ปลั๊กอินใช้ไม่ได้หลังอัปเกรด] ปัญหา: ปลั๊กอินหรือส่วนขยายเดิมใช้ไม่ได้หลังอัปเกรด วิธีแก้: ตรวจว่าเวอร์ชันปลั๊กอินรองรับเวอร์ชันใหม่หรือไม่ ถ้าไม่รองรับให้ปิดไว้ก่อน แล้วติดต่อผู้ผลิตปลั๊กอินเพื่อขอเวอร์ชันที่รองรับ ที่มา: โปรเจกต์อัปเกรด 2026/07`,
   input:"หลังอัปเกรด เซอร์วิสของลูกค้าเริ่มทำงานไม่ได้ ควรตรวจอะไรก่อน",btn:"ถาม FAQ ของแผนก",prompt:KB_P.th,
   example:`ให้ตรวจก่อนว่าดิสก์ที่เก็บโฟลเดอร์ชั่วคราวเหลือพื้นที่น้อยกว่า 10 GB หรือไม่ ล้างแล้วรีสตาร์ตเซอร์วิส [FAQ-027] ถ้ายังเริ่มทำงานไม่ได้ ให้เก็บ log ส่งให้ผู้ผลิต [FAQ-027]`}};
 ZH.report.lab=RPT_LAB.zh;EN.report.lab=RPT_LAB.en;TH.report.lab=RPT_LAB.th;

@@ -588,7 +588,10 @@ const startHash=(window.__startHash||location.hash||"").slice(1);
 resize();
 let pct=0;const lt=$("loadPct");
 const fontsReady=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
-const quick=!!(window.I18N&&I18N.skipIntro);
+// coming back from a page the lab linked to (e.g. the AI Demo): skip the entrance and reopen the station the visitor left from
+const returnTo=(()=>{try{const r=JSON.parse(sessionStorage.getItem("ailab.ret")||"null");sessionStorage.removeItem("ailab.ret");
+  if(r&&Date.now()-r.t<6*3600e3&&(startHash==="return"||/vision\.html/.test(document.referrer||"")||(performance.getEntriesByType&&(performance.getEntriesByType("navigation")[0]||{}).type==="back_forward")))return r.id}catch(e){}return null})();
+const quick=!!(window.I18N&&I18N.skipIntro)||!!returnTo;
 const timer=setInterval(()=>{pct=Math.min(pct+Math.ceil(Math.random()*9),96);lt.textContent=pct+"%"},90);
 fontsReady.then(()=>new Promise(r=>setTimeout(r,quick?100:900))).then(()=>{
   {const c=signTex.image;drawLabSign(c.getContext("2d"),c.width,c.height);signTex.needsUpdate=true;if(nameDraw>=1)paintName(1)}
@@ -596,11 +599,12 @@ fontsReady.then(()=>new Promise(r=>setTimeout(r,quick?100:900))).then(()=>{
   for(const id in labelMeshes){const old=labelMeshes[id];const st=ST.find(x=>x.id===id);const lab=makeSign(st);Rg.remove(old);old.children.forEach(c=>{const k=pickables.indexOf(c);if(k>=0)pickables.splice(k,1)});lab.children.forEach(c=>pickables.push(c));Rg.add(lab);labelMeshes[id]=lab}
   clearInterval(timer);lt.textContent="100%";$("loadMsg").textContent=tt("ld.done");
   setTimeout(()=>{$("loader").classList.add("hide");mode="entrance";$("entryUI").classList.remove("hide");setStage();nameDrawT=1;document.body.classList.add("focus-in");setTimeout(()=>document.body.classList.add("focused"),60);if(!reduce){const v=views.entrance();cam.position.copy(v.pos.clone().add(new T.Vector3(1.5,2.2,10)));look.copy(v.look);cam.fov=v.fov+8;camT=1;flyTo(v,2.6)}
-    if(startHash&&startHash!=="room"){pending=startHash;}
+    if(returnTo){pending=ST.some(s=>s.id===returnTo)?returnTo:null;enterRoom(true)}
+    else if(startHash&&startHash!=="room"&&startHash!=="return"){pending=startHash;}
     // never auto-enter: a topic in the URL is only remembered, the visitor still opens the door themselves
     try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
   },500);
   requestAnimationFrame(frame);
 });
-window.__lab={openStation,enterRoom,ST,cam,stationView,get camT(){return camT},get mode(){return mode}};
+window.__lab={openStation,enterRoom,ST,cam,stationView,get active(){return active},get camT(){return camT},get mode(){return mode}};
 })();

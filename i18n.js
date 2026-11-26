@@ -113,7 +113,7 @@ const D={
 "lab.gov":{zh:"去識別化實驗台",en:"De-identification bench",th:"สถานีปกปิดข้อมูลส่วนบุคคล"},
 "lab.fuzzy":{zh:"模糊比對實驗台",en:"Fuzzy-matching bench",th:"สถานีจับคู่แบบคลุมเครือ"},
 "lab.projects":{zh:"作品清單",en:"Projects",th:"รายการผลงาน"},
-"lab.docs":{zh:"查看部門 FAQ 記錄（8 筆模擬資料）",en:"View the department FAQ records (8 mock records)",th:"ดูเอกสารคลังความรู้ (SOP จำลอง 3 ฉบับ)"},
+"lab.docs":{zh:"查看部門 FAQ 記錄（12 筆模擬資料）",en:"View the department FAQ records (12 mock records)",th:"ดูบันทึก FAQ ของแผนก (ข้อมูลจำลอง 12 รายการ)"},
 "lab.question":{zh:"你的問題",en:"Your question",th:"คำถามของคุณ"},
 "lab.input":{zh:"輸入資料（可直接修改）",en:"Input (editable)",th:"ข้อมูลนำเข้า (แก้ไขได้)"},
 "lab.masked":{zh:"遮罩後（實際送給 AI 的內容）",en:"Masked (what is actually sent to AI)",th:"หลังปกปิด (สิ่งที่ส่งให้ AI จริง)"},

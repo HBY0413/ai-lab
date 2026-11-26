@@ -703,9 +703,10 @@ function simQ(a,b){const n=s=>s.toLowerCase().replace(/[\s\p{P}\p{S}]/gu,"");a=n
   const bg=s=>{const m=new Map();for(let i=0;i<s.length-1;i++){const k=s.slice(i,i+2);m.set(k,(m.get(k)||0)+1)}return m};
   const A=bg(a),B=bg(b);let inter=0;A.forEach((v,k)=>{inter+=Math.min(v,B.get(k)||0)});return 2*inter/(Math.max(1,a.length-1)+Math.max(1,b.length-1))}
 const STOPW=new Set("how what when where why who can could does do did is are was the a an to of in on for and or with i my we our you your get it this that be".split(" "));
-function qTokens(s){s=s.toLowerCase();const w=new Set(),c=new Set();(s.match(/[a-z0-9]+/g)||[]).forEach(x=>{if(x.length>=3&&!STOPW.has(x))w.add(x)});
+const FILLER=/怎麼辦|怎麼|如何|什麼|哪些|可以|是否|請問|需要|要|嗎|呢|吧|了|的|是|會|能|有/g;
+function qTokens(s){s=s.toLowerCase().replace(FILLER," ");const w=new Set(),c=new Set();(s.match(/[a-z0-9]+/g)||[]).forEach(x=>{if(x.length>=3&&!STOPW.has(x))w.add(x)});
   s.replace(/[a-z0-9\s\p{P}\p{S}]+/gu,"|").split("|").forEach(seg=>{if(!seg)return;const n=/[\u0E00-\u0E7F]/.test(seg)?3:2;if(seg.length<=n){c.add(seg);return}for(let i=0;i+n<=seg.length;i++)c.add(seg.slice(i,i+n))});return{w,c}}
-function coverQ(q,target){const Q=qTokens(q),tl=target.toLowerCase().replace(/[\s\p{P}\p{S}]/gu,""),TW=new Set(tl.length?(target.toLowerCase().match(/[a-z0-9]+/g)||[]):[]);
+function coverQ(q,target){const Q=qTokens(q),tl=target.toLowerCase().replace(FILLER,"").replace(/[\s\p{P}\p{S}]/gu,""),TW=new Set(tl.length?(target.toLowerCase().match(/[a-z0-9]+/g)||[]):[]);
   const tot=Q.w.size+Q.c.size;if(!tot)return 0;let hit=0;Q.w.forEach(k=>{if(TW.has(k))hit++});Q.c.forEach(k=>{if(tl.includes(k))hit++});return hit/tot}
 function bestQ(q,P){let best=null;P.forEach((p,i)=>{const s=Math.max(simQ(q,p.input),.85*coverQ(q,p.input));if(!best||s>best.s)best={i,s}});return best&&best.s>=.34?best:null}
 function buildLab(x,el){
@@ -1018,6 +1019,9 @@ function renderMask(raw){
   return `<p>${shown}</p><div class="hint" style="margin-top:6px">${I18N.t("gov.count",{n:map.length})}${map.map(m=>esc(m.c)).join(I18N.t("sep"))||I18N.t("gov.none")}${I18N.t("gov.local")}</div>`;
 }
 
+/* remember where the visitor was before following a link out of the lab, so coming back reopens that spot */
+document.addEventListener("click",ev=>{const a=ev.target.closest&&ev.target.closest('a[href^="vision.html"]');if(!a)return;
+  try{sessionStorage.setItem("ailab.ret",JSON.stringify({id:(window.__lab&&__lab.active)||"demos",t:Date.now()}))}catch(e){}},true);
 /* ---------- carousel ---------- */
 function initCarousel(){
   const slides=[...track.querySelectorAll(".slide")],tabs=document.getElementById("tabs"),dots=document.getElementById("dots");
