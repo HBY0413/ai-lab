@@ -602,7 +602,7 @@ let sample=null;
 const statusEl=document.getElementById("aiStatus");
 function setStatus(on){
   statusEl.classList.toggle("on",on);
-  statusEl.children[1].textContent=I18N.t(on?"status.on":"status.off");
+  statusEl.children[1].setAttribute("data-i18n",on?"status.on":"status.off");statusEl.children[1].textContent=I18N.t(on?"status.on":"status.off");
 }
 setStatus(false);
 (async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}setStatus(!!sample)})();
