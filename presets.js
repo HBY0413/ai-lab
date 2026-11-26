@@ -1351,3 +1351,252 @@ window.PRESETS.kb.items.push(
         en: "The department FAQ has no record of this yet. Please add the question to the FAQ list so the responsible colleague can write up a migration procedure.",
         th: "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้ แนะนำให้เพิ่มคำถามนี้ในรายการ FAQ เพื่อให้ผู้รับผิดชอบเขียนขั้นตอนการย้ายระบบ" }, none: true }
 );
+/* ---- batch 5 ---- */
+window.PRESETS.report.items.push(
+ { label: { zh: "協銷有取消的活動", en: "A cancelled presales activity", th: "มีกิจกรรม Presales ที่ยกเลิก" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶A,顧問服務&開發,72
+客戶B,顧問服務&開發,36
+客戶C,顧問服務&開發,20
+【協銷進度】客戶,活動,日期,狀態
+客戶D,POC 執行,2026-10-08,已取消
+客戶E,技術簡報,2026-10-21,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client A,Consulting & development,72
+Client B,Consulting & development,36
+Client C,Consulting & development,20
+[Presales tracker] Client,Activity,Date,Status
+Client D,POC run,2026-10-08,Cancelled
+Client E,Technical briefing,2026-10-21,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า A,ที่ปรึกษาและพัฒนา,72
+ลูกค้า B,ที่ปรึกษาและพัฒนา,36
+ลูกค้า C,ที่ปรึกษาและพัฒนา,20
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า D,ทำ POC,2026-10-08,ยกเลิก
+ลูกค้า E,บรรยายเทคนิค,2026-10-21,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶A | 72 | 9.0 |
+| 顧問服務&開發 | 客戶B | 36 | 4.5 |
+| 顧問服務&開發 | 客戶C | 20 | 2.5 |
+| 合計 | — | 128 | 16.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶D POC 執行（10/08，已取消）；客戶E 技術簡報（10/21，已完成）
+- **持續追蹤**：無
+#### 待主管確認
+- 客戶D 的 POC 執行狀態是「已取消」，請確認是否仍要列在月會報告中，或改列說明取消原因。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client A | 72 | 9.0 |
+| Consulting & development | Client B | 36 | 4.5 |
+| Consulting & development | Client C | 20 | 2.5 |
+| Total | — | 128 | 16.0 |
+#### Presales progress
+- **This month**: Client D POC run (10/08, cancelled); Client E technical briefing (10/21, done)
+- **Ongoing**: none
+#### For the manager to confirm
+- Client D's POC run is marked "cancelled"; please confirm whether it should still appear in the report or be listed with the reason for cancelling.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า A | 72 | 9.0 |
+| ที่ปรึกษาและพัฒนา | ลูกค้า B | 36 | 4.5 |
+| ที่ปรึกษาและพัฒนา | ลูกค้า C | 20 | 2.5 |
+| รวม | — | 128 | 16.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า D ทำ POC (10/08 ยกเลิก); ลูกค้า E บรรยายเทคนิค (10/21 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- ทำ POC ของลูกค้า D มีสถานะ "ยกเลิก" กรุณายืนยันว่ายังต้องแสดงในรายงานหรือไม่ หรือควรระบุเหตุผลที่ยกเลิก` } },
+
+ { label: { zh: "人天需要四捨五入", en: "Person-days need rounding", th: "แมนเดย์ต้องปัดเศษ" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶F,維護,10
+客戶G,教育訓練,6
+客戶H,顧問服務&開發,30
+【協銷進度】客戶,活動,日期,狀態
+客戶I,產品展示,2026-10-10,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client F,Maintenance,10
+Client G,Training,6
+Client H,Consulting & development,30
+[Presales tracker] Client,Activity,Date,Status
+Client I,Product demo,2026-10-10,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า F,บำรุงรักษา,10
+ลูกค้า G,ฝึกอบรม,6
+ลูกค้า H,ที่ปรึกษาและพัฒนา,30
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า I,สาธิตผลิตภัณฑ์,2026-10-10,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶H | 30 | 3.8 |
+| 維護 | 客戶F | 10 | 1.3 |
+| 教育訓練 | 客戶G | 6 | 0.8 |
+| 合計 | — | 46 | 5.8 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶I 產品展示（10/10，已完成）
+- **持續追蹤**：無
+#### 待主管確認
+- 人天依規則四捨五入到小數一位（3.75→3.8、1.25→1.3、0.75→0.8），各列相加是 5.9，和用總工時換算的合計 5.8 差 0.1；合計以總工時 46 小時換算為準。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client H | 30 | 3.8 |
+| Maintenance | Client F | 10 | 1.3 |
+| Training | Client G | 6 | 0.8 |
+| Total | — | 46 | 5.8 |
+#### Presales progress
+- **This month**: Client I product demo (10/10, done)
+- **Ongoing**: none
+#### For the manager to confirm
+- Person-days are rounded to one decimal per the rules (3.75→3.8, 1.25→1.3, 0.75→0.8). The rows add up to 5.9, 0.1 more than the total of 5.8 converted from all 46 hours; the total uses the 46 hours.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า H | 30 | 3.8 |
+| บำรุงรักษา | ลูกค้า F | 10 | 1.3 |
+| ฝึกอบรม | ลูกค้า G | 6 | 0.8 |
+| รวม | — | 46 | 5.8 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า I สาธิตผลิตภัณฑ์ (10/10 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- แมนเดย์ปัดเป็นทศนิยมหนึ่งตำแหน่งตามกฎ (3.75→3.8, 1.25→1.3, 0.75→0.8) ผลรวมของแต่ละแถวคือ 5.9 มากกว่ายอดรวม 5.8 ที่คำนวณจากชั่วโมงทั้งหมด 46 ชั่วโมงอยู่ 0.1 ยอดรวมใช้ค่าจาก 46 ชั่วโมง` } }
+);
+
+window.PRESETS.cases.items.push(
+ { label: { zh: "規則上線後問題消失", en: "The issue stopped after a rule", th: "ปัญหาหายไปหลังมีกฎ" },
+   input: {
+    zh: `K01 客戶甲 2026-01 Tableau 升級：授權寫成「10C/5E」
+K02 客戶乙 2026-02 Tableau 升級：授權寫成「Core 10 / Explorer 5」
+K03 客戶丙 2026-03 保養健檢：（本月起套用授權固定句型）沒有授權問題
+K04 客戶丁 2026-06 Tableau 升級：沒有授權問題
+K05 客戶戊 2026-09 保養健檢：沒有授權問題`,
+    en: `K01 Client A 2026-01 Tableau upgrade: licence written as "10C/5E"
+K02 Client B 2026-02 Tableau upgrade: licence written as "Core 10 / Explorer 5"
+K03 Client C 2026-03 health check: (fixed licence pattern applied from this month) no licence issue
+K04 Client D 2026-06 Tableau upgrade: no licence issue
+K05 Client E 2026-09 health check: no licence issue`,
+    th: `K01 ลูกค้า A 2026-01 อัปเกรด Tableau: เขียนสิทธิ์ใช้งานว่า "10C/5E"
+K02 ลูกค้า B 2026-02 อัปเกรด Tableau: เขียนสิทธิ์ใช้งานว่า "Core 10 / Explorer 5"
+K03 ลูกค้า C 2026-03 ตรวจสุขภาพระบบ: (เริ่มใช้รูปแบบประโยคไลเซนส์ตายตัวเดือนนี้) ไม่มีปัญหาไลเซนส์
+K04 ลูกค้า D 2026-06 อัปเกรด Tableau: ไม่มีปัญหาไลเซนส์
+K05 ลูกค้า E 2026-09 ตรวจสุขภาพระบบ: ไม่มีปัญหาไลเซนส์` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 授權寫法不一致 | K01、K02 | 2 | 已涵蓋（授權固定句型）；兩次都發生在 2026-03 套用句型之前，之後 K03～K05 都沒有再發生 |
+#### 值得考慮寫進規則
+- 授權固定句型看起來有效，不需要新增規則；建議下次回顧時繼續觀察。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Inconsistent licence wording | K01, K02 | 2 | Covered (fixed licence pattern); both happened before the pattern was applied in 2026-03, and K03–K05 had no recurrence |
+#### Worth adding to the rules
+- The fixed licence pattern appears to be working; no new rule is needed. Keep watching at the next review.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| เขียนสิทธิ์ใช้งานไม่เหมือนกัน | K01, K02 | 2 | ครอบคลุมแล้ว (รูปแบบประโยคไลเซนส์ตายตัว) ทั้งสองครั้งเกิดก่อนเริ่มใช้รูปแบบในเดือน 2026-03 และ K03–K05 ไม่เกิดอีก |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- รูปแบบประโยคไลเซนส์ดูได้ผล ไม่ต้องเพิ่มกฎใหม่ ให้ติดตามต่อในการทบทวนครั้งหน้า
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } },
+
+ { label: { zh: "大綱頁碼對不上", en: "Outline page numbers don't match", th: "เลขหน้าในสารบัญไม่ตรง" },
+   input: {
+    zh: `L01 客戶甲 2026-04 Tableau 升級：細項大綱的頁碼和實際頁數對不上
+L02 客戶乙 2026-05 保養健檢：細項大綱的頁碼和實際頁數對不上
+L03 客戶丙 2026-07 Tableau 升級：細項大綱的頁碼和實際頁數對不上
+L04 客戶丁 2026-09 保養健檢：返回大綱箭頭蓋到標題`,
+    en: `L01 Client A 2026-04 Tableau upgrade: page numbers in the detailed outline don't match the actual pages
+L02 Client B 2026-05 health check: page numbers in the detailed outline don't match the actual pages
+L03 Client C 2026-07 Tableau upgrade: page numbers in the detailed outline don't match the actual pages
+L04 Client D 2026-09 health check: back-to-contents arrow overlaps the title`,
+    th: `L01 ลูกค้า A 2026-04 อัปเกรด Tableau: เลขหน้าในสารบัญรายละเอียดไม่ตรงกับหน้าจริง
+L02 ลูกค้า B 2026-05 ตรวจสุขภาพระบบ: เลขหน้าในสารบัญรายละเอียดไม่ตรงกับหน้าจริง
+L03 ลูกค้า C 2026-07 อัปเกรด Tableau: เลขหน้าในสารบัญรายละเอียดไม่ตรงกับหน้าจริง
+L04 ลูกค้า D 2026-09 ตรวจสุขภาพระบบ: ลูกศรกลับสารบัญทับหัวข้อ` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 細項大綱頁碼和實際頁數對不上 | L01、L02、L03 | 3 | 部分涵蓋（細項大綱預設必要，但節錄中未見頁碼檢查）；升級與保養案都有發生 |
+| 返回大綱箭頭蓋到標題 | L04 | 1 | 已涵蓋（已記錄的陷阱）；單次，不算模式 |
+#### 值得考慮寫進規則
+- 產出的最後一步自動更新細項大綱的頁碼，並和實際頁數比對，不一致就提醒使用者。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Outline page numbers don't match the actual pages | L01, L02, L03 | 3 | Partly covered (the detailed outline is required by default, but the excerpt has no page-number check); happens in both upgrades and health checks |
+| Back-to-contents arrow overlaps the title | L04 | 1 | Covered (recorded pitfall); single case, not a pattern |
+#### Worth adding to the rules
+- As the last step of output, automatically refresh the outline's page numbers and compare them with the actual pages, alerting the user if they differ.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| เลขหน้าในสารบัญรายละเอียดไม่ตรงกับหน้าจริง | L01, L02, L03 | 3 | ครอบคลุมบางส่วน (สารบัญรายละเอียดจำเป็นโดยค่าเริ่มต้น แต่ไม่พบการตรวจเลขหน้าในข้อความที่ยกมา) เกิดทั้งงานอัปเกรดและงานตรวจสุขภาพ |
+| ลูกศรกลับสารบัญทับหัวข้อ | L04 | 1 | ครอบคลุมแล้ว (บันทึกเป็นข้อควรระวัง) ครั้งเดียว ไม่นับเป็นรูปแบบ |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- ขั้นตอนสุดท้ายของการส่งออก ให้อัปเดตเลขหน้าในสารบัญรายละเอียดอัตโนมัติและเทียบกับหน้าจริง ถ้าไม่ตรงให้แจ้งผู้ใช้
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } }
+);
+
+window.PRESETS.gov.items.push(
+ { label: { zh: "要求刪除個資", en: "Personal data deletion request", th: "ขอให้ลบข้อมูลส่วนบุคคล" },
+   input: {
+    zh: `依個資法，永盛貿易股份有限公司的鄭雅文小姐要求刪除她在系統中的個人資料。
+她的身分證字號是 C223344556，聯絡信箱 yawen.cheng@example.com，請於 14 天內回覆處理結果。`,
+    en: `Under data-protection law, Ms. Grace Cheng from Yongsheng Trading Co., Ltd. asks us to delete her personal data from the system.
+Her ID is C223344556 and her email is grace.cheng@example.com. Please reply with the outcome within 14 days.`,
+    th: `คุณมาลี ศรีวงศ์ จากบริษัท หย่งเซิงเทรดดิ้ง จำกัด ขอให้ลบข้อมูลส่วนบุคคลของเธอออกจากระบบตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล
+เลขประจำตัว 3-4455-66778-89-0 อีเมล malee.s@example.com กรุณาแจ้งผลภายใน 14 วัน` },
+   output: {
+    zh: `- 問題：〔客戶A〕的〔人員A〕依個資法要求刪除她在系統中的個人資料。
+- 期限：14 天內回覆處理結果。
+- 下一步：先以〔身分證A〕確認申請人身分，依公司的個資刪除流程處理並留下紀錄，完成後透過〔Email A〕回覆。`,
+    en: `- Issue: [Person A] from [Client A] asks, under data-protection law, for her personal data to be deleted from the system.
+- Deadline: reply with the outcome within 14 days.
+- Next step: verify the requester's identity with [ID A], follow the company's personal-data deletion process and keep a record, then reply via [Email A].`,
+    th: `- ปัญหา: [บุคคล A] จาก [ลูกค้า A] ขอให้ลบข้อมูลส่วนบุคคลของเธอออกจากระบบตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล
+- กำหนดเวลา: แจ้งผลภายใน 14 วัน
+- ขั้นตอนถัดไป: ยืนยันตัวตนผู้ขอด้วย [เลขบัตร A] ดำเนินการตามขั้นตอนลบข้อมูลส่วนบุคคลของบริษัทพร้อมเก็บบันทึก แล้วตอบกลับทาง [อีเมล A]` } },
+
+ { label: { zh: "合作夥伴轉介新客戶", en: "Partner referral", th: "พาร์ตเนอร์แนะนำลูกค้าใหม่" },
+   input: {
+    zh: `我們的合作夥伴：宏圖整合有限公司，介紹了新客戶光明食品股份有限公司，窗口是孫立人經理，手機 0966-111-222。
+希望下週安排一次產品說明會。`,
+    en: `Our partner Hongtu Integration Ltd. referred a new client, Guangming Foods Co., Ltd. The contact is Mr. Leo Sun, mobile 0966-111-222.
+They'd like a product briefing next week.`,
+    th: `พาร์ตเนอร์ของเรา บริษัท หงถูอินทิเกรชัน จำกัด แนะนำลูกค้าใหม่ บริษัท กวงหมิงฟู้ดส์ จำกัด ผู้ติดต่อคือคุณสมศักดิ์ ใจเย็น โทร 096-111-2222
+อยากนัดบรรยายผลิตภัณฑ์สัปดาห์หน้า` },
+   output: {
+    zh: `- 問題：合作夥伴〔客戶A〕介紹新客戶〔客戶B〕，對方希望下週安排產品說明會。
+- 期限：下週。
+- 下一步：透過〔電話A〕聯絡〔客戶B〕的窗口〔人員A〕，確認說明會的時間與參加人數，並把安排結果告知〔客戶A〕。`,
+    en: `- Issue: partner [Client A] referred a new client, [Client B], who would like a product briefing next week.
+- Deadline: next week.
+- Next step: contact [Person A] at [Client B] via [Phone A] to confirm the time and number of attendees, then let [Client A] know the arrangement.`,
+    th: `- ปัญหา: พาร์ตเนอร์ [ลูกค้า A] แนะนำลูกค้าใหม่ [ลูกค้า B] ซึ่งอยากนัดบรรยายผลิตภัณฑ์สัปดาห์หน้า
+- กำหนดเวลา: สัปดาห์หน้า
+- ขั้นตอนถัดไป: ติดต่อ [บุคคล A] ของ [ลูกค้า B] ทาง [โทรศัพท์ A] เพื่อยืนยันเวลาและจำนวนผู้เข้าร่วม แล้วแจ้งผลการนัดหมายให้ [ลูกค้า A] ทราบ` } }
+);

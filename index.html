@@ -645,16 +645,20 @@ function labShell(el,title){el.innerHTML=`<div class="lab-bar"><span>${title}</s
 const SHOTS=[
   {src:"ev/shot-cpu.jpg",ex:{
     zh:{screen:"Windows 工作管理員・效能頁",item:"主機檢查・伺服器資源",title:"主機檢查 - 伺服器資源工作管理員",bullets:["C 槽：100 GB","D 槽：500 GB","CPU：16 cores","RAM：128 GB"],warnings:[]},
-    en:{screen:"Windows Task Manager, Performance tab",item:"Host check · server resources",title:"Host check - server resources (Task Manager)",bullets:["C drive: 100 GB","D drive: 500 GB","CPU: 16 cores","RAM: 128 GB"],warnings:[]}}},
+    en:{screen:"Windows Task Manager, Performance tab",item:"Host check · server resources",title:"Host check - server resources (Task Manager)",bullets:["C drive: 100 GB","D drive: 500 GB","CPU: 16 cores","RAM: 128 GB"],warnings:[]},
+    th:{screen:"Windows Task Manager แท็บประสิทธิภาพ",item:"ตรวจเครื่อง · ทรัพยากรเซิร์ฟเวอร์",title:"ตรวจเครื่อง - ทรัพยากรเซิร์ฟเวอร์ (Task Manager)",bullets:["ไดรฟ์ C: 100 GB","ไดรฟ์ D: 500 GB","CPU: 16 คอร์","RAM: 128 GB"],warnings:[]}}},
   {src:"ev/shot-ver.jpg",ex:{
     zh:{screen:"「關於 OO Server」視窗",item:"主機檢查・應用程式版本",title:"主機檢查 - 應用程式版本",bullets:["目前安裝程式版本：OO Server 2024.5"],warnings:["畫面顯示 2024.5，是升級後的版本；如果這張要放在「升級前環境檢查」，版本應該是舊版，請確認截圖時間點。"]},
-    en:{screen:"About OO Server dialog",item:"Host check · application version",title:"Host check - application version",bullets:["Installed version: OO Server 2024.5"],warnings:["The screen shows 2024.5, the post-upgrade version. If this belongs in the pre-upgrade check, it should show the old version; please confirm when it was taken."]}}},
+    en:{screen:"About OO Server dialog",item:"Host check · application version",title:"Host check - application version",bullets:["Installed version: OO Server 2024.5"],warnings:["The screen shows 2024.5, the post-upgrade version. If this belongs in the pre-upgrade check, it should show the old version; please confirm when it was taken."]},
+    th:{screen:"หน้าต่าง About OO Server",item:"ตรวจเครื่อง · เวอร์ชันแอปพลิเคชัน",title:"ตรวจเครื่อง - เวอร์ชันแอปพลิเคชัน",bullets:["เวอร์ชันที่ติดตั้ง: OO Server 2024.5"],warnings:["หน้าจอแสดง 2024.5 ซึ่งเป็นเวอร์ชันหลังอัปเกรด ถ้าภาพนี้อยู่ในส่วนตรวจก่อนอัปเกรด ควรเป็นเวอร์ชันเดิม กรุณายืนยันว่าถ่ายไว้ตอนไหน"]}}},
   {src:"ev/shot-bak.jpg",ex:{
     zh:{screen:"命令提示字元・執行維護備份指令",item:"升級前・備份",title:"升級前 - 備份",bullets:["以系統管理者身分執行備份指令","備份完成（100%），備份檔寫入 D 槽"],warnings:["視窗標題是系統管理員命令提示字元，但跟以往範本的 TSM 備份畫面不同（範本用 tsm maintenance backup 的輸出頁），請確認備份方式是否一致。"]},
-    en:{screen:"Command prompt running the maintenance backup",item:"Pre-upgrade · backup",title:"Pre-upgrade - backup",bullets:["Ran the backup command as administrator","Backup completed (100%), file written to D:"],warnings:["This differs from the backup screen in past templates (tsm maintenance backup output); please confirm the backup method is the same."]}}},
+    en:{screen:"Command prompt running the maintenance backup",item:"Pre-upgrade · backup",title:"Pre-upgrade - backup",bullets:["Ran the backup command as administrator","Backup completed (100%), file written to D:"],warnings:["This differs from the backup screen in past templates (tsm maintenance backup output); please confirm the backup method is the same."]},
+    th:{screen:"Command Prompt กำลังรันคำสั่งสำรองข้อมูล",item:"ก่อนอัปเกรด · สำรองข้อมูล",title:"ก่อนอัปเกรด - สำรองข้อมูล",bullets:["รันคำสั่งสำรองข้อมูลด้วยสิทธิ์ผู้ดูแลระบบ","สำรองข้อมูลเสร็จ (100%) เขียนไฟล์ไว้ที่ไดรฟ์ D"],warnings:["หน้าจอนี้ต่างจากหน้าจอสำรองข้อมูลในเทมเพลตเดิม (ผลลัพธ์ของ tsm maintenance backup) กรุณายืนยันว่าใช้วิธีสำรองข้อมูลแบบเดียวกัน"]}}},
   {src:"ev/shot-cut.jpg",ex:{
     zh:{screen:"Windows 工作管理員・效能頁（不完整）",item:"主機檢查・伺服器資源",title:"主機檢查 - 伺服器資源工作管理員",bullets:["C 槽：100 GB","D 槽：500 GB","CPU：16 cores","RAM：128 GB"],warnings:["截圖沒截完整：右側與下方的使用率、速度、核心數區塊被切掉，核心數只能從左側摘要讀到。建議重截完整視窗。","畫面比範本小很多，放進簡報後文字可能看不清楚。"]},
-    en:{screen:"Windows Task Manager, Performance tab (incomplete)",item:"Host check · server resources",title:"Host check - server resources (Task Manager)",bullets:["C drive: 100 GB","D drive: 500 GB","CPU: 16 cores","RAM: 128 GB"],warnings:["The screenshot is cut off: the usage, speed and core-count panel on the right and bottom is missing, so cores were read from the side summary only. Please recapture the full window.","It is much smaller than the template shots, so text may be hard to read in the deck."]}}}
+    en:{screen:"Windows Task Manager, Performance tab (incomplete)",item:"Host check · server resources",title:"Host check - server resources (Task Manager)",bullets:["C drive: 100 GB","D drive: 500 GB","CPU: 16 cores","RAM: 128 GB"],warnings:["The screenshot is cut off: the usage, speed and core-count panel on the right and bottom is missing, so cores were read from the side summary only. Please recapture the full window.","It is much smaller than the template shots, so text may be hard to read in the deck."]},
+    th:{screen:"Windows Task Manager แท็บประสิทธิภาพ (ไม่ครบ)",item:"ตรวจเครื่อง · ทรัพยากรเซิร์ฟเวอร์",title:"ตรวจเครื่อง - ทรัพยากรเซิร์ฟเวอร์ (Task Manager)",bullets:["ไดรฟ์ C: 100 GB","ไดรฟ์ D: 500 GB","CPU: 16 คอร์","RAM: 128 GB"],warnings:["ภาพหน้าจอถูกตัด ส่วนการใช้งาน ความเร็ว และจำนวนคอร์ด้านขวาและด้านล่างหายไป จึงอ่านจำนวนคอร์ได้จากสรุปด้านข้างเท่านั้น กรุณาถ่ายหน้าต่างใหม่ให้ครบ","ภาพเล็กกว่าภาพในเทมเพลตมาก ข้อความในสไลด์อาจอ่านยาก"]}}}
 ];
 function slideHTML(img,d,no){
   const w=d.warnings&&d.warnings.length;
@@ -680,7 +684,7 @@ function buildShots(x,b){
   const out=b.querySelector(".out"),note=b.querySelector(".note");
   const cur=()=>upload?upURL:SHOTS[sel].src;
   const example=()=>{if(upload){note.textContent=I18N.t("sh.noex");out.innerHTML=`<div class="shotview"><img src="${upURL}" alt=""></div>`;return}
-    const e=SHOTS[sel].ex;out.innerHTML=resultHTML(cur(),I18N.lang==="zh"?e.zh:e.en,false)};
+    const e=SHOTS[sel].ex;out.innerHTML=resultHTML(cur(),e[I18N.lang]||e.en,false)};
   b.querySelectorAll(".shotpick button").forEach(bt=>bt.addEventListener("click",()=>{upload=null;sel=+bt.dataset.i;b.querySelectorAll(".shotpick button,.shotpick .up").forEach(z=>z.classList.remove("on"));bt.classList.add("on");note.textContent="";example()}));
   b.querySelector(".up input").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;upload=f;upURL=URL.createObjectURL(f);b.querySelectorAll(".shotpick button").forEach(z=>z.classList.remove("on"));b.querySelector(".up").classList.add("on");note.textContent="";out.innerHTML=`<div class="shotview"><img src="${upURL}" alt=""></div>`});
   b.querySelector(".exb").addEventListener("click",example);
