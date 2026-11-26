@@ -32,7 +32,12 @@ renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;rende
 renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
 stage.appendChild(renderer.domElement);
 const cv=renderer.domElement;
-const scene=new T.Scene();scene.background=new T.Color(0x0B0C0E);scene.fog=new T.Fog(0x0B0C0E,22,48);
+// light overlay layer for the drifting dust: redrawing ~170 points is nearly free, so the heavy scene below can idle slowly
+const fx=new T.WebGLRenderer({alpha:true,antialias:false});fx.setPixelRatio(Math.min(1.5,window.devicePixelRatio||1));fx.setClearColor(0x000000,0);
+fx.outputEncoding=T.sRGBEncoding;fx.toneMapping=T.ACESFilmicToneMapping;fx.toneMappingExposure=1.15;
+Object.assign(fx.domElement.style,{position:"absolute",inset:"0",pointerEvents:"none"});fx.domElement.setAttribute("aria-hidden","true");stage.appendChild(fx.domElement);
+const fxScene=new T.Scene();
+const scene=new T.Scene();scene.background=new T.Color(0x0B0C0E);scene.fog=new T.Fog(0x0B0C0E,22,48);fxScene.fog=scene.fog;
 const cam=new T.PerspectiveCamera(34,1,.1,200);
 
 /* ---------------- helpers ---------------- */
@@ -424,7 +429,7 @@ cv.addEventListener("pointerup",e=>{
 cv.addEventListener("pointerleave",()=>{tip.style.display="none"});
 
 /* resize */
-function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();if(camT>=1){const v=mode==="entrance"||mode==="loading"?views.entrance():active?stationView(active):views.room();cam.position.copy(v.pos);look.copy(v.look);cam.fov=v.fov;camTo=v}}
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);fx.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();if(camT>=1){const v=mode==="entrance"||mode==="loading"?views.entrance():active?stationView(active):views.room();cam.position.copy(v.pos);look.copy(v.look);cam.fov=v.fov;camTo=v}}
 addEventListener("resize",resize);
 
 /* clock */
@@ -436,7 +441,7 @@ function placeBadge(){const p=new T.Vector3(-60,2.5,.4).project(cam);const b=$("
 
 /* ================= loop ================= */
 let doorOpen=0,doorAmt=0,last=performance.now(),tm=0;
-let lastRender=0,lastFov=0,lastDoor=-1,lastHoverR=null,signsMoving=false;const lastCam=new T.Vector3(),lastLook=new T.Vector3();
+let fxDue=true,lastDust=performance.now(),lastRender=0,lastFov=0,lastDoor=-1,lastHoverR=null,signsMoving=false;const lastCam=new T.Vector3(),lastLook=new T.Vector3();
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 function frame(now){
   const dt=Math.min(.05,(now-last)/1000);last=now;tm+=dt;
@@ -473,9 +478,13 @@ function frame(now){
   const busy=camMoved||doorMoving||mode!=="room"&&mode!=="entrance"||now<fadeUntil||down||hover!==lastHoverR||(nameDraw>0&&nameDraw<1)||signsMoving;
   const gap=busy?0:(document.body.classList.contains("popen")?120:66);
   if(now-lastRender>=gap){
-    if(!reduce&&now-lastRender>=66){driftDust(dustRoom,(now-lastRender)/1000);driftDust(dustDoor,(now-lastRender)/1000)}
     if(doorMoving)renderer.shadowMap.needsUpdate=true;
-    renderer.render(scene,cam);lastRender=now;lastCam.copy(camPos);lastLook.copy(look);lastFov=cam.fov;lastDoor=doorAmt;lastHoverR=hover;
+    renderer.render(scene,cam);lastRender=now;fxDue=true;lastCam.copy(camPos);lastLook.copy(look);lastFov=cam.fov;lastDoor=doorAmt;lastHoverR=hover;
+  }
+  // dust layer: 30 fps on its own, and in lockstep with the scene whenever the scene redraws
+  if(fxDue||(!reduce&&now-lastDust>=33)){
+    if(!reduce){const dd=Math.min(.1,(now-lastDust)/1000);driftDust(dustRoom,dd);driftDust(dustDoor,dd)}
+    lastDust=now;fxDue=false;fx.render(fxScene,cam);
   }
   cam.position.copy(realPos);
   requestAnimationFrame(frame);
@@ -532,8 +541,9 @@ function entranceScrub(dt){
   if(enterP>.965)finishEnter();
 }
 // 3) dust motes drifting in the light
+const DUST_K=Math.min(2,window.devicePixelRatio||1)/Math.min(1.5,window.devicePixelRatio||1);
 function dust(n,box,color){const g=new T.BufferGeometry(),p=new Float32Array(n*3),sd=new Float32Array(n);for(let i=0;i<n;i++){p[i*3]=box[0]+Math.random()*box[3];p[i*3+1]=box[1]+Math.random()*box[4];p[i*3+2]=box[2]+Math.random()*box[5];sd[i]=Math.random()*6.28}
-  g.setAttribute("position",new T.BufferAttribute(p,3));const m=new T.Points(g,new T.PointsMaterial({color,size:.028,transparent:true,opacity:.32,depthWrite:false,blending:T.AdditiveBlending}));m.userData={box,sd};scene.add(m);return m}
+  g.setAttribute("position",new T.BufferAttribute(p,3));const m=new T.Points(g,new T.PointsMaterial({color,size:.028*DUST_K,transparent:true,opacity:.32,depthWrite:false,blending:T.AdditiveBlending}));m.userData={box,sd};fxScene.add(m);return m}
 const dustRoom=dust(110,[.3,.2,.3,10,5.6,10],0xFFE7C8),dustDoor=dust(60,[-69,.2,.5,18,9,9],0xFFF1DE);
 function driftDust(d,dt){const a=d.geometry.attributes.position,b=d.userData.box,sd=d.userData.sd;for(let i=0;i<a.count;i++){let y=a.getY(i)+dt*.08,x=a.getX(i)+Math.sin(tm*.3+sd[i])*dt*.05;if(y>b[1]+b[4])y=b[1];a.setXY(i,x,y)}a.needsUpdate=true}
 // 4) signs lift toward the viewer on hover
