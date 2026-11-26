@@ -20,7 +20,6 @@ const ST=[ // order = experiment number. Front row (floor, nearest the viewer) h
   {id:"gov",label:"資料治理",nav:"治理",kind:"wallA",pos:[0,0,2.4],labelAt:[0.03,4.55,2.4]},
   {id:"build",label:"AI 協作",nav:"作品",kind:"wallB",pos:[2.1,0,0],labelAt:[2.1,4.55,0.03]},
   {id:"ocr",label:"OCR 辨識",nav:"OCR",kind:"wallB",pos:[5.6,0,0],labelAt:[5.6,4.75,0.03]},
-  {id:"site",label:"作品集網站",nav:"網站",kind:"floor",signY:2.75,pos:[8.9,0,6.7],labelAt:[9.4,0.02,7.6],labelR:1.6},
   {id:"demos",label:"AI 檢測 DEMO",nav:"AI Demo",kind:"wallB",pos:[8.6,0,0],labelAt:[8.6,4.55,0.03]}
 ];
 const tt=(k,v)=>window.I18N?I18N.t(k,v):k;

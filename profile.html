@@ -128,7 +128,6 @@ const ROWS={
      ["cases","AI 歷史案子學習稽核","同樣的錯誤反覆發生，經驗沒變成規則","跨客戶找出重複模式，規則由人決定"],
      ["maint","AI 產出檔案存放規範","AI 產出散落、命名不一、分不出是否 AI 生成","單一出口、統一命名、不覆蓋"],
      ["ocr","AI 協作開發的國際服道具辨識工具","亞洲玩家看不懂英文道具，拼錯就查不到","打字或掃描畫面都能查到中文資料"],
-     ["site","這個作品集網站本身","作品集只有截圖文字，看不出是否真的做過","可走進去、親手操作的產品，迭代 57 版上線"],
      ["build","用 AI 開發的其他作品","想法多但沒有工程團隊","7 個 GitHub 專案（3D、網頁、音效）"]],
  en:[["manual","AI upgrade/maintenance record deck generator","Engineers return with only screenshots, then spend a day recalling what each one showed and retyping it","1 day → 30 min"],
      ["report","AI monthly department report generator","Pulling data, counting person-days and building slides by hand every month","17-slide monthly deck: half a day → 15 min + audit workbook"],
@@ -137,7 +136,6 @@ const ROWS={
      ["cases","AI learning audit of past projects","The same mistakes kept recurring and never became rules","Recurring patterns found across clients; people decide the rules"],
      ["maint","AI output filing rules","AI outputs scattered, inconsistently named, AI-made files indistinguishable","One output location, one naming rule, no overwrites"],
      ["ocr","AI-built item finder for international game servers","Asian players couldn't read English items; one typo and search failed","Type or scan the screen to get item details in Chinese"],
-     ["site","This portfolio website itself","Screenshots and text can't prove you built it","A product you can walk into and use, 57 versions to launch"],
      ["build","Other projects built with AI","Plenty of ideas, no engineering team","7 GitHub projects (3D, web, audio)"]],
  th:[["manual","ตัวสร้างสไลด์บันทึกอัปเกรด/บำรุงรักษาด้วย AI","กลับมาพร้อมภาพหน้าจออย่างเดียว ต้องนึกว่าแต่ละภาพทำอะไรแล้วพิมพ์ใหม่ ใช้เวลาทั้งวัน","1 วัน → 30 นาที"],
      ["report","ตัวสร้างรายงานประชุมประจำเดือนด้วย AI","ต้องดึงข้อมูล คำนวณ man-day และทำสไลด์เองทุกเดือน","สไลด์รายงาน 17 หน้า: ครึ่งวัน → 15 นาที + Excel ตรวจสอบ"],
@@ -146,7 +144,6 @@ const ROWS={
      ["cases","AI ตรวจสอบเพื่อเรียนรู้จากโปรเจกต์ในอดีต","ความผิดพลาดเดิมเกิดซ้ำและไม่กลายเป็นกฎ","พบรูปแบบซ้ำข้ามลูกค้า ให้คนตัดสินใจเรื่องกฎ"],
      ["maint","กฎการจัดเก็บไฟล์ที่สร้างด้วย AI","ไฟล์ AI กระจัดกระจาย ชื่อไม่เหมือนกัน แยกไม่ออกว่า AI สร้าง","จุดจัดเก็บเดียว ตั้งชื่อแบบเดียว ไม่เขียนทับ"],
      ["ocr","ตัวช่วยค้นหาไอเท็มเซิร์ฟเวอร์อินเตอร์ที่พัฒนาด้วย AI","ผู้เล่นเอเชียอ่านไอเท็มภาษาอังกฤษไม่ออก พิมพ์ผิดก็ค้นไม่เจอ","พิมพ์หรือสแกนหน้าจอเพื่อดูข้อมูลภาษาจีน"],
-     ["site","เว็บไซต์พอร์ตโฟลิโอนี้เอง","ภาพหน้าจอและข้อความพิสูจน์ไม่ได้ว่าทำจริง","ผลิตภัณฑ์ที่เดินเข้าไปและลองใช้ได้ 57 เวอร์ชันจนเปิดใช้"],
      ["build","ผลงานอื่นที่พัฒนาด้วย AI","มีไอเดียมากแต่ไม่มีทีมวิศวกร","7 โปรเจกต์บน GitHub (3D, เว็บ, เสียง)"]]
 };
 const TL={
@@ -175,7 +172,7 @@ const pick=o=>o[L]||o.zh;
 document.querySelectorAll("[data-t]").forEach(el=>el.innerHTML=t(el.dataset.t));
 document.getElementById("chips").innerHTML=pick(T.chips).map(c=>`<span class="chip">${c}</span>`).join("");
 document.getElementById("tiles").innerHTML=pick(TILES).map(([a,b])=>`<div class="tile"><strong>${a}</strong><span>${b}</span></div>`).join("");
-document.getElementById("rows").innerHTML=pick(ROWS).slice().sort((a,b)=>["report","manual","kb","maint","cases","gov","build","ocr","site"].indexOf(a[0])-["report","manual","kb","maint","cases","gov","build","ocr","site"].indexOf(b[0])).map(([id,n,p,g],i)=>`<tr><td class="case"><small>${"EXP-0"+(["report","manual","kb","maint","cases","gov","build","ocr","site"].indexOf(id)+1)}</small><b>${n}</b></td><td>${p}</td><td class="gain">${g}</td><td class="ev"><a href="index.html#${id}">${t("ev")}</a></td></tr>`).join("");
+document.getElementById("rows").innerHTML=pick(ROWS).slice().sort((a,b)=>["report","manual","kb","maint","cases","gov","build","ocr"].indexOf(a[0])-["report","manual","kb","maint","cases","gov","build","ocr"].indexOf(b[0])).map(([id,n,p,g],i)=>`<tr><td class="case"><small>${"EXP-0"+(["report","manual","kb","maint","cases","gov","build","ocr"].indexOf(id)+1)}</small><b>${n}</b></td><td>${p}</td><td class="gain">${g}</td><td class="ev"><a href="index.html#${id}">${t("ev")}</a></td></tr>`).join("");
 document.getElementById("tl").innerHTML=pick(TL).map(([w,h,d])=>`<div class="it"><div class="when">${w}</div><div><b>${h}</b><p>${d}</p></div></div>`).join("");
 document.getElementById("cols").innerHTML=pick(COLS).map(([h,list])=>`<div class="col"><b>${h}</b><ul>${list.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("");
 document.getElementById("sw").innerHTML=I18N.switcher();

@@ -48,7 +48,7 @@ const D={
 "proj.open":{zh:"開啟網站",en:"Open live site",th:"เปิดเว็บไซต์"},
 "proj.see":{zh:"看實驗",en:"See the experiment",th:"ดูการทดลอง"},
 "card.n":{zh:"HB 的作品集",en:"HB · Portfolio",th:"พอร์ตโฟลิโอของ HB"},
-"card.p":{zh:"這份作品集收錄我做到上線的 AI Agent 產品、用 AI 開發的工具，也包括這個網站本身。每個案例都從痛點講起，附上實際產出的畫面；走進實驗室，就能親手操作。",en:"This portfolio collects the AI agent products I have shipped, tools I built with AI, and this website itself. Each case starts from the pain point and shows real output. Step into the lab to try them yourself.",th:"พอร์ตโฟลิโอนี้รวบรวมผลิตภัณฑ์ AI Agent ที่ผมพาไปถึงการใช้งานจริง เครื่องมือที่พัฒนาด้วย AI และเว็บไซต์นี้เอง ทุกเคสเริ่มจากปัญหาและแสดงผลลัพธ์จริง เดินเข้าห้องแล็บเพื่อทดลองใช้ได้ด้วยตัวเอง"},
+"card.p":{zh:"這份作品集收錄我做到上線的 AI Agent 產品、以及用 AI 開發的工具。每個案例都從痛點講起，附上實際產出的畫面；走進實驗室，就能親手操作。",en:"This portfolio collects the AI agent products I have shipped, and tools I built with AI. Each case starts from the pain point and shows real output. Step into the lab to try them yourself.",th:"พอร์ตโฟลิโอนี้รวบรวมผลิตภัณฑ์ AI Agent ที่ผมพาไปถึงการใช้งานจริง และเครื่องมือที่พัฒนาด้วย AI ทุกเคสเริ่มจากปัญหาและแสดงผลลัพธ์จริง เดินเข้าห้องแล็บเพื่อทดลองใช้ได้ด้วยตัวเอง"},
 "card.mk":{zh:"已實際上線・帶來的效益",en:"Live in production · real impact",th:"ใช้งานจริงแล้ว · ผลลัพธ์ที่ได้"},
 "ev.run":{zh:"執行過程",en:"How it runs",th:"ขั้นตอนการทำงาน"},
 "ev.runNote":{zh:"以模擬資料重現一次 Skill 的執行過程；公司、客戶與內部路徑都已移除。畫面文字為中文。",en:"A replay of one skill run on mock data, with company, client and internal path names removed. On-screen text is in Chinese.",th:"การจำลองการทำงานของ Skill หนึ่งรอบด้วยข้อมูลจำลอง ตัดชื่อบริษัท ลูกค้า และพาธภายในออกแล้ว ข้อความบนหน้าจอเป็นภาษาจีน"},
@@ -195,7 +195,6 @@ const STN={
   cases:{zh:["AI 學習稽核","AI 稽核"],en:["AI LEARNING AUDIT","AI Audit"],th:["AI ตรวจสอบบทเรียน","AI ตรวจสอบ"]},
   ocr:{zh:["AI 開發 OCR","AI OCR"],en:["AI-BUILT OCR","AI OCR"],th:["OCR สร้างด้วย AI","AI OCR"]},
   gov:{zh:["AI 導入治理","AI 治理"],en:["AI GOVERNANCE","AI Governance"],th:["กำกับดูแล AI","AI กำกับ"]},
-  site:{zh:["AI 作品集網站","AI 網站"],en:["THIS PORTFOLIO","AI Site"],th:["เว็บพอร์ตโฟลิโอนี้","AI เว็บ"]},
   build:{zh:["AI 協作開發","AI 作品"],en:["AI-BUILT PROJECTS","AI Builds"],th:["ผลงานสร้างด้วย AI","AI ผลงาน"]}
 };
 
@@ -478,20 +477,6 @@ X.th.gov={facet:"การกำกับดูแล AI",title:"ด่านป
 - กำหนดเวลา: ต้องตอบกลับ [บุคคล A] ภายในวันศุกร์
 - ขั้นตอนถัดไป: ตรวจสิทธิ์การส่งออกและเวอร์ชันคอมโพเนนต์หลังอัปเกรด หากจำเป็นให้ติดต่อผ่าน [โทรศัพท์ A] หรือ [อีเมล A] เพื่อยืนยันหน้าจอข้อผิดพลาด`}};
 
-X.en.site={facet:"AI product building",title:"This Portfolio Website Itself",gain:"From positioning to launch, <strong>57 versions iterated on feedback</strong>",
-  pain:"A portfolio of screenshots and text makes it hard to tell whether someone really built things or just writes well. For an AI Product Builder, the most convincing proof is a product that actually works and can be tried.",
-  purpose:"I treated the portfolio as a product. I defined the users first (HR should grasp it in a minute, managers should be able to verify it hands-on), then the information architecture (every case runs what it is → pain → impact → what it looks like → try it), a 3D entrance, three languages, mobile layout and de-identification. I wrote the specs, reviewed every screen and asked for fixes; an AI agent did the implementation, round after round until launch.",
-  steps:["Define users and goals: HR understands it in a minute, managers can verify hands-on","Design the information architecture and interactions: 3D lab, numbered sections, Live Labs","An AI agent builds; I review each round, request fixes and verify","De-identify all evidence and deploy to GitHub Pages and Claude"],
-  effect:{type:"kpi",items:[["57 versions","iterated on feedback"],["3 languages","中文 · English · ไทย"],["9","interactive cases"]]},
-  tech:["Three.js","i18n","Responsive","GitHub Pages","Agent collaboration"],
-  lab:{items:[["GitHub source","The full source and every change made."],["1-minute overview","A one-page summary for HR."]]}};
-X.th.site={facet:"การสร้างผลิตภัณฑ์ AI",title:"เว็บไซต์พอร์ตโฟลิโอนี้เอง",gain:"ตั้งแต่วางตำแหน่งถึงเปิดใช้ <strong>ปรับตามความเห็น 57 เวอร์ชัน</strong>",
-  pain:"พอร์ตโฟลิโอที่มีแค่ภาพหน้าจอและข้อความ ทำให้ผู้อ่านบอกได้ยากว่าทำจริงหรือแค่เขียนเก่ง สำหรับ AI Product Builder หลักฐานที่น่าเชื่อที่สุดคือผลิตภัณฑ์ที่ใช้งานและลองได้จริง",
-  purpose:"ผมทำพอร์ตโฟลิโอนี้เหมือนเป็นผลิตภัณฑ์ เริ่มจากกำหนดผู้ใช้ (HR เข้าใจได้ในหนึ่งนาที หัวหน้าลองยืนยันได้เอง) แล้วออกแบบโครงสร้างข้อมูล (ทุกเคสเรียงเป็น นี่คืออะไร → ปัญหา → ผลลัพธ์ → หน้าตาจริง → ลองใช้) ทางเข้า 3D สามภาษา รองรับมือถือ และปกปิดข้อมูล ผมเขียนสเปก ตรวจทุกหน้าจอ และขอให้แก้ ส่วน AI Agent เป็นผู้ลงมือทำ ปรับทีละรอบจนเปิดใช้งาน",
-  steps:["กำหนดผู้ใช้และเป้าหมาย: HR เข้าใจในหนึ่งนาที หัวหน้าลองยืนยันได้เอง","ออกแบบโครงสร้างข้อมูลและการโต้ตอบ: ห้องแล็บ 3D ส่วนที่มีหมายเลข Live Lab","AI Agent ลงมือทำ ผมตรวจทุกรอบ ขอแก้ และยืนยันผล","ปกปิดข้อมูลหลักฐานทั้งหมด แล้วเผยแพร่บน GitHub Pages และ Claude"],
-  effect:{type:"kpi",items:[["57 เวอร์ชัน","ปรับตามความเห็น"],["3 ภาษา","中文 · English · ไทย"],["9","เคสที่โต้ตอบได้"]]},
-  tech:["Three.js","หลายภาษา","Responsive","GitHub Pages","ทำงานร่วมกับ Agent"],
-  lab:{items:[["ซอร์สโค้ดบน GitHub","ไฟล์ทั้งหมดและประวัติการแก้ไข"],["สรุป 1 นาที","สรุปหน้าเดียวสำหรับ HR"]]}};
 X.en.build={facet:"Building with AI",title:"Other Projects Built with AI",gain:"Idea → <strong>live product</strong>",
   purpose:"Outside work I use AI agents to turn ideas straight into working websites and tools, practising how to break down requirements, direct an agent and verify the result. This lab itself was built the same way. The OCR item finder is a fuller case, so it has its own entry as experiment 08.",
   steps:["Break the idea into small, testable steps","Direct the agent to build, testing and fixing step by step","Deploy and keep iterating"],
