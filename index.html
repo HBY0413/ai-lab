@@ -294,6 +294,9 @@ body{display:flex;flex-direction:column;overflow:hidden}
 @media (max-width:700px){.lg-grid{grid-template-columns:1fr}}
 
 .cc.apply{border-left:3px solid #7FB8FF}
+
+.usegrid{display:grid;gap:10px;margin-top:14px}
+.cc.use{border-left:3px solid #39C97A}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
@@ -859,6 +862,21 @@ const APPLY={
 site:{zh:"任何需要「讓人看得懂又能親手試」的展示：產品 Demo、內部工具推廣頁、提案展示網站。",en:"Anything that must be understood at a glance and tried hands-on: product demos, internal tool launch pages, pitch sites.",th:"งานนำเสนอใดก็ตามที่ต้องเข้าใจง่ายและลองใช้ได้: เดโมผลิตภัณฑ์ หน้าเปิดตัวเครื่องมือภายใน เว็บไซต์นำเสนอ"},
  ocr:{zh:"同樣的「螢幕擷取 → 文字辨識 → 模糊比對資料庫」流程，可以用在料號查詢、設備畫面讀值、多語系介面翻譯對照。",en:"The same screen capture → text recognition → fuzzy database match pipeline works for part-number lookup, reading values off equipment screens, and multilingual UI reference.",th:"ขั้นตอนเดียวกัน จับภาพหน้าจอ → อ่านข้อความ → จับคู่ฐานข้อมูลแบบคลุมเครือ ใช้ได้กับการค้นรหัสชิ้นส่วน การอ่านค่าจากหน้าจอเครื่องจักร และการเทียบคำแปลหน้าจอหลายภาษา"}
 };
+/* real adoption, feedback and iteration notes, as reported by HB */
+const USE={
+ report:{zh:[["使用狀況","已連續使用 3 個月，每月固定產出。主管開會前一兩天提出需求，半小時內就能交付。"],["回饋","主管的回饋是數據沒有疏漏；每個數字都能在核對明細裡查到來源。"]],
+   en:[["Adoption","Used every month for 3 months running. The manager asks a day or two before the meeting and gets the deck within half an hour."],["Feedback","The manager's feedback: no gaps in the numbers, and every figure can be traced in the audit workbook."]],
+   th:[["การใช้งาน","ใช้ต่อเนื่องทุกเดือนมา 3 เดือน หัวหน้าขอก่อนประชุมหนึ่งถึงสองวัน และได้สไลด์ภายในครึ่งชั่วโมง"],["ความเห็น","หัวหน้าบอกว่าตัวเลขไม่มีตกหล่น และทุกตัวเลขตรวจย้อนได้ในไฟล์ตรวจสอบ"]]},
+ manual:{zh:[["使用狀況","這項業務固定由 3 位工程師負責，目前 2 位在使用；每 3 個月約有 3–5 個升級或保養案子。工程師已經很少需要花一整天整理文件、再找人幫忙看。"],["準確度","截圖判讀在測試樣本上的準確度約 97%。"],["迭代：發現問題 → 改進","開發時發現每個客戶的桌面、介面和系統語系都不一樣，同一個檢查畫面在不同環境長得不同，很多截圖因此無法被正確辨識。我調整了 Agent 的辨識方式和判斷基準，讓它能跨介面差異、跨語系辨識同一個檢查項目，原本會被當成無效資料的截圖也能用上，紀錄的完整度因此提高。"]],
+   en:[["Adoption","Three engineers handle this work; two use the skill today, across 3–5 upgrade or maintenance projects every three months. Engineers rarely spend a whole day on documents or chase someone to review them anymore."],["Accuracy","Screenshot recognition reached about 97% accuracy on the test samples."],["Iteration: problem → fix","During development I found that every client's desktop, interface and system language differ, so the same check looks different from site to site and many screenshots couldn't be recognised. I reworked how the agent recognises screens and the rules it judges by, so it identifies the same check across interface and language differences. Screenshots that used to be unusable now count, and the records are more complete."]],
+   th:[["การใช้งาน","งานนี้มีวิศวกรประจำ 3 คน ตอนนี้ใช้อยู่ 2 คน ทุก 3 เดือนมีงานอัปเกรดหรือบำรุงรักษาราว 3–5 งาน วิศวกรแทบไม่ต้องใช้ทั้งวันทำเอกสารหรือหาคนช่วยตรวจอีกแล้ว"],["ความแม่นยำ","การอ่านภาพหน้าจอแม่นยำราว 97% ในชุดทดสอบ"],["การปรับปรุง: พบปัญหา → แก้","ระหว่างพัฒนาพบว่าเดสก์ท็อป หน้าตาโปรแกรม และภาษาระบบของลูกค้าแต่ละรายต่างกัน หน้าจอตรวจเดียวกันจึงหน้าตาไม่เหมือนกัน ภาพจำนวนมากจึงอ่านไม่ได้ ผมปรับวิธีจดจำและเกณฑ์การตัดสินของ Agent ให้ระบุรายการตรวจเดียวกันได้แม้หน้าตาหรือภาษาต่างกัน ภาพที่เคยใช้ไม่ได้จึงกลายเป็นข้อมูลที่ใช้ได้ และบันทึกครบถ้วนขึ้น"]]},
+ kb:{zh:[["使用狀況","約 3–4 位工程師在使用。"],["回饋","QA 紀錄都規範好出處與相關資料，用起來很快，不必再用 Ctrl+F 翻以前的 Google 表單。"]],
+   en:[["Adoption","Used by about 3–4 engineers."],["Feedback","Every Q&A record now has a source and related material, so answers come fast, with no more Ctrl+F through old Google Forms."]],
+   th:[["การใช้งาน","วิศวกรใช้อยู่ราว 3–4 คน"],["ความเห็น","บันทึก Q&A ทุกรายการมีแหล่งที่มาและข้อมูลประกอบชัดเจน ใช้งานเร็ว ไม่ต้องกด Ctrl+F ค้นใน Google Form เก่าอีก"]]},
+ ocr:{zh:[["使用狀況","約 4–5 位玩家在使用。"],["回饋","玩家覺得很方便：不用再跳出遊戲開瀏覽器查資料，在遊戲裡就能看到中文；連打字都嫌麻煩時，按一個鍵框選截圖就好。"]],
+   en:[["Adoption","Used by about 4–5 players."],["Feedback","Players find it convenient: no more leaving the game to search in a browser, the Chinese details show up in game, and when typing feels like too much, one key and a box selection does it."]],
+   th:[["การใช้งาน","ผู้เล่นใช้อยู่ราว 4–5 คน"],["ความเห็น","ผู้เล่นบอกว่าสะดวก ไม่ต้องออกจากเกมไปเปิดเบราว์เซอร์ เห็นข้อมูลภาษาจีนในเกมได้เลย และถ้าขี้เกียจพิมพ์ก็กดปุ่มเดียวแล้วครอบภาพได้"]]}
+};
 const HAS_RUN=["report","manual","kb","maint","cases","ocr"];
 function replayHTML(x){return `<figure class="replay"><img src="ev/run-${x.id}.gif" alt="${esc(x.title)} — ${esc(I18N.t("ev.run"))}" loading="lazy"><figcaption>${I18N.t(x.id==="ocr"?"ev.runNoteOcr":"ev.runNote")}</figcaption></figure>`}
 /* one clearly separated block per part of a case, numbered, with a jump bar at the top */
@@ -869,7 +887,7 @@ function blocksHTML(x,eff){
      <div class="cc how"><div class="label">${I18N.t("sec.how")}</div><ol class="steps">${x.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
      <div class="techrow"><div class="label">${I18N.t("sec.tech")}</div><div class="chips">${x.tech.map(t=>`<span class="chip">${t}</span>`).join("")}</div></div>`]);
   B.push(["pain",I18N.t("blk.pain"),`<div class="cc pain"><p>${x.pain}</p></div>`]);
-  B.push(["gain",I18N.t("blk.gain"),`<div class="impact"><span>${I18N.t("sec.impact")}</span><strong>${x.gain}</strong></div><div class="effect">${eff}</div>`]);
+  B.push(["gain",I18N.t("blk.gain"),`<div class="impact"><span>${I18N.t("sec.impact")}</span><strong>${x.gain}</strong></div><div class="effect">${eff}</div>${USE[x.id]?`<div class="usegrid">${(USE[x.id][I18N.lang]||USE[x.id].zh).map(([h,t])=>`<div class="cc use"><div class="label">${h}</div><p>${t}</p></div>`).join("")}</div>`:""}`]);
   const run=HAS_RUN.includes(x.id),out=!!x.evidence;
   if(run||out)B.push(["look",I18N.t("blk.look"),(run?`<div class="sub"><div class="label">${I18N.t("ev.run")}</div>${replayHTML(x)}</div>`:"")+(out?`<div class="sub"><div class="label">${I18N.t("blk.out")}</div>${evidenceHTML(x,true)}</div>`:"")]);
   B.push(["lab",I18N.t("blk.lab"),`<div class="lab lab-last" id="lab-${x.id}"></div>`]);
