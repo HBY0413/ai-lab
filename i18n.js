@@ -49,7 +49,7 @@ const D={
 "proj.see":{zh:"看實驗",en:"See the experiment",th:"ดูการทดลอง"},
 "card.n":{zh:"HB 的作品集",en:"HB · Portfolio",th:"พอร์ตโฟลิโอของ HB"},
 "card.p":{zh:"這份作品集收錄我已經上線的 AI Agent 應用，也包括用 AI 開發的工具與作品，以及一個可以直接操作的 AI 影像檢測 Demo。每個案例都從痛點講起，附上實際產出的畫面；走進實驗室，就能親手操作。",en:"This portfolio gathers the AI agent applications I have put into production, along with tools and projects I built with AI and a hands-on AI visual inspection demo. Each case starts from the pain point and shows real output. Step into the lab to try them yourself.",th:"พอร์ตโฟลิโอนี้รวบรวม AI Agent ที่ผมนำไปใช้งานจริง รวมถึงเครื่องมือและผลงานที่พัฒนาด้วย AI และเดโมตรวจจับภาพด้วย AI ที่ทดลองใช้ได้จริง ทุกเคสเริ่มจากปัญหาและแสดงผลลัพธ์จริง เดินเข้าห้องแล็บเพื่อทดลองใช้ได้ด้วยตัวเอง"},
-"card.mk":{zh:"帶來的效益",en:"Impact so far",th:"ผลลัพธ์ที่ได้"},
+"card.mk":{zh:"已實際上線・帶來的效益",en:"Live in production · real impact",th:"ใช้งานจริงแล้ว · ผลลัพธ์ที่ได้"},
 "ev.run":{zh:"執行過程",en:"How it runs",th:"ขั้นตอนการทำงาน"},
 "ev.runNote":{zh:"以模擬資料重現一次 Skill 的執行過程；公司、客戶與內部路徑都已移除。畫面文字為中文。",en:"A replay of one skill run on mock data, with company, client and internal path names removed. On-screen text is in Chinese.",th:"การจำลองการทำงานของ Skill หนึ่งรอบด้วยข้อมูลจำลอง ตัดชื่อบริษัท ลูกค้า และพาธภายในออกแล้ว ข้อความบนหน้าจอเป็นภาษาจีน"},
 "hint.drag":{zh:"可拖曳",en:"Drag",th:"ลากได้"},

@@ -464,12 +464,12 @@ const nameTex=new T.CanvasTexture(nameCv);nameTex.encoding=T.sRGBEncoding;
 const namePlane=new T.Mesh(new T.PlaneGeometry(8.2,2.25),new T.MeshBasicMaterial({map:nameTex,transparent:true,depthWrite:false}));
 namePlane.position.set(-65.55,3.5,.03);scene.add(namePlane);
 let nameDraw=0,nameDrawT=0,nameT0=0;
-function placeName(){if(narrow()){namePlane.position.set(-60,7.7,.03);namePlane.scale.setScalar(.74)}else{namePlane.position.set(-64.45,6.26,.03);namePlane.scale.setScalar(.49)}}placeName();addEventListener("resize",placeName);
+function placeName(){if(narrow()){namePlane.position.set(-60,7.7,.03);namePlane.scale.setScalar(.74)}else{namePlane.position.set(-63.96,6.3,.03);namePlane.scale.setScalar(.49)}}placeName();addEventListener("resize",placeName);
 function paintName(p){
   nameX.clearRect(0,0,2048,560);let fs=430;const F=f=>`600 ${f}px Jost, sans-serif`;nameX.font=F(fs);
   const w=nameX.measureText(NAME).width;if(w>1990){fs*=1990/w;nameX.font=F(fs)}
   nameX.save();nameX.beginPath();nameX.rect(0,0,2048*p,560);nameX.clip();
-  nameX.fillStyle="rgba(241,236,227,.94)";nameX.textBaseline="alphabetic";nameX.fillText(NAME,20,490);
+  nameX.fillStyle="rgba(241,236,227,.94)";nameX.textBaseline="alphabetic";nameX.textAlign="right";nameX.fillText(NAME,2028,490);nameX.textAlign="left";
   nameX.restore();
   if(p<1){nameX.fillStyle="rgba(240,160,96,.95)";nameX.fillRect(2048*p-3,40,6,500)}
   nameTex.needsUpdate=true;
