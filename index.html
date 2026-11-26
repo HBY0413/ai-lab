@@ -1001,7 +1001,7 @@ function deidentify(s){
   const map=[],cnt={};
   const code=(k,v)=>{const ex=map.find(m=>m.v===v);if(ex)return ex.c;cnt[k]=(cnt[k]||0)+1;const c=I18N.lang==="zh"?`〔${k}${String.fromCharCode(64+cnt[k])}〕`:`[${k}${String.fromCharCode(64+cnt[k])}]`;map.push({k,v,c});return c};
   let t=s;
-  t=t.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,v=>code(I18N.t("code.email"),v));
+  t=t.replace(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g,v=>code(I18N.t("code.email"),v));
   t=t.replace(/0[689]\d-?\d{3}-?\d{4}|09\d{2}-?\d{3}-?\d{3}/g,v=>code(I18N.t("code.phone"),v));
   t=t.replace(/\b[A-Z][12]\d{8}\b|\b\d-\d{4}-\d{5}-\d{2}-\d\b/g,v=>code(I18N.t("code.id"),v));
   t=t.replace(/(?:[A-Z][\w&]*\s){1,4}(?:Co\., Ltd\.|Inc\.|Corp\.|Ltd\.)/g,v=>code(I18N.t("code.client"),v.trim()));
