@@ -2638,3 +2638,267 @@ window.PRESETS.kb.items.push(
         en: "The department FAQ has no record of this yet. Please add the question to the FAQ list so the responsible colleague can check feasibility before replying.",
         th: "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้ แนะนำให้เพิ่มคำถามนี้ในรายการ FAQ เพื่อให้ผู้รับผิดชอบตรวจสอบความเป็นไปได้ก่อนตอบ" }, none: true }
 );
+/* ---- batch 9 ---- */
+window.PRESETS.report.items.push(
+ { label: { zh: "客戶名稱寫法不一", en: "Client name written two ways", th: "เขียนชื่อลูกค้าสองแบบ" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶A,維護,16
+A客戶,維護,8
+客戶B,教育訓練,12
+【協銷進度】客戶,活動,日期,狀態
+客戶C,產品展示,2026-10-14,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client A,Maintenance,16
+Client-A,Maintenance,8
+Client B,Training,12
+[Presales tracker] Client,Activity,Date,Status
+Client C,Product demo,2026-10-14,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า A,บำรุงรักษา,16
+ลูกค้าA,บำรุงรักษา,8
+ลูกค้า B,ฝึกอบรม,12
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า C,สาธิตผลิตภัณฑ์,2026-10-14,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 維護 | 客戶A | 16 | 2.0 |
+| 維護 | A客戶 | 8 | 1.0 |
+| 教育訓練 | 客戶B | 12 | 1.5 |
+| 合計 | — | 36 | 4.5 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶C 產品展示（10/14，已完成）
+- **持續追蹤**：無
+#### 待主管確認
+- 「A客戶」可能和「客戶A」是同一位客戶，表格照原文分開列出；若是同一位，客戶A 的維護合計為 24 小時、3.0 人天，請確認並統一寫法。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Maintenance | Client A | 16 | 2.0 |
+| Maintenance | Client-A | 8 | 1.0 |
+| Training | Client B | 12 | 1.5 |
+| Total | — | 36 | 4.5 |
+#### Presales progress
+- **This month**: Client C product demo (10/14, done)
+- **Ongoing**: none
+#### For the manager to confirm
+- "Client-A" may be the same client as "Client A"; the table lists them separately as written. If they are the same, Client A's maintenance comes to 24 hours, 3.0 person-days; please confirm and standardise the name.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| บำรุงรักษา | ลูกค้า A | 16 | 2.0 |
+| บำรุงรักษา | ลูกค้าA | 8 | 1.0 |
+| ฝึกอบรม | ลูกค้า B | 12 | 1.5 |
+| รวม | — | 36 | 4.5 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า C สาธิตผลิตภัณฑ์ (10/14 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- "ลูกค้าA" อาจเป็นลูกค้ารายเดียวกับ "ลูกค้า A" ตารางแยกแสดงตามต้นฉบับ หากเป็นรายเดียวกัน งานบำรุงรักษาของลูกค้า A รวมเป็น 24 ชั่วโมง 3.0 แมนเดย์ กรุณายืนยันและใช้ชื่อเดียวกัน` } },
+
+ { label: { zh: "日期已過但狀態沒更新", en: "Past date, status not updated", th: "เลยวันแล้วแต่สถานะไม่อัปเดต" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶E,顧問服務&開發,16
+客戶F,維護,24
+【協銷進度】客戶,活動,日期,狀態
+客戶D,POC 執行,2026-10-05,已排定
+客戶G,產品展示,2026-10-22,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client E,Consulting & development,16
+Client F,Maintenance,24
+[Presales tracker] Client,Activity,Date,Status
+Client D,POC run,2026-10-05,Scheduled
+Client G,Product demo,2026-10-22,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า E,ที่ปรึกษาและพัฒนา,16
+ลูกค้า F,บำรุงรักษา,24
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า D,ทำ POC,2026-10-05,กำหนดวันแล้ว
+ลูกค้า G,สาธิตผลิตภัณฑ์,2026-10-22,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶E | 16 | 2.0 |
+| 維護 | 客戶F | 24 | 3.0 |
+| 合計 | — | 40 | 5.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶D POC 執行（10/05，已排定）；客戶G 產品展示（10/22，已完成）
+- **持續追蹤**：無
+#### 待主管確認
+- 客戶D 的 POC 執行日期 10/05 已經過了，狀態仍是「已排定」，請確認是否已執行並更新狀態。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client E | 16 | 2.0 |
+| Maintenance | Client F | 24 | 3.0 |
+| Total | — | 40 | 5.0 |
+#### Presales progress
+- **This month**: Client D POC run (10/05, scheduled); Client G product demo (10/22, done)
+- **Ongoing**: none
+#### For the manager to confirm
+- Client D's POC run was dated 10/05, which has passed, but its status is still "Scheduled"; please confirm whether it happened and update the status.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า E | 16 | 2.0 |
+| บำรุงรักษา | ลูกค้า F | 24 | 3.0 |
+| รวม | — | 40 | 5.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า D ทำ POC (10/05 กำหนดวันแล้ว); ลูกค้า G สาธิตผลิตภัณฑ์ (10/22 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- ทำ POC ของลูกค้า D กำหนดไว้ 10/05 ซึ่งผ่านไปแล้ว แต่สถานะยังเป็น "กำหนดวันแล้ว" กรุณายืนยันว่าทำแล้วหรือยังและอัปเดตสถานะ` } }
+);
+
+window.PRESETS.cases.items.push(
+ { label: { zh: "同一問題、不同寫法", en: "Same issue, different wording", th: "ปัญหาเดียวกัน เขียนต่างกัน" },
+   input: {
+    zh: `U01 客戶甲 2026-06 保養健檢：服務列表截圖缺了下半部
+U02 客戶乙 2026-08 Tableau 升級：服務狀態畫面沒截完整
+U03 客戶丙 2026-10 保養健檢：服務清單只截到前半段`,
+    en: `U01 Client A 2026-06 health check: service list screenshot missing its lower half
+U02 Client B 2026-08 Tableau upgrade: service status screen not fully captured
+U03 Client C 2026-10 health check: service list only captured up to the middle`,
+    th: `U01 ลูกค้า A 2026-06 ตรวจสุขภาพระบบ: ภาพรายการเซอร์วิสขาดครึ่งล่าง
+U02 ลูกค้า B 2026-08 อัปเกรด Tableau: จับภาพหน้าจอสถานะเซอร์วิสไม่ครบ
+U03 ลูกค้า C 2026-10 ตรวจสุขภาพระบบ: ภาพรายการเซอร์วิสจับได้แค่ครึ่งแรก` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 服務狀態截圖不完整（三筆用了不同寫法，描述的是同一個問題） | U01、U02、U03 | 3 | 未涵蓋（節錄中未見截圖完整性的檢查） |
+#### 值得考慮寫進規則
+- 把完整的服務狀態畫面列為必拍，並在產出前檢查截圖是否完整。
+- 問題紀錄改用固定的分類用詞，之後統計同類問題會更準確。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Service-status screenshot incomplete (three different wordings describing the same issue) | U01, U02, U03 | 3 | Not covered (no screenshot-completeness check in the excerpt) |
+#### Worth adding to the rules
+- Make a complete service-status screen a required shot and check completeness before output.
+- Record issues with fixed category terms so similar problems can be counted accurately later.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| ภาพสถานะเซอร์วิสไม่ครบ (เขียนต่างกัน 3 แบบ แต่เป็นปัญหาเดียวกัน) | U01, U02, U03 | 3 | ยังไม่ครอบคลุม (ไม่พบการตรวจความครบของภาพในข้อความที่ยกมา) |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- กำหนดให้หน้าจอสถานะเซอร์วิสแบบเต็มเป็นภาพบังคับ และตรวจความครบของภาพก่อนส่งออก
+- บันทึกปัญหาด้วยคำจัดหมวดที่ตายตัว เพื่อให้นับปัญหาประเภทเดียวกันได้แม่นยำขึ้น
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } },
+
+ { label: { zh: "升級後驗證漏拍", en: "Post-upgrade checks not captured", th: "ไม่ได้ถ่ายภาพการตรวจหลังอัปเกรด" },
+   input: {
+    zh: `V01 客戶甲 2026-05 Tableau 升級：升級後沒有附登入測試截圖
+V02 客戶乙 2026-08 Tableau 升級：升級後沒有附登入測試截圖
+V03 客戶丙 2026-09 Tableau 升級：升級後沒有附儀表板開啟測試截圖
+V04 客戶丁 2026-10 Tableau 升級：升級後沒有附儀表板開啟測試截圖`,
+    en: `V01 Client A 2026-05 Tableau upgrade: no post-upgrade login test screenshot
+V02 Client B 2026-08 Tableau upgrade: no post-upgrade login test screenshot
+V03 Client C 2026-09 Tableau upgrade: no post-upgrade dashboard-open test screenshot
+V04 Client D 2026-10 Tableau upgrade: no post-upgrade dashboard-open test screenshot`,
+    th: `V01 ลูกค้า A 2026-05 อัปเกรด Tableau: ไม่มีภาพทดสอบเข้าสู่ระบบหลังอัปเกรด
+V02 ลูกค้า B 2026-08 อัปเกรด Tableau: ไม่มีภาพทดสอบเข้าสู่ระบบหลังอัปเกรด
+V03 ลูกค้า C 2026-09 อัปเกรด Tableau: ไม่มีภาพทดสอบเปิดแดชบอร์ดหลังอัปเกรด
+V04 ลูกค้า D 2026-10 อัปเกรด Tableau: ไม่มีภาพทดสอบเปิดแดชบอร์ดหลังอัปเกรด` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 升級後沒附登入測試截圖 | V01、V02 | 2 | 未涵蓋（節錄中未見升級後驗證清單） |
+| 升級後沒附儀表板開啟測試截圖 | V03、V04 | 2 | 未涵蓋（節錄中未見升級後驗證清單） |
+#### 值得考慮寫進規則
+- 訂一份升級後驗證清單（至少包含登入測試、開啟儀表板），列為升級案的必拍截圖。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| No post-upgrade login test screenshot | V01, V02 | 2 | Not covered (no post-upgrade check list in the excerpt) |
+| No post-upgrade dashboard-open test screenshot | V03, V04 | 2 | Not covered (no post-upgrade check list in the excerpt) |
+#### Worth adding to the rules
+- Define a post-upgrade check list (at least a login test and opening a dashboard) and make those required shots for upgrade projects.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| ไม่มีภาพทดสอบเข้าสู่ระบบหลังอัปเกรด | V01, V02 | 2 | ยังไม่ครอบคลุม (ไม่พบรายการตรวจหลังอัปเกรดในข้อความที่ยกมา) |
+| ไม่มีภาพทดสอบเปิดแดชบอร์ดหลังอัปเกรด | V03, V04 | 2 | ยังไม่ครอบคลุม (ไม่พบรายการตรวจหลังอัปเกรดในข้อความที่ยกมา) |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- กำหนดรายการตรวจหลังอัปเกรด (อย่างน้อยทดสอบเข้าสู่ระบบและเปิดแดชบอร์ด) และให้เป็นภาพบังคับของงานอัปเกรด
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } }
+);
+
+window.PRESETS.gov.items.push(
+ { label: { zh: "保密協議簽回", en: "NDA to sign and return", th: "ลงนามสัญญารักษาความลับ" },
+   input: {
+    zh: `澐水系統有限公司法務部吳宗翰先生寄來保密協議，請在週五前簽回。
+掃描檔請寄 zonghan.wu@example.com，正本寄到公司。`,
+    en: `Mr. Zack Wu from Yunshui Systems Ltd. (legal) sent an NDA and asks for it to be signed and returned by Friday.
+Email the scan to zack.wu@example.com and post the original to their office.`,
+    th: `คุณสุรชัย มีสุข จากบริษัท อวิ๋นสุ่ยซิสเต็มส์ จำกัด ฝ่ายกฎหมาย ส่งสัญญารักษาความลับมา ขอให้ลงนามส่งกลับภายในวันศุกร์
+ส่งไฟล์สแกนไปที่ surachai.m@example.com และส่งต้นฉบับไปที่บริษัท` },
+   output: {
+    zh: `- 問題：〔客戶A〕的〔人員A〕寄來保密協議，需要簽回。
+- 期限：週五前。
+- 下一步：先交法務或主管審閱內容，簽署後把掃描檔寄到〔Email A〕，正本寄回〔客戶A〕。`,
+    en: `- Issue: [Person A] from [Client A] sent an NDA that needs to be signed and returned.
+- Deadline: by Friday.
+- Next step: have legal or a manager review it first; once signed, email the scan to [Email A] and post the original to [Client A].`,
+    th: `- ปัญหา: [บุคคล A] จาก [ลูกค้า A] ส่งสัญญารักษาความลับมาให้ลงนามส่งกลับ
+- กำหนดเวลา: ภายในวันศุกร์
+- ขั้นตอนถัดไป: ให้ฝ่ายกฎหมายหรือหัวหน้าตรวจก่อน เมื่อลงนามแล้วส่งไฟล์สแกนไปที่ [อีเมล A] และส่งต้นฉบับไปที่ [ลูกค้า A]` } },
+
+ { label: { zh: "多人會議邀請", en: "Meeting invitation, several attendees", th: "เชิญประชุมหลายคน" },
+   input: {
+    zh: `嶼森科技股份有限公司想在 12/3 下午開系統檢討會，與會者有黃美玲小姐（meiling.huang@example.com）、林冠宇先生（guanyu.lin@example.com），請回覆可否出席。`,
+    en: `Yusen Tech Co., Ltd. would like a system review meeting on the afternoon of 12/3. Attendees: Ms. Mei Huang (mei.huang@example.com) and Mr. Gary Lin (gary.lin@example.com). Please reply whether we can attend.`,
+    th: `บริษัท ยวี่เซินเทค จำกัด ต้องการประชุมทบทวนระบบบ่ายวันที่ 12/3 ผู้เข้าร่วมคือคุณเมษา ใจดี จากฝ่ายไอที (mesa.j@example.com) และ korn.p@example.com กรุณาตอบว่าเข้าร่วมได้หรือไม่` },
+   output: {
+    zh: `- 問題：〔客戶A〕想在 12/3 下午開系統檢討會，與會者有〔人員A〕與〔人員B〕。
+- 期限：會議在 12/3 下午，需在那之前回覆是否出席。
+- 下一步：確認我方出席人員與時間後，回信給〔Email A〕與〔Email B〕。`,
+    en: `- Issue: [Client A] wants a system review meeting on the afternoon of 12/3, with [Person A] and [Person B] attending.
+- Deadline: reply before the meeting on the afternoon of 12/3.
+- Next step: confirm who from our side will attend and the time, then reply to [Email A] and [Email B].`,
+    th: `- ปัญหา: [ลูกค้า A] ต้องการประชุมทบทวนระบบบ่ายวันที่ 12/3 ผู้เข้าร่วมคือ [บุคคล A] และอีกหนึ่งคน
+- กำหนดเวลา: ต้องตอบก่อนการประชุมบ่ายวันที่ 12/3
+- ขั้นตอนถัดไป: ยืนยันผู้เข้าร่วมและเวลาฝั่งเรา แล้วตอบกลับไปที่ [อีเมล A] และ [อีเมล B]` } }
+);
+
+window.PRESETS.kb.items.push(
+ { q: { zh: "報表匯出時跳出錯誤訊息", en: "An error pops up when exporting a report", th: "ส่งออกรายงานแล้วมีข้อความแจ้งข้อผิดพลาด" },
+   a: { zh: "如果是升級後才出現，先確認匯出元件版本和升級後的版本一致；不一致就重新部署匯出元件並重啟服務【FAQ-012】。",
+        en: "If it started after an upgrade, check that the export component version matches the upgraded version; if not, redeploy the export component and restart the service [FAQ-012].",
+        th: "ถ้าเกิดหลังอัปเกรด ให้ตรวจว่าเวอร์ชันคอมโพเนนต์ส่งออกตรงกับเวอร์ชันหลังอัปเกรด ถ้าไม่ตรงให้ติดตั้งคอมโพเนนต์ส่งออกใหม่แล้วรีสตาร์ตเซอร์วิส [FAQ-012]" } },
+ { q: { zh: "磁碟空間不足會有什麼影響？", en: "What happens when disk space runs low?", th: "พื้นที่ดิสก์ไม่พอจะเกิดอะไรขึ้น" },
+   a: { zh: "記錄裡有兩種情況：暫存目錄所在磁碟剩不到 10 GB 時，升級後服務可能啟動逾時【FAQ-027】；備份檔太大也會占滿磁碟，要清理 30 天以前的舊備份並至少保留最近 3 份【FAQ-056】。",
+        en: "The records cover two cases: if the disk holding the temp directory has under 10 GB free, the service may time out on start after an upgrade [FAQ-027]; large backups can also fill the disk, so delete backups older than 30 days and keep at least the three most recent [FAQ-056].",
+        th: "บันทึกมีสองกรณี: ถ้าดิสก์ที่เก็บโฟลเดอร์ชั่วคราวเหลือน้อยกว่า 10 GB เซอร์วิสอาจเริ่มทำงานไม่ทันหลังอัปเกรด [FAQ-027] และไฟล์สำรองที่ใหญ่ก็ทำให้ดิสก์เต็มได้ ให้ลบไฟล์สำรองที่เก่ากว่า 30 วันและเก็บล่าสุดไว้อย่างน้อย 3 ชุด [FAQ-056]" } },
+ { q: { zh: "外掛的新版本要去哪裡拿？", en: "Where do we get a new plug-in version?", th: "เวอร์ชันใหม่ของปลั๊กอินต้องเอาจากที่ไหน" },
+   a: { zh: "要向外掛廠商取得相容的版本；在拿到之前，先停用不支援新版本的外掛【FAQ-068】。",
+        en: "Get a compatible version from the plug-in vendor; until then, disable any plug-in that doesn't support the new release [FAQ-068].",
+        th: "ต้องขอเวอร์ชันที่รองรับจากผู้ผลิตปลั๊กอิน ระหว่างนั้นให้ปิดปลั๊กอินที่ไม่รองรับเวอร์ชันใหม่ไว้ก่อน [FAQ-068]" } },
+ { q: { zh: "授權到期了會怎樣？", en: "What happens when the licence expires?", th: "ไลเซนส์หมดอายุแล้วจะเป็นอย่างไร" },
+   a: { zh: "記錄只寫到系統會在到期前 30 天於管理頁提醒、續約由業務窗口報價【FAQ-031】，沒有寫到期後的影響；這部分建議到 FAQ 總表補充。",
+        en: "The record only says the system reminds admins 30 days before expiry and the sales contact quotes the renewal [FAQ-031]; it doesn't say what happens after expiry, so consider adding that to the FAQ list.",
+        th: "บันทึกระบุเพียงว่าระบบจะแจ้งเตือนในหน้าผู้ดูแล 30 วันก่อนหมดอายุ และฝ่ายขายเป็นผู้เสนอราคาต่ออายุ [FAQ-031] ไม่ได้บอกว่าหลังหมดอายุจะเป็นอย่างไร ควรเพิ่มเรื่องนี้ในรายการ FAQ" } },
+ { q: { zh: "排程失敗要去哪裡看？", en: "Where do I check why a scheduled job failed?", th: "งานตามกำหนดเวลาล้มเหลว ต้องดูที่ไหน" },
+   a: { zh: "先看排程紀錄有沒有失敗【FAQ-044】。常見原因是來源資料庫備份時鎖表，可以把排程時間往後調 1 小時【FAQ-044】。",
+        en: "Check the scheduled job's log for failures first [FAQ-044]. A common cause is the source database locking tables during its backup; moving the schedule an hour later helps [FAQ-044].",
+        th: "ให้ดูบันทึกงานตามกำหนดเวลาก่อนว่าล้มเหลวหรือไม่ [FAQ-044] สาเหตุที่พบบ่อยคือฐานข้อมูลต้นทางล็อกตารางระหว่างสำรองข้อมูล ให้เลื่อนเวลางานออกไป 1 ชั่วโมง [FAQ-044]" } },
+ { q: { zh: "可以遠端幫客戶重灌整台系統嗎？", en: "Can we remotely reinstall the client's whole system?", th: "เราติดตั้งระบบใหม่ทั้งเครื่องให้ลูกค้าจากระยะไกลได้ไหม" },
+   a: { zh: "部門 FAQ 目前沒有這筆記錄。建議到 FAQ 總表新增這個問題，先確認服務範圍與風險再回覆客戶。",
+        en: "The department FAQ has no record of this yet. Please add the question to the FAQ list and confirm the service scope and risks before replying to the client.",
+        th: "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้ แนะนำให้เพิ่มคำถามนี้ในรายการ FAQ และยืนยันขอบเขตบริการและความเสี่ยงก่อนตอบลูกค้า" }, none: true }
+);
