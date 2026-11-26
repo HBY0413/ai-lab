@@ -300,6 +300,7 @@ body{display:flex;flex-direction:column;overflow:hidden}
 </style>
 <script src="i18n.js"></script>
 <script src="real.js"></script>
+<script src="relay.js"></script>
 <link rel="stylesheet" href="house.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="stylesheet" href="type.css">
@@ -341,14 +342,12 @@ body{display:flex;flex-direction:column;overflow:hidden}
       <nav class="index" data-i18n-aria="home.index" id="index"></nav>
     </header>
   </div></div>
-  <div class="slide" data-id="demos" data-label-key="demos.label" data-label="專屬 Demo" aria-roledescription="slide"><div class="wrap">
+  <div class="slide" data-id="demos" data-label-key="demos.label" data-label="AI 檢測 Demo" aria-roledescription="slide"><div class="wrap">
     <div class="demos" style="margin-top:0">
       <div class="eyebrow" data-i18n="demos.eyebrow"></div>
       <h1 style="font-size:clamp(28px,4vw,42px)" data-i18n="demos.h"></h1>
       <div class="demo-row">
         <a class="demo" href="vision.html"><span class="role" data-i18n="demo1.role"></span><b data-i18n="demo1.t"></b><p data-i18n="demo1.p"></p><span class="go" data-i18n="demo.go"></span></a>
-        <div class="demo soon"><span class="role" data-i18n="demo2.role"></span><b data-i18n="demo2.t"></b><p data-i18n="demo2.p"></p><span class="go" data-i18n="demo.soon"></span></div>
-        <div class="demo soon"><span class="role" data-i18n="demo3.role"></span><b data-i18n="demo3.t"></b><p data-i18n="demo3.p"></p><span class="go" data-i18n="demo.soon"></span></div>
       </div>
     </div>
     <footer style="margin-top:40px">
@@ -605,7 +604,7 @@ function setStatus(on){
   statusEl.children[1].setAttribute("data-i18n",on?"status.on":"status.off");statusEl.children[1].textContent=I18N.t(on?"status.on":"status.off");
 }
 setStatus(false);
-(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}setStatus(!!sample)})();
+(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}if(!sample&&window.relaySample)sample=relaySample();setStatus(!!sample)})();
 
 /* ---------- render ---------- */
 const idx=document.getElementById("index"),track=document.getElementById("track");
@@ -683,7 +682,7 @@ function buildShots(x,b){
     try{
       const blob=upload||await (await fetch(SHOTS[sel].src)).blob();
       const r=await sample(`你是 IT 系統升級／保養紀錄簡報的 AI Agent。工程師在客戶現場只截圖、沒寫說明。看這張截圖，只回傳一個 JSON 物件，不要其他文字：
-{"screen":"這是什麼畫面","item":"從這些選最符合的一個：主機檢查・伺服器資源／主機檢查・應用程式版本／主機檢查・服務狀態／升級前・備份／升級前・停機／升級流程・執行安裝檔／升級流程・安裝進行中／升級後・服務啟動與檢查；都不符合寫「規範外項目」","title":"簡報頁標題，格式「大類 - 項目」","bullets":["要放進簡報左側的說明，每點一句，只填畫面上讀得到的值"],"warnings":["提醒使用者怪怪的地方：截圖不完整或被切掉、看不清楚、畫面跟一般範本的標準畫面不同、版本或時間前後可能矛盾、可能截錯畫面；沒有就給空陣列"]}${I18N.lang==="zh"?"":" Write every string value in "+(I18N.lang==="th"?"Thai":"English")+"."}`,{images:[blob],cache:false});
+{"screen":"這是什麼畫面","item":"從這些選最符合的一個：主機檢查・伺服器資源／主機檢查・應用程式版本／主機檢查・服務狀態／升級前・備份／升級前・停機／升級流程・執行安裝檔／升級流程・安裝進行中／升級後・服務啟動與檢查；都不符合寫「規範外項目」","title":"簡報頁標題，格式「大類 - 項目」","bullets":["要放進簡報左側的說明，每點一句，只填畫面上讀得到的值"],"warnings":["提醒使用者怪怪的地方：截圖不完整或被切掉、看不清楚、畫面跟一般範本的標準畫面不同、版本或時間前後可能矛盾、可能截錯畫面；沒有就給空陣列"]}${I18N.lang==="zh"?"":" Write every string value in "+(I18N.lang==="th"?"Thai":"English")+"."}`+(I18N.lang==="en"?"\n\nWrite every JSON value in English (translate the check item names).":I18N.lang==="th"?"\n\nเขียนค่าทุกช่องใน JSON เป็นภาษาไทย (แปลชื่อรายการตรวจด้วย)":""),{images:[blob],cache:false});
       const t=(r.text||"").replace(/^[^{]*/,"").replace(/[^}]*$/,"");const d=JSON.parse(t);
       out.innerHTML=resultHTML(cur(),d,true);note.textContent=I18N.t("lab.done");
     }catch(e){note.textContent=I18N.t("sh.fail");example()}

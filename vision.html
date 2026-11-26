@@ -98,6 +98,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:20px 0 50px;colo
 </style>
 <script src="i18n.js"></script>
 <script src="vision-i18n.js"></script>
+<script src="relay.js"></script>
 <style>.langsw{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-left:10px;vertical-align:middle}.langsw button{background:none;border:none;color:var(--ink-2);font:500 12px "Jost","Noto Sans TC",sans-serif;padding:4px 10px;cursor:pointer}.langsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}</style>
 <link rel="stylesheet" href="type.css">
 </head>
@@ -105,7 +106,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:20px 0 50px;colo
 <div class="wrap">
 <header class="top">
   <div class="crumb"><a href="index.html#demos">← 回到 AI 實驗室</a> <span>/ AI 檢測 Demo</span><span id="sw"></span></div>
-  <div class="eyebrow">應用情境 · 製造業 AI 視覺／AOI</div>
+  <div class="eyebrow">應用情境 · AI 視覺檢測（以 PCB 為例）</div>
   <h1>PCB 外觀瑕疵 AI 檢測站</h1>
   <p class="lede">工廠的瑕疵品很少，很難收集到大量「壞的」樣本。這個 Demo 只用良品訓練異常偵測模型，看到跟良品不一樣的地方就標出來。訓練、推論、門檻值調整都在你的瀏覽器裡即時運算，你也可以自己在板子上畫瑕疵來考它。</p>
   <div class="jd" role="region" aria-label="Demo 導覽">
@@ -414,7 +415,7 @@ newBoard();
 
 /* ---------- Claude judgement ---------- */
 let sample=null,canImg=false;
-(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample");if(sample){const l=await sample.limits();canImg=!!(l&&l.images)}}}catch(e){sample=null}
+(async()=>{try{if(window.claude&&claude.use){sample=await claude.use("sample")}}catch(e){sample=null}if(!sample&&window.relaySample)sample=relaySample();try{if(sample){const l=await sample.limits();canImg=!!(l&&l.images)}}catch(e){canImg=false}
   $("askNote").textContent=tv(sample?(canImg?"會送出這一片的影像與熱力圖":"此環境的 AI 不支援圖片，將只送出檢測數據"):"此環境未開啟即時 AI，按下會顯示範例判讀");})();
 const EXAMPLE=`#### 判讀結果
 - **瑕疵類型**：短路（Short），兩條相鄰線路之間出現殘銅相連。

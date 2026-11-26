@@ -78,7 +78,6 @@ const KB_PROMPT=(q,docs)=>`你是部門 FAQ 問答助手，只能根據下方 FA
 FAQ 記錄：
 ${docs}
 問題：${q}`;
-ZH.kb.lab={prompt:KB_PROMPT};
 
 const EN={
  manual:{title:"AI Upgrade / Maintenance Record Deck Generator",facet:"Document automation",gain:"140–200-page record decks: <strong>1 day → 30 min</strong>",
@@ -270,6 +269,163 @@ EN.gov={title:"Five-Layer Governance for AI Adoption",gain:"Governance in every 
 TH.gov={title:"การกำกับดูแล 5 ชั้นสำหรับการนำ AI มาใช้",gain:"ฝังการกำกับดูแลในทุก Skill <strong>ทดสอบภายใต้การอนุมัติของหัวหน้า</strong>",purpose:"หัวใจอยู่ที่ชั้นแรก การปกปิดข้อมูล: ชื่อลูกค้า ชื่อโฮสต์ บัญชี และข้อมูลอ่อนไหวอื่น ๆ ถูกแทนด้วยรหัสบนเครื่องของผู้ใช้ และ<b>ตารางเทียบรหัสเก็บไว้บนคอมพิวเตอร์ของผู้ใช้เท่านั้น</b> ไม่อัปโหลดและไม่ใส่ในโฟลเดอร์ส่วนกลาง หาก AI ต้องอ่านตาราง Skill มีเงื่อนไขบังคับ: ผู้ใช้ต้องกด \"อนุมัติ\" ในบทสนทนาก่อน อ่านแล้วไม่เก็บและไม่จดจำ และรหัสในตารางจะถูกเปลี่ยนและแทนไฟล์ใหม่เป็นระยะ อีกสี่ชั้น (อ่านอย่างเดียว ให้คนยืนยัน ตรวจสอบก่อนส่งมอบ ไม่แต่งคำตอบ) ก็เขียนเป็นกฎบังคับในทุก Skill เช่นกัน",
   steps:["แทนข้อมูลส่วนบุคคล ชื่อลูกค้า และชื่อโฮสต์ด้วยรหัสบนเครื่อง","ตารางเทียบรหัสเก็บไว้บนคอมพิวเตอร์ของผู้ใช้เท่านั้น ไม่อัปโหลดหรือแชร์","ก่อน AI อ่านตาราง ต้องได้รับอนุมัติจากผู้ใช้ในบทสนทนา","อ่านแล้วไม่เก็บไม่จดจำ และเปลี่ยนรหัส/แทนไฟล์เป็นระยะ","ส่งเฉพาะเนื้อหาที่ปกปิดแล้วให้ AI"],
   tech:["ตารางเทียบในเครื่อง","ด่านขออนุมัติผู้ใช้","ไม่เก็บ·ไม่จดจำ","เปลี่ยนรหัสเป็นระยะ","อ่านอย่างเดียว","ให้คนยืนยัน"]};
+/* ---- 01 / 03 live labs, aligned with the real cases (mock data) ---- */
+const RPT_PROMPT={
+ zh:i=>`你是部門月會報告 Agent，使用者是部門主管本人。根據以下模擬的工時紀錄與協銷進度（報告月份 2026-10），照月會範本的規則整理，用繁體中文、Markdown 輸出：
+規則：1 人天 = 8 小時，人天取到小數一位；專案類型缺漏的工時不計入人天，列為待確認；協銷活動日期在報告月份內的歸「本月活動」，其餘（含沒有日期的）歸「持續追蹤」。數字一律從資料計算，不要編造。
+#### 專案執行（本月人天）
+一個表格：| 類型 | 客戶 | 工時 | 人天 |，依類型排列，最後一列為合計（只算已分類的工時）。
+#### 技術銷售・協銷進度
+- **本月活動**：逐筆列出。
+- **持續追蹤**：逐筆列出。
+#### 待主管確認
+- 資料有缺漏或疑義的項目，每項一句，說明暫時怎麼處理。
+資料：
+${i}`,
+ en:i=>`You are a department monthly-report agent; the user is the department manager. Using the mock timesheet and presales tracker below (report month 2026-10), follow the template rules and output Markdown in English.
+Rules: 1 person-day = 8 hours, one decimal place; hours with no project type are excluded from person-days and flagged for confirmation; presales activities dated within the report month go under "This month", everything else (including undated items) under "Ongoing". Calculate every number from the data; never invent one.
+#### Project delivery (person-days this month)
+A table: | Type | Client | Hours | Person-days |, grouped by type, last row Total (classified hours only).
+#### Presales progress
+- **This month**: one line per item.
+- **Ongoing**: one line per item.
+#### For the manager to confirm
+- One sentence per missing or doubtful item, saying how it was handled for now.
+Data:
+${i}`,
+ th:i=>`คุณคือ Agent ทำรายงานประชุมประจำเดือนของแผนก ผู้ใช้คือหัวหน้าแผนกเอง ใช้บันทึกชั่วโมงงานและความคืบหน้างาน Presales (ข้อมูลจำลอง เดือนรายงาน 2026-10) ด้านล่าง จัดตามกฎของเทมเพลต แล้วตอบเป็นภาษาไทยในรูปแบบ Markdown
+กฎ: 1 แมนเดย์ = 8 ชั่วโมง ทศนิยมหนึ่งตำแหน่ง ชั่วโมงที่ไม่ระบุประเภทโครงการไม่นับเป็นแมนเดย์และให้ระบุว่ารอยืนยัน กิจกรรม Presales ที่มีวันที่อยู่ในเดือนรายงานให้อยู่ใน "กิจกรรมเดือนนี้" ที่เหลือ (รวมรายการไม่มีวันที่) อยู่ใน "ติดตามต่อเนื่อง" ทุกตัวเลขต้องคำนวณจากข้อมูล ห้ามแต่งขึ้นเอง
+#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+ตาราง: | ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ | เรียงตามประเภท แถวสุดท้ายเป็นรวม (เฉพาะชั่วโมงที่จัดประเภทแล้ว)
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: รายการละหนึ่งบรรทัด
+- **ติดตามต่อเนื่อง**: รายการละหนึ่งบรรทัด
+#### รายการให้หัวหน้ายืนยัน
+- รายการที่ข้อมูลขาดหรือไม่ชัดเจน รายการละหนึ่งประโยค บอกว่าตอนนี้จัดการอย่างไร
+ข้อมูล:
+${i}`};
+const RPT_LAB={
+ zh:{hint:"以下是模擬的當月工時紀錄與協銷進度表。AI 會照月會範本的規則算出各案人天、把協銷分成「本月活動」與「持續追蹤」，資料有缺漏的列為待主管確認。可以直接修改資料再產生一次。",
+  input:`【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶A,顧問服務&開發,64
+客戶A,維護,12
+客戶B,維護,20
+客戶C,教育訓練,16
+客戶D,顧問服務&開發,40
+客戶E,,10
+【協銷進度】客戶,活動,日期,狀態
+客戶F,產品展示,2026-10-08,已完成
+客戶G,POC 規劃,2026-10-21,進行中
+客戶H,報價追蹤,2026-09-15,等待客戶回覆
+客戶I,Test-Drive,,待排定`,
+  btn:"產生月會摘要",prompt:RPT_PROMPT.zh,
+  example:`#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶A | 64 | 8.0 |
+| 顧問服務&開發 | 客戶D | 40 | 5.0 |
+| 維護 | 客戶A | 12 | 1.5 |
+| 維護 | 客戶B | 20 | 2.5 |
+| 教育訓練 | 客戶C | 16 | 2.0 |
+| 合計 | — | 152 | 19.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶F 產品展示（10/08，已完成）；客戶G POC 規劃（10/21，進行中）
+- **持續追蹤**：客戶H 報價追蹤（9/15 起，等待客戶回覆）；客戶I Test-Drive（待排定）
+#### 待主管確認
+- 客戶E 的 10 小時沒有填專案類型，暫不計入人天，請確認歸屬哪一類。
+- 客戶I 的 Test-Drive 還沒有日期，先列在持續追蹤。`},
+ en:{hint:"Below are a mock monthly timesheet and presales tracker. AI follows the report template rules: it calculates person-days per project, splits presales into \"This month\" and \"Ongoing\", and flags gaps for the manager to confirm. Edit the data and run it again.",
+  input:`[Timesheet 2026-10] Client,Project type,Hours
+Client A,Consulting & development,64
+Client A,Maintenance,12
+Client B,Maintenance,20
+Client C,Training,16
+Client D,Consulting & development,40
+Client E,,10
+[Presales tracker] Client,Activity,Date,Status
+Client F,Product demo,2026-10-08,Done
+Client G,POC planning,2026-10-21,In progress
+Client H,Quote follow-up,2026-09-15,Waiting for client
+Client I,Test-Drive,,To be scheduled`,
+  btn:"Write summary",prompt:RPT_PROMPT.en,
+  example:`#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client A | 64 | 8.0 |
+| Consulting & development | Client D | 40 | 5.0 |
+| Maintenance | Client A | 12 | 1.5 |
+| Maintenance | Client B | 20 | 2.5 |
+| Training | Client C | 16 | 2.0 |
+| Total | — | 152 | 19.0 |
+#### Presales progress
+- **This month**: Client F product demo (10/08, done); Client G POC planning (10/21, in progress)
+- **Ongoing**: Client H quote follow-up (since 9/15, waiting for client); Client I Test-Drive (to be scheduled)
+#### For the manager to confirm
+- Client E's 10 hours have no project type, so they are left out of person-days for now; please confirm the category.
+- Client I's Test-Drive has no date yet, so it is listed under Ongoing.`},
+ th:{hint:"ด้านล่างคือบันทึกชั่วโมงงานประจำเดือนและความคืบหน้างาน Presales (ข้อมูลจำลอง) AI จะคำนวณแมนเดย์ของแต่ละโครงการตามกฎของเทมเพลต แยกงาน Presales เป็น \"กิจกรรมเดือนนี้\" กับ \"ติดตามต่อเนื่อง\" และระบุรายการที่ข้อมูลขาดให้หัวหน้ายืนยัน แก้ข้อมูลแล้วสร้างใหม่ได้",
+  input:`[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า A,ที่ปรึกษาและพัฒนา,64
+ลูกค้า A,บำรุงรักษา,12
+ลูกค้า B,บำรุงรักษา,20
+ลูกค้า C,ฝึกอบรม,16
+ลูกค้า D,ที่ปรึกษาและพัฒนา,40
+ลูกค้า E,,10
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า F,สาธิตผลิตภัณฑ์,2026-10-08,เสร็จแล้ว
+ลูกค้า G,วางแผน POC,2026-10-21,กำลังดำเนินการ
+ลูกค้า H,ติดตามใบเสนอราคา,2026-09-15,รอลูกค้าตอบกลับ
+ลูกค้า I,Test-Drive,,รอกำหนดวัน`,
+  btn:"สร้างสรุปการประชุม",prompt:RPT_PROMPT.th,
+  example:`#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า A | 64 | 8.0 |
+| ที่ปรึกษาและพัฒนา | ลูกค้า D | 40 | 5.0 |
+| บำรุงรักษา | ลูกค้า A | 12 | 1.5 |
+| บำรุงรักษา | ลูกค้า B | 20 | 2.5 |
+| ฝึกอบรม | ลูกค้า C | 16 | 2.0 |
+| รวม | — | 152 | 19.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า F สาธิตผลิตภัณฑ์ (10/08 เสร็จแล้ว); ลูกค้า G วางแผน POC (10/21 กำลังดำเนินการ)
+- **ติดตามต่อเนื่อง**: ลูกค้า H ติดตามใบเสนอราคา (ตั้งแต่ 9/15 รอลูกค้าตอบกลับ); ลูกค้า I Test-Drive (รอกำหนดวัน)
+#### รายการให้หัวหน้ายืนยัน
+- 10 ชั่วโมงของลูกค้า E ไม่ได้ระบุประเภทโครงการ จึงยังไม่นับเป็นแมนเดย์ กรุณายืนยันประเภท
+- Test-Drive ของลูกค้า I ยังไม่มีวันที่ จึงจัดไว้ในติดตามต่อเนื่อง`}};
+const KB_P={
+ zh:(q,docs)=>`你是部門 FAQ 問答助手，只能根據下方 FAQ 記錄回答，用繁體中文，2～4 句。每個事實後面用【記錄編號】標示出處。如果記錄裡沒有答案，回答「部門 FAQ 目前沒有這筆記錄」，並建議同仁到 FAQ 總表新增，不要自行推測。
+FAQ 記錄：
+${docs}
+問題：${q}`,
+ en:(q,docs)=>`You are the department FAQ assistant. Answer only from the FAQ records below, in English, in 2–4 sentences. Put the record ID in brackets after each fact, e.g. [FAQ-027]. If the records don't contain the answer, say "The department FAQ has no record of this yet" and suggest adding one to the FAQ list; never guess.
+FAQ records:
+${docs}
+Question: ${q}`,
+ th:(q,docs)=>`คุณคือผู้ช่วยตอบคำถาม FAQ ของแผนก ตอบจากบันทึก FAQ ด้านล่างเท่านั้น เป็นภาษาไทย 2–4 ประโยค ใส่รหัสบันทึกในวงเล็บหลังแต่ละข้อเท็จจริง เช่น [FAQ-027] หากบันทึกไม่มีคำตอบ ให้ตอบว่า "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้" และแนะนำให้เพิ่มบันทึกในรายการ FAQ ห้ามเดาเอง
+บันทึก FAQ:
+${docs}
+คำถาม: ${q}`};
+const KB_LAB={
+ zh:{hint:"下方是三筆模擬的部門 FAQ 記錄（客戶維運與技術支援）。試著問一個記錄裡有的問題，再問一個記錄裡沒有的（例如「客戶要怎麼申請 VPN？」），看它會不會編答案。",
+  docs:`[FAQ-012 報表匯出失敗] 問題：系統升級後，報表匯出 PDF 出現錯誤。處理：確認匯出元件版本與升級後的版本一致，重新部署匯出元件後重啟服務。出處：2026/05 升級案。
+[FAQ-027 服務啟動逾時] 問題：升級後服務啟動超過 10 分鐘仍未完成。處理：先檢查暫存目錄所在磁碟的剩餘空間是否低於 10 GB，清理後重新啟動；仍失敗就收集 log 交給原廠。出處：2026/07 保養案。
+[FAQ-031 授權到期提醒] 問題：客戶詢問授權到期前多久會收到提醒。處理：系統會在到期前 30 天於管理頁顯示提醒；續約由業務窗口提供報價。出處：2026/08 客戶詢問。`,
+  input:"客戶升級後服務一直啟動不起來，要先檢查什麼？",single:true,btn:"詢問部門 FAQ",prompt:KB_P.zh,
+  example:`先檢查暫存目錄所在磁碟的剩餘空間是否低於 10 GB，清理後再重新啟動服務【FAQ-027】。如果還是啟動失敗，就收集 log 交給原廠處理【FAQ-027】。`},
+ en:{hint:"Below are three mock department FAQ records (client support and maintenance). Ask one question the records cover, then one they don't (e.g. \"How does a client request VPN access?\") and see whether it makes anything up.",
+  docs:`[FAQ-012 Report export fails] Issue: after a system upgrade, exporting a report to PDF throws an error. Fix: check that the export component version matches the upgraded version, redeploy the export component and restart the service. Source: 2026/05 upgrade project.
+[FAQ-027 Service start times out] Issue: after an upgrade the service is still starting after 10 minutes. Fix: first check whether the disk holding the temp directory has less than 10 GB free; clean it up and restart. If it still fails, collect the logs and send them to the vendor. Source: 2026/07 maintenance project.
+[FAQ-031 Licence expiry reminder] Issue: a client asks how early they are reminded before the licence expires. Answer: the system shows a reminder on the admin page 30 days before expiry; renewals are quoted by the sales contact. Source: 2026/08 client question.`,
+  input:"After the upgrade the client's service won't start. What should I check first?",btn:"Ask the department FAQ",prompt:KB_P.en,
+  example:`First check whether the disk holding the temp directory has less than 10 GB free, clean it up and restart the service [FAQ-027]. If it still won't start, collect the logs and send them to the vendor [FAQ-027].`},
+ th:{hint:"ด้านล่างคือบันทึก FAQ ของแผนก (ข้อมูลจำลอง เรื่องดูแลระบบและซัพพอร์ตลูกค้า) 3 รายการ ลองถามคำถามที่บันทึกมีคำตอบ แล้วถามคำถามที่ไม่มี (เช่น \"ลูกค้าขอใช้ VPN อย่างไร\") ดูว่า AI จะแต่งคำตอบเองหรือไม่",
+  docs:`[FAQ-012 ส่งออกรายงานไม่ได้] ปัญหา: หลังอัปเกรดระบบ ส่งออกรายงานเป็น PDF แล้วเกิดข้อผิดพลาด วิธีแก้: ตรวจว่าเวอร์ชันคอมโพเนนต์ส่งออกตรงกับเวอร์ชันหลังอัปเกรด ติดตั้งคอมโพเนนต์ใหม่แล้วรีสตาร์ตเซอร์วิส ที่มา: โปรเจกต์อัปเกรด 2026/05
+[FAQ-027 เซอร์วิสเริ่มทำงานนานเกินไป] ปัญหา: หลังอัปเกรด เซอร์วิสเริ่มทำงานเกิน 10 นาทีแล้วยังไม่เสร็จ วิธีแก้: ตรวจก่อนว่าดิสก์ที่เก็บโฟลเดอร์ชั่วคราวเหลือพื้นที่น้อยกว่า 10 GB หรือไม่ ล้างแล้วรีสตาร์ต ถ้ายังไม่ได้ให้เก็บ log ส่งให้ผู้ผลิต ที่มา: โปรเจกต์บำรุงรักษา 2026/07
+[FAQ-031 แจ้งเตือนไลเซนส์หมดอายุ] ปัญหา: ลูกค้าถามว่าจะได้รับแจ้งเตือนก่อนไลเซนส์หมดอายุนานเท่าไร คำตอบ: ระบบแสดงแจ้งเตือนในหน้าผู้ดูแล 30 วันก่อนหมดอายุ การต่ออายุให้ฝ่ายขายเสนอราคา ที่มา: คำถามจากลูกค้า 2026/08`,
+  input:"หลังอัปเกรด เซอร์วิสของลูกค้าเริ่มทำงานไม่ได้ ควรตรวจอะไรก่อน",btn:"ถาม FAQ ของแผนก",prompt:KB_P.th,
+  example:`ให้ตรวจก่อนว่าดิสก์ที่เก็บโฟลเดอร์ชั่วคราวเหลือพื้นที่น้อยกว่า 10 GB หรือไม่ ล้างแล้วรีสตาร์ตเซอร์วิส [FAQ-027] ถ้ายังเริ่มทำงานไม่ได้ ให้เก็บ log ส่งให้ผู้ผลิต [FAQ-027]`}};
+ZH.report.lab=RPT_LAB.zh;EN.report.lab=RPT_LAB.en;TH.report.lab=RPT_LAB.th;
+ZH.kb.lab=KB_LAB.zh;EN.kb.lab=KB_LAB.en;TH.kb.lab=KB_LAB.th;
 function merge(a,b){if(b===undefined)return a;if(Array.isArray(b)||typeof b!=="object"||b===null||typeof b==="function")return b;const o=Object.assign({},a);for(const k in b)o[k]=merge(a?a[k]:undefined,b[k]);return o}
 const TX={
  "ev.title":{zh:"實際畫面 · Skill 真實產出",en:"Real output · produced by the skill",th:"ภาพจริง · ผลลัพธ์ที่ Skill สร้าง"},
@@ -309,7 +465,6 @@ window.REAL={
   apply(list,lang){
     const over=lang==="en"?EN:lang==="th"?TH:null;
     return list.map(x=>{let y=merge(x,ZH[x.id]);if(over&&over[x.id])y=merge(y,over[x.id]);
-      if(lang!=="zh"&&x.id==="kb"){y=merge(y,{lab:{prompt:(q,d)=>KB_PROMPT(q,d)}})}
       if(x.id==="gov"){const G=GOV[lang]||GOV.zh;y.evidence={layers:G.L.map((l,i)=>({t:l[0],d:l[1],imgs:GOV_IMG[i].map(k=>`ev/gov-${k}.jpg`)})),title:G.title,note:G.note}}
       if(SKTREE[x.id])y.evidence={tree:SKTREE[x.id],excerpt:EXCERPT[x.id],imgs:EV[x.id]?EV[x.id].imgs:null};
       return y});
