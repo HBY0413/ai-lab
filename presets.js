@@ -427,7 +427,7 @@ gov: {
  items: [
  { label: { zh: "儀表板沒更新", en: "Dashboard not refreshing", th: "แดชบอร์ดไม่อัปเดต" },
    input: {
-    zh: `華星科技有限公司的林小美小姐來信，說儀表板從昨天開始資料沒有更新。
+    zh: `星禾科技有限公司的林小美小姐來信，說儀表板從昨天開始資料沒有更新。
 她的 Email 是 xiaomei.lin@example.com，分機不方便，請改打手機 0987-654-321。
 希望今天下班前能先回覆初步原因。`,
     en: `Ms. Amy Lin from Starbright Tech Ltd. emailed: the dashboard hasn't refreshed since yesterday.
@@ -449,11 +449,11 @@ She'd like an initial cause before the end of today.`,
 
  { label: { zh: "改停機時間", en: "Rescheduling downtime", th: "เลื่อนเวลาหยุดระบบ" },
    input: {
-    zh: `宏達物流股份有限公司陳志明經理來電：升級停機時間要改到下週六晚上。
+    zh: `澄川物流股份有限公司陳志明經理來電：升級停機時間要改到下週六晚上。
 連絡手機 0933-123-456，另一位窗口張美玲小姐的信箱是 meiling.chang@example.com。`,
-    en: `Mr. Kevin Chen from Hongda Logistics Co., Ltd. called: the upgrade downtime should move to next Saturday night.
+    en: `Mr. Kevin Chen from Chengchuan Logistics Co., Ltd. called: the upgrade downtime should move to next Saturday night.
 Mobile 0933-123-456. The other contact, Ms. Mei Chang, can be reached at mei.chang@example.com.`,
-    th: `คุณวิชัย มั่นคง จากบริษัท ฮงต้าโลจิสติกส์ จำกัด โทรมาแจ้งว่าขอเลื่อนเวลาหยุดระบบเพื่ออัปเกรดเป็นคืนวันเสาร์หน้า
+    th: `คุณวิชัย มั่นคง จากบริษัท เฉิงชวนโลจิสติกส์ จำกัด โทรมาแจ้งว่าขอเลื่อนเวลาหยุดระบบเพื่ออัปเกรดเป็นคืนวันเสาร์หน้า
 มือถือ 086-123-4567 ผู้ติดต่ออีกคนใช้อีเมล malee.k@example.com` },
    output: {
     zh: `- 問題：〔客戶A〕的〔人員A〕來電，要把升級停機時間改到下週六晚上。
@@ -469,10 +469,10 @@ Mobile 0933-123-456. The other contact, Ms. Mei Chang, can be reached at mei.cha
  { label: { zh: "調閱登入紀錄", en: "Login records request", th: "ขอดูบันทึกการเข้าสู่ระบบ" },
    input: {
     zh: `申請人李大同先生（身分證字號 B234567890）要求調閱上個月的系統登入紀錄。
-公司名稱：遠景資訊股份有限公司，聯絡信箱 datong.lee@example.com，月底前需要。`,
+公司名稱：青嵐資訊股份有限公司，聯絡信箱 datong.lee@example.com，月底前需要。`,
     en: `Applicant Mr. Daniel Lee (ID B234567890) requests last month's system login records.
-Company: Vision Info Corp., email daniel.lee@example.com. Needed by month end.`,
-    th: `ผู้ยื่นคำขอ คุณประเสริฐ ดีงาม จากบริษัท วิชั่นอินโฟ จำกัด ขอดูบันทึกการเข้าสู่ระบบของเดือนที่แล้ว
+Company: Qinglan Info Corp., email daniel.lee@example.com. Needed by month end.`,
+    th: `ผู้ยื่นคำขอ คุณประเสริฐ ดีงาม จากบริษัท ชิงหลานอินโฟ จำกัด ขอดูบันทึกการเข้าสู่ระบบของเดือนที่แล้ว
 เลขประจำตัว 3-1234-56789-01-2 อีเมล prasert.d@example.com ต้องการภายในสิ้นเดือน` },
    output: {
     zh: `- 問題：〔客戶A〕的申請人〔人員A〕要求調閱上個月的系統登入紀錄。
@@ -851,11 +851,11 @@ This report only records observations and does not modify the skill; the owner d
 window.PRESETS.gov.items.push(
  { label: { zh: "帳號被鎖", en: "Locked account", th: "บัญชีถูกล็อก" },
    input: {
-    zh: `鼎新電子股份有限公司的黃俊傑先生反映，早上連續輸錯密碼後帳號被鎖住，影響整個部門結帳。
+    zh: `晨曦電子股份有限公司的黃俊傑先生反映，早上連續輸錯密碼後帳號被鎖住，影響整個部門結帳。
 請盡快回電 0918-222-333，或寄信到 junjie.huang@example.com。`,
-    en: `Mr. Jason Huang from Dingxin Electronics Co., Ltd. reports his account was locked this morning after several wrong passwords, blocking his department's month-end closing.
+    en: `Mr. Jason Huang from Chenxi Electronics Co., Ltd. reports his account was locked this morning after several wrong passwords, blocking his department's month-end closing.
 Please call back on 0918-222-333 or email jason.huang@example.com as soon as possible.`,
-    th: `คุณสุดา วงศ์ทอง จากบริษัท ดิงซินอิเล็กทรอนิกส์ จำกัด แจ้งว่าเช้านี้ใส่รหัสผ่านผิดหลายครั้งจนบัญชีถูกล็อก ทำให้ทั้งแผนกปิดบัญชีไม่ได้
+    th: `คุณสุดา วงศ์ทอง จากบริษัท เฉินซีอิเล็กทรอนิกส์ จำกัด แจ้งว่าเช้านี้ใส่รหัสผ่านผิดหลายครั้งจนบัญชีถูกล็อก ทำให้ทั้งแผนกปิดบัญชีไม่ได้
 กรุณาโทรกลับ 081-222-3333 หรืออีเมล suda.w@example.com โดยเร็ว` },
    output: {
     zh: `- 問題：〔客戶A〕的〔人員A〕連續輸錯密碼後帳號被鎖住，影響整個部門結帳。
@@ -870,11 +870,11 @@ Please call back on 0918-222-333 or email jason.huang@example.com as soon as pos
 
  { label: { zh: "續約報價", en: "Renewal quote", th: "ใบเสนอราคาต่ออายุ" },
    input: {
-    zh: `致遠系統有限公司採購部吳佩珊小姐詢問：明年一月授權到期，想先拿續約報價。
+    zh: `雲杉系統有限公司採購部吳佩珊小姐詢問：明年一月授權到期，想先拿續約報價。
 請寄到 peishan.wu@example.com，並副本給主管周建宏協理。`,
-    en: `Ms. Grace Wu from Zhiyuan Systems Ltd. (purchasing) asks for a renewal quote: their licence expires next January.
+    en: `Ms. Grace Wu from Yunshan Systems Ltd. (purchasing) asks for a renewal quote: their licence expires next January.
 Please send it to grace.wu@example.com and cc her manager, Mr. Henry Chou.`,
-    th: `คุณพิมพ์ชนก รุ่งเรือง จากบริษัท จื้อหยวนซิสเต็มส์ จำกัด ฝ่ายจัดซื้อ ขอใบเสนอราคาต่ออายุ เพราะไลเซนส์จะหมดอายุเดือนมกราคมปีหน้า
+    th: `คุณพิมพ์ชนก รุ่งเรือง จากบริษัท หยุนซานซิสเต็มส์ จำกัด ฝ่ายจัดซื้อ ขอใบเสนอราคาต่ออายุ เพราะไลเซนส์จะหมดอายุเดือนมกราคมปีหน้า
 กรุณาส่งไปที่ pimchanok.r@example.com และสำเนาถึงหัวหน้าของเธอ` },
    output: {
     zh: `- 問題：〔客戶A〕的〔人員A〕詢問續約報價，授權明年一月到期。
@@ -889,11 +889,11 @@ Please send it to grace.wu@example.com and cc her manager, Mr. Henry Chou.`,
 
  { label: { zh: "現場派工與門禁", en: "On-site visit and site access", th: "นัดงานหน้างานและการเข้าพื้นที่" },
    input: {
-    zh: `明天早上 9 點，工程師到客戶遠東紡織股份有限公司機房做保養，現場聯絡人是趙文華先生，手機 0922-555-666。
+    zh: `明天早上 9 點，工程師到客戶松岳紡織股份有限公司機房做保養，現場聯絡人是趙文華先生，手機 0922-555-666。
 門禁需要提前登記工程師身分證字號：A198765432。`,
-    en: `Tomorrow at 9 a.m. an engineer goes to Fareast Textile Co., Ltd. for on-site maintenance. The on-site contact is Mr. Peter Chao, mobile 0922-555-666.
+    en: `Tomorrow at 9 a.m. an engineer goes to Songyue Textile Co., Ltd. for on-site maintenance. The on-site contact is Mr. Peter Chao, mobile 0922-555-666.
 Site access must be registered in advance with the engineer's ID: A198765432.`,
-    th: `พรุ่งนี้ 9 โมงเช้า วิศวกรต้องไปบำรุงรักษาห้องเซิร์ฟเวอร์ที่บริษัท ฟาร์อีสท์เท็กซ์ไทล์ จำกัด ผู้ติดต่อหน้างานคือคุณธนา ใจกล้า โทร 092-555-6666
+    th: `พรุ่งนี้ 9 โมงเช้า วิศวกรต้องไปบำรุงรักษาห้องเซิร์ฟเวอร์ที่บริษัท ซงเยว่เท็กซ์ไทล์ จำกัด ผู้ติดต่อหน้างานคือคุณธนา ใจกล้า โทร 092-555-6666
 ต้องลงทะเบียนเข้าพื้นที่ล่วงหน้าด้วยเลขประจำตัววิศวกร 1-1020-30405-06-7` },
    output: {
     zh: `- 問題：明天早上 9 點要到客戶〔客戶A〕的機房做保養。
@@ -1253,11 +1253,11 @@ This report only records observations and does not modify the skill; the owner d
 window.PRESETS.gov.items.push(
  { label: { zh: "發票寄錯地址", en: "Invoice sent to the wrong address", th: "ส่งใบแจ้งหนี้ผิดที่อยู่" },
    input: {
-    zh: `宏遠精密股份有限公司會計部王淑芬小姐來電：上個月的發票寄到舊地址，需要重新開立。
+    zh: `拓垣精密股份有限公司會計部王淑芬小姐來電：上個月的發票寄到舊地址，需要重新開立。
 請回電 0955-888-777，新的收件信箱是 shufen.wang@example.com。`,
-    en: `Ms. Susan Wang from Hongyuan Precision Co., Ltd. (accounting) called: last month's invoice went to their old address and needs to be reissued.
+    en: `Ms. Susan Wang from Tuoyuan Precision Co., Ltd. (accounting) called: last month's invoice went to their old address and needs to be reissued.
 Please call back on 0955-888-777; the new receiving email is susan.wang@example.com.`,
-    th: `คุณวิไล แสงทอง จากบริษัท หงหยวนพรีซิชั่น จำกัด ฝ่ายบัญชี แจ้งว่าใบแจ้งหนี้เดือนที่แล้วส่งไปที่อยู่เก่า ต้องออกใหม่
+    th: `คุณวิไล แสงทอง จากบริษัท ทั่วหยวนพรีซิชั่น จำกัด ฝ่ายบัญชี แจ้งว่าใบแจ้งหนี้เดือนที่แล้วส่งไปที่อยู่เก่า ต้องออกใหม่
 กรุณาโทรกลับ 095-888-7777 อีเมลรับเอกสารใหม่คือ wilai.s@example.com` },
    output: {
     zh: `- 問題：〔客戶A〕的〔人員A〕反映上個月的發票寄到舊地址，需要重新開立。
@@ -1272,11 +1272,11 @@ Please call back on 0955-888-777; the new receiving email is susan.wang@example.
 
  { label: { zh: "資安事件通報", en: "Security incident report", th: "แจ้งเหตุด้านความปลอดภัย" },
    input: {
-    zh: `群光網通有限公司資安窗口蔡明哲經理通報：今天凌晨有異常登入，來源 IP 不明，已先停用兩個帳號。
+    zh: `嵐川網通有限公司資安窗口蔡明哲經理通報：今天凌晨有異常登入，來源 IP 不明，已先停用兩個帳號。
 請在兩小時內回電 0911-000-222，事件單號 SEC-1127。`,
-    en: `Mr. Allen Tsai, security contact at Qunguang Networks Ltd., reports unusual logins early this morning from an unknown IP; two accounts have been disabled for now.
+    en: `Mr. Allen Tsai, security contact at Lanchuan Networks Ltd., reports unusual logins early this morning from an unknown IP; two accounts have been disabled for now.
 Please call back within two hours on 0911-000-222. Incident ticket: SEC-1127.`,
-    th: `คุณกิตติ ทองดี จากบริษัท ฉวินกวงเน็ตเวิร์กส์ จำกัด ผู้ประสานงานด้านความปลอดภัย แจ้งว่าเช้ามืดวันนี้มีการเข้าสู่ระบบผิดปกติจาก IP ที่ไม่ทราบที่มา ระงับบัญชีไปแล้ว 2 บัญชี
+    th: `คุณกิตติ ทองดี จากบริษัท หลานชวนเน็ตเวิร์กส์ จำกัด ผู้ประสานงานด้านความปลอดภัย แจ้งว่าเช้ามืดวันนี้มีการเข้าสู่ระบบผิดปกติจาก IP ที่ไม่ทราบที่มา ระงับบัญชีไปแล้ว 2 บัญชี
 กรุณาโทรกลับภายใน 2 ชั่วโมงที่ 091-000-2222 เลขที่เหตุการณ์ SEC-1127` },
    output: {
     zh: `- 問題：〔客戶A〕的〔人員A〕通報今天凌晨有異常登入，來源 IP 不明，已先停用兩個帳號。
@@ -1291,11 +1291,11 @@ Please call back within two hours on 0911-000-222. Incident ticket: SEC-1127.`,
 
  { label: { zh: "教育訓練報名", en: "Training registration", th: "ลงทะเบียนอบรม" },
    input: {
-    zh: `大同醫療股份有限公司要報名下週的系統教育訓練，學員是劉怡君小姐（yijun.liu@example.com）和許志豪先生（zhihao.hsu@example.com）。
+    zh: `明澄醫療股份有限公司要報名下週的系統教育訓練，學員是劉怡君小姐（yijun.liu@example.com）和許志豪先生（zhihao.hsu@example.com）。
 報名截止是本週五。`,
-    en: `Datong Medical Co., Ltd. wants to enrol in next week's system training. Attendees: Ms. Ivy Liu (ivy.liu@example.com) and Mr. Howard Hsu (howard.hsu@example.com).
+    en: `Mingcheng Medical Co., Ltd. wants to enrol in next week's system training. Attendees: Ms. Ivy Liu (ivy.liu@example.com) and Mr. Howard Hsu (howard.hsu@example.com).
 Registration closes this Friday.`,
-    th: `บริษัท ต้าถงเมดิคอล จำกัด ต้องการลงทะเบียนอบรมระบบสัปดาห์หน้า ผู้เข้าอบรมคือคุณนภา สายใจ จากฝ่ายไอที (napa.s@example.com) และ kittipong.r@example.com
+    th: `บริษัท หมิงเฉิงเมดิคอล จำกัด ต้องการลงทะเบียนอบรมระบบสัปดาห์หน้า ผู้เข้าอบรมคือคุณนภา สายใจ จากฝ่ายไอที (napa.s@example.com) และ kittipong.r@example.com
 ปิดรับสมัครวันศุกร์นี้` },
    output: {
     zh: `- 問題：〔客戶A〕要報名下週的系統教育訓練，學員為〔人員A〕（〔Email A〕）與〔人員B〕（〔Email B〕）。
@@ -1564,11 +1564,11 @@ This report only records observations and does not modify the skill; the owner d
 window.PRESETS.gov.items.push(
  { label: { zh: "要求刪除個資", en: "Personal data deletion request", th: "ขอให้ลบข้อมูลส่วนบุคคล" },
    input: {
-    zh: `依個資法，永盛貿易股份有限公司的鄭雅文小姐要求刪除她在系統中的個人資料。
+    zh: `依個資法，禾森貿易股份有限公司的鄭雅文小姐要求刪除她在系統中的個人資料。
 她的身分證字號是 C223344556，聯絡信箱 yawen.cheng@example.com，請於 14 天內回覆處理結果。`,
-    en: `Under data-protection law, Ms. Grace Cheng from Yongsheng Trading Co., Ltd. asks us to delete her personal data from the system.
+    en: `Under data-protection law, Ms. Grace Cheng from Hesen Trading Co., Ltd. asks us to delete her personal data from the system.
 Her ID is C223344556 and her email is grace.cheng@example.com. Please reply with the outcome within 14 days.`,
-    th: `คุณมาลี ศรีวงศ์ จากบริษัท หย่งเซิงเทรดดิ้ง จำกัด ขอให้ลบข้อมูลส่วนบุคคลของเธอออกจากระบบตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล
+    th: `คุณมาลี ศรีวงศ์ จากบริษัท เหอเซินเทรดดิ้ง จำกัด ขอให้ลบข้อมูลส่วนบุคคลของเธอออกจากระบบตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล
 เลขประจำตัว 3-4455-66778-89-0 อีเมล malee.s@example.com กรุณาแจ้งผลภายใน 14 วัน` },
    output: {
     zh: `- 問題：〔客戶A〕的〔人員A〕依個資法要求刪除她在系統中的個人資料。
@@ -1583,11 +1583,11 @@ Her ID is C223344556 and her email is grace.cheng@example.com. Please reply with
 
  { label: { zh: "合作夥伴轉介新客戶", en: "Partner referral", th: "พาร์ตเนอร์แนะนำลูกค้าใหม่" },
    input: {
-    zh: `我們的合作夥伴：宏圖整合有限公司，介紹了新客戶光明食品股份有限公司，窗口是孫立人經理，手機 0966-111-222。
+    zh: `我們的合作夥伴：序恆整合有限公司，介紹了新客戶晴田食品股份有限公司，窗口是孫立人經理，手機 0966-111-222。
 希望下週安排一次產品說明會。`,
-    en: `Our partner Hongtu Integration Ltd. referred a new client, Guangming Foods Co., Ltd. The contact is Mr. Leo Sun, mobile 0966-111-222.
+    en: `Our partner Xuheng Integration Ltd. referred a new client, Qingtian Foods Co., Ltd. The contact is Mr. Leo Sun, mobile 0966-111-222.
 They'd like a product briefing next week.`,
-    th: `พาร์ตเนอร์ของเรา บริษัท หงถูอินทิเกรชัน จำกัด แนะนำลูกค้าใหม่ บริษัท กวงหมิงฟู้ดส์ จำกัด ผู้ติดต่อคือคุณสมศักดิ์ ใจเย็น โทร 096-111-2222
+    th: `พาร์ตเนอร์ของเรา บริษัท ซวี่เหิงอินทิเกรชัน จำกัด แนะนำลูกค้าใหม่ บริษัท ชิงเถียนฟู้ดส์ จำกัด ผู้ติดต่อคือคุณสมศักดิ์ ใจเย็น โทร 096-111-2222
 อยากนัดบรรยายผลิตภัณฑ์สัปดาห์หน้า` },
    output: {
     zh: `- 問題：合作夥伴〔客戶A〕介紹新客戶〔客戶B〕，對方希望下週安排產品說明會。
@@ -1599,4 +1599,282 @@ They'd like a product briefing next week.`,
     th: `- ปัญหา: พาร์ตเนอร์ [ลูกค้า A] แนะนำลูกค้าใหม่ [ลูกค้า B] ซึ่งอยากนัดบรรยายผลิตภัณฑ์สัปดาห์หน้า
 - กำหนดเวลา: สัปดาห์หน้า
 - ขั้นตอนถัดไป: ติดต่อ [บุคคล A] ของ [ลูกค้า B] ทาง [โทรศัพท์ A] เพื่อยืนยันเวลาและจำนวนผู้เข้าร่วม แล้วแจ้งผลการนัดหมายให้ [ลูกค้า A] ทราบ` } }
+);
+/* ---- batch 6 ---- */
+window.PRESETS.report.items.push(
+ { label: { zh: "日期疑似打錯", en: "A date that looks like a typo", th: "วันที่ที่อาจพิมพ์ผิด" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶A,維護,24
+客戶B,顧問服務&開發,16
+【協銷進度】客戶,活動,日期,狀態
+客戶C,產品展示,2026-01-15,已完成
+客戶D,技術簡報,2026-10-28,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client A,Maintenance,24
+Client B,Consulting & development,16
+[Presales tracker] Client,Activity,Date,Status
+Client C,Product demo,2026-01-15,Done
+Client D,Technical briefing,2026-10-28,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า A,บำรุงรักษา,24
+ลูกค้า B,ที่ปรึกษาและพัฒนา,16
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า C,สาธิตผลิตภัณฑ์,2026-01-15,เสร็จแล้ว
+ลูกค้า D,บรรยายเทคนิค,2026-10-28,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 顧問服務&開發 | 客戶B | 16 | 2.0 |
+| 維護 | 客戶A | 24 | 3.0 |
+| 合計 | — | 40 | 5.0 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶D 技術簡報（10/28，已完成）
+- **持續追蹤**：客戶C 產品展示（1/15，已完成）
+#### 待主管確認
+- 客戶C 的產品展示日期是 2026-01-15，狀態卻是剛完成；如果其實是 10/15 的誤植，就應列入本月活動。目前依資料列在持續追蹤，請確認正確日期。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Consulting & development | Client B | 16 | 2.0 |
+| Maintenance | Client A | 24 | 3.0 |
+| Total | — | 40 | 5.0 |
+#### Presales progress
+- **This month**: Client D technical briefing (10/28, done)
+- **Ongoing**: Client C product demo (1/15, done)
+#### For the manager to confirm
+- Client C's product demo is dated 2026-01-15 yet marked done; if it should be 10/15, it belongs under This month. It is listed under Ongoing per the data for now; please confirm the date.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| ที่ปรึกษาและพัฒนา | ลูกค้า B | 16 | 2.0 |
+| บำรุงรักษา | ลูกค้า A | 24 | 3.0 |
+| รวม | — | 40 | 5.0 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า D บรรยายเทคนิค (10/28 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ลูกค้า C สาธิตผลิตภัณฑ์ (1/15 เสร็จแล้ว)
+#### รายการให้หัวหน้ายืนยัน
+- สาธิตผลิตภัณฑ์ของลูกค้า C ลงวันที่ 2026-01-15 แต่มีสถานะเสร็จแล้ว หากที่จริงคือ 10/15 ควรอยู่ในกิจกรรมเดือนนี้ ตอนนี้จัดไว้ในติดตามต่อเนื่องตามข้อมูล กรุณายืนยันวันที่ที่ถูกต้อง` } },
+
+ { label: { zh: "工時明顯偏高", en: "Unusually high hours", th: "ชั่วโมงงานสูงผิดปกติ" },
+   input: {
+    zh: `【工時紀錄 2026-10】客戶,專案類型,工時(小時)
+客戶E,維護,160
+客戶F,維護,12
+客戶G,教育訓練,8
+【協銷進度】客戶,活動,日期,狀態
+客戶H,報價追蹤,2026-10-05,已完成`,
+    en: `[Timesheet 2026-10] Client,Project type,Hours
+Client E,Maintenance,160
+Client F,Maintenance,12
+Client G,Training,8
+[Presales tracker] Client,Activity,Date,Status
+Client H,Quote follow-up,2026-10-05,Done`,
+    th: `[บันทึกชั่วโมงงาน 2026-10] ลูกค้า,ประเภทโครงการ,ชั่วโมง
+ลูกค้า E,บำรุงรักษา,160
+ลูกค้า F,บำรุงรักษา,12
+ลูกค้า G,ฝึกอบรม,8
+[ความคืบหน้า Presales] ลูกค้า,กิจกรรม,วันที่,สถานะ
+ลูกค้า H,ติดตามใบเสนอราคา,2026-10-05,เสร็จแล้ว` },
+   output: {
+    zh: `#### 專案執行（本月人天）
+| 類型 | 客戶 | 工時 | 人天 |
+|---|---|---|---|
+| 維護 | 客戶E | 160 | 20.0 |
+| 維護 | 客戶F | 12 | 1.5 |
+| 教育訓練 | 客戶G | 8 | 1.0 |
+| 合計 | — | 180 | 22.5 |
+#### 技術銷售・協銷進度
+- **本月活動**：客戶H 報價追蹤（10/05，已完成）
+- **持續追蹤**：無
+#### 待主管確認
+- 客戶E 的維護工時是 160 小時（20.0 人天），遠高於另一筆維護案的 12 小時，請確認是否輸入錯誤，或確實是大型維護案。`,
+    en: `#### Project delivery (person-days this month)
+| Type | Client | Hours | Person-days |
+|---|---|---|---|
+| Maintenance | Client E | 160 | 20.0 |
+| Maintenance | Client F | 12 | 1.5 |
+| Training | Client G | 8 | 1.0 |
+| Total | — | 180 | 22.5 |
+#### Presales progress
+- **This month**: Client H quote follow-up (10/05, done)
+- **Ongoing**: none
+#### For the manager to confirm
+- Client E's maintenance hours are 160 (20.0 person-days), far above the other maintenance entry of 12 hours; please confirm whether it's a typo or a genuinely large maintenance job.`,
+    th: `#### การดำเนินโครงการ (แมนเดย์เดือนนี้)
+| ประเภท | ลูกค้า | ชั่วโมง | แมนเดย์ |
+|---|---|---|---|
+| บำรุงรักษา | ลูกค้า E | 160 | 20.0 |
+| บำรุงรักษา | ลูกค้า F | 12 | 1.5 |
+| ฝึกอบรม | ลูกค้า G | 8 | 1.0 |
+| รวม | — | 180 | 22.5 |
+#### ความคืบหน้างาน Presales
+- **กิจกรรมเดือนนี้**: ลูกค้า H ติดตามใบเสนอราคา (10/05 เสร็จแล้ว)
+- **ติดตามต่อเนื่อง**: ไม่มี
+#### รายการให้หัวหน้ายืนยัน
+- ชั่วโมงบำรุงรักษาของลูกค้า E คือ 160 ชั่วโมง (20.0 แมนเดย์) สูงกว่างานบำรุงรักษาอีกรายการที่ 12 ชั่วโมงมาก กรุณายืนยันว่ากรอกผิดหรือเป็นงานบำรุงรักษาขนาดใหญ่จริง` } }
+);
+
+window.PRESETS.cases.items.push(
+ { label: { zh: "同一案一次出現多個問題", en: "Several issues in one project", th: "หลายปัญหาในโปรเจกต์เดียว" },
+   input: {
+    zh: `M01 客戶甲 2026-10 Tableau 升級：服務狀態截圖只截到一半
+M02 客戶甲 2026-10 Tableau 升級：範本殘留上一案的舊截圖
+M03 客戶甲 2026-10 Tableau 升級：返回大綱箭頭蓋到標題
+M04 客戶乙 2026-10 保養健檢：服務狀態截圖只截到一半`,
+    en: `M01 Client A 2026-10 Tableau upgrade: service-status screenshot only half captured
+M02 Client A 2026-10 Tableau upgrade: old screenshot from the previous project left in the template
+M03 Client A 2026-10 Tableau upgrade: back-to-contents arrow overlaps the title
+M04 Client B 2026-10 health check: service-status screenshot only half captured`,
+    th: `M01 ลูกค้า A 2026-10 อัปเกรด Tableau: ภาพสถานะเซอร์วิสจับได้แค่ครึ่งเดียว
+M02 ลูกค้า A 2026-10 อัปเกรด Tableau: ภาพเก่าจากโปรเจกต์ก่อนค้างอยู่ในเทมเพลต
+M03 ลูกค้า A 2026-10 อัปเกรด Tableau: ลูกศรกลับสารบัญทับหัวข้อ
+M04 ลูกค้า B 2026-10 ตรวจสุขภาพระบบ: ภาพสถานะเซอร์วิสจับได้แค่ครึ่งเดียว` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 服務狀態截圖不完整 | M01、M04 | 2 | 未涵蓋（節錄中未見截圖完整性的檢查） |
+| 範本殘留舊截圖 | M02 | 1 | 已涵蓋（已記錄的陷阱）；單次，不算模式 |
+| 返回大綱箭頭蓋到標題 | M03 | 1 | 已涵蓋（已記錄的陷阱）；單次，不算模式 |
+#### 值得考慮寫進規則
+- 把完整的服務狀態畫面列為必拍，並在產出前檢查截圖是否完整。
+- 客戶甲 10 月的升級案一次出現 3 個問題，其中 2 個是已記錄的陷阱，建議回頭確認這次產出是否略過了既有的檢查步驟。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Service-status screenshot incomplete | M01, M04 | 2 | Not covered (no screenshot-completeness check in the excerpt) |
+| Old screenshot left in the template | M02 | 1 | Covered (recorded pitfall); single case, not a pattern |
+| Back-to-contents arrow overlaps the title | M03 | 1 | Covered (recorded pitfall); single case, not a pattern |
+#### Worth adding to the rules
+- Make a complete service-status screen a required shot and check completeness before output.
+- Client A's October upgrade had three issues at once, two of them recorded pitfalls; check whether this output skipped the existing checks.
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| ภาพสถานะเซอร์วิสไม่ครบ | M01, M04 | 2 | ยังไม่ครอบคลุม (ไม่พบการตรวจความครบของภาพในข้อความที่ยกมา) |
+| ภาพเก่าค้างในเทมเพลต | M02 | 1 | ครอบคลุมแล้ว (บันทึกเป็นข้อควรระวัง) ครั้งเดียว ไม่นับเป็นรูปแบบ |
+| ลูกศรกลับสารบัญทับหัวข้อ | M03 | 1 | ครอบคลุมแล้ว (บันทึกเป็นข้อควรระวัง) ครั้งเดียว ไม่นับเป็นรูปแบบ |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- กำหนดให้หน้าจอสถานะเซอร์วิสแบบเต็มเป็นภาพบังคับ และตรวจความครบของภาพก่อนส่งออก
+- งานอัปเกรดเดือนตุลาคมของลูกค้า A มี 3 ปัญหาในครั้งเดียว 2 ข้อเป็นข้อควรระวังที่บันทึกไว้แล้ว ควรตรวจว่าการส่งออกครั้งนี้ข้ามขั้นตอนตรวจที่มีอยู่หรือไม่
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } },
+
+ { label: { zh: "保養案的內容不夠具體", en: "Health-check content not specific enough", th: "เนื้อหางานตรวจสุขภาพไม่ชัดเจนพอ" },
+   input: {
+    zh: `N01 客戶乙 2026-03 保養健檢：磁碟用量沒有和上次保養比較
+N02 客戶丙 2026-05 保養健檢：磁碟用量沒有和上次保養比較
+N03 客戶丁 2026-08 保養健檢：磁碟用量沒有和上次保養比較
+N04 客戶戊 2026-09 保養健檢：建議事項只寫「持續觀察」，沒有具體動作
+N05 客戶甲 2026-10 保養健檢：建議事項只寫「持續觀察」，沒有具體動作`,
+    en: `N01 Client B 2026-03 health check: disk usage not compared with the previous health check
+N02 Client C 2026-05 health check: disk usage not compared with the previous health check
+N03 Client D 2026-08 health check: disk usage not compared with the previous health check
+N04 Client E 2026-09 health check: recommendations only say "keep monitoring", no concrete action
+N05 Client A 2026-10 health check: recommendations only say "keep monitoring", no concrete action`,
+    th: `N01 ลูกค้า B 2026-03 ตรวจสุขภาพระบบ: ไม่ได้เทียบการใช้ดิสก์กับการตรวจครั้งก่อน
+N02 ลูกค้า C 2026-05 ตรวจสุขภาพระบบ: ไม่ได้เทียบการใช้ดิสก์กับการตรวจครั้งก่อน
+N03 ลูกค้า D 2026-08 ตรวจสุขภาพระบบ: ไม่ได้เทียบการใช้ดิสก์กับการตรวจครั้งก่อน
+N04 ลูกค้า E 2026-09 ตรวจสุขภาพระบบ: ข้อเสนอแนะเขียนแค่ "เฝ้าติดตามต่อ" ไม่มีสิ่งที่ต้องทำชัดเจน
+N05 ลูกค้า A 2026-10 ตรวจสุขภาพระบบ: ข้อเสนอแนะเขียนแค่ "เฝ้าติดตามต่อ" ไม่มีสิ่งที่ต้องทำชัดเจน` },
+   output: {
+    zh: `#### 觀察到的重複模式
+| 模式 | 案子 | 次數 | 目前規則是否涵蓋 |
+|---|---|---|---|
+| 磁碟用量沒有和上次保養比較 | N01、N02、N03 | 3 | 未涵蓋（節錄中未見跨次比較的要求） |
+| 建議事項只寫「持續觀察」 | N04、N05 | 2 | 未涵蓋（節錄中未見建議事項的寫法規範） |
+#### 值得考慮寫進規則
+- 保養案加入「與上次保養比較」段落，至少列出磁碟用量的變化。
+- 建議事項要寫出具體動作與建議時程，避免只寫「持續觀察」。
+#### 說明
+本報告只提出觀察，不會修改 Skill；是否更新規則由負責人決定。`,
+    en: `#### Recurring patterns
+| Pattern | Projects | Count | Covered by current rules? |
+|---|---|---|---|
+| Disk usage not compared with the previous health check | N01, N02, N03 | 3 | Not covered (no comparison requirement in the excerpt) |
+| Recommendations only say "keep monitoring" | N04, N05 | 2 | Not covered (no rule on writing recommendations in the excerpt) |
+#### Worth adding to the rules
+- Add a "compared with the previous health check" section, listing at least the change in disk usage.
+- Recommendations should state a concrete action and suggested timing rather than just "keep monitoring".
+#### Note
+This report only records observations and does not modify the skill; the owner decides whether to update the rules.`,
+    th: `#### รูปแบบที่เกิดซ้ำ
+| รูปแบบ | โปรเจกต์ | จำนวน | กฎปัจจุบันครอบคลุมหรือไม่ |
+|---|---|---|---|
+| ไม่ได้เทียบการใช้ดิสก์กับการตรวจครั้งก่อน | N01, N02, N03 | 3 | ยังไม่ครอบคลุม (ไม่พบข้อกำหนดเรื่องการเทียบในข้อความที่ยกมา) |
+| ข้อเสนอแนะเขียนแค่ "เฝ้าติดตามต่อ" | N04, N05 | 2 | ยังไม่ครอบคลุม (ไม่พบมาตรฐานการเขียนข้อเสนอแนะในข้อความที่ยกมา) |
+#### ควรพิจารณาเพิ่มเป็นกฎ
+- เพิ่มส่วน "เทียบกับการตรวจครั้งก่อน" ในงานตรวจสุขภาพ อย่างน้อยแสดงการเปลี่ยนแปลงของการใช้ดิสก์
+- ข้อเสนอแนะต้องระบุสิ่งที่ต้องทำและช่วงเวลาที่แนะนำ ไม่ใช่เขียนแค่ "เฝ้าติดตามต่อ"
+#### หมายเหตุ
+รายงานนี้บันทึกข้อสังเกตเท่านั้น ไม่แก้ไข Skill ผู้รับผิดชอบเป็นผู้ตัดสินใจว่าจะปรับกฎหรือไม่` } }
+);
+
+window.PRESETS.gov.items.push(
+ { label: { zh: "遠端連線安排", en: "Remote access arrangement", th: "นัดเชื่อมต่อระยะไกล" },
+   input: {
+    zh: `岳崧鋼鐵股份有限公司的楊家豪先生同意明天下午 2 點開放遠端連線，連線帳號會用簡訊傳到 0977-333-444。
+連線完成後請把報告寄到 jiahao.yang@example.com。`,
+    en: `Mr. Kevin Yang from Yuesong Steel Co., Ltd. agreed to open remote access tomorrow at 2 p.m.; the login details will be texted to 0977-333-444.
+After the session, please email the report to kevin.yang@example.com.`,
+    th: `คุณอนุชา เพ็ชรดี จากบริษัท เยว่ซงสตีล จำกัด อนุญาตให้เชื่อมต่อระยะไกลพรุ่งนี้บ่ายสองโมง บัญชีเชื่อมต่อจะส่งทาง SMS ไปที่ 097-333-4444
+เสร็จแล้วกรุณาส่งรายงานไปที่ anucha.p@example.com` },
+   output: {
+    zh: `- 問題：〔客戶A〕的〔人員A〕同意明天下午 2 點開放遠端連線，連線帳號會用簡訊傳到〔電話A〕。
+- 期限：明天下午 2 點。
+- 下一步：連線前確認已收到帳號並準備好作業清單；完成後把報告寄到〔Email A〕。`,
+    en: `- Issue: [Person A] from [Client A] agreed to open remote access tomorrow at 2 p.m.; login details will be texted to [Phone A].
+- Deadline: tomorrow at 2 p.m.
+- Next step: before connecting, confirm the login details arrived and prepare the task list; afterwards, email the report to [Email A].`,
+    th: `- ปัญหา: [บุคคล A] จาก [ลูกค้า A] อนุญาตให้เชื่อมต่อระยะไกลพรุ่งนี้บ่ายสองโมง บัญชีเชื่อมต่อจะส่งทาง SMS ไปที่ [โทรศัพท์ A]
+- กำหนดเวลา: พรุ่งนี้บ่ายสองโมง
+- ขั้นตอนถัดไป: ก่อนเชื่อมต่อให้ยืนยันว่าได้รับบัญชีแล้วและเตรียมรายการงาน เสร็จแล้วส่งรายงานไปที่ [อีเมล A]` } },
+
+ { label: { zh: "客訴升級", en: "Escalated complaint", th: "ข้อร้องเรียนที่ยกระดับ" },
+   input: {
+    zh: `恆翊航勤股份有限公司資訊處林志偉協理來信抱怨：同一個問題已經回報三次還沒解決，要求明天中午前給正式說明。
+他的信箱是 zhiwei.lin@example.com，秘書電話 0938-777-888。`,
+    en: `Mr. David Lin, IT director at Hengyi Aviation Services Co., Ltd., complained by email: the same issue has been reported three times and is still unresolved. He wants a formal explanation by noon tomorrow.
+His email is david.lin@example.com; his assistant's phone is 0938-777-888.`,
+    th: `คุณประวิทย์ แก้วใส จากบริษัท เหิงอี้เอวิเอชั่นเซอร์วิส จำกัด ผู้อำนวยการฝ่ายไอที ร้องเรียนทางอีเมลว่าปัญหาเดิมแจ้งไปสามครั้งแล้วยังไม่ได้แก้ ต้องการคำชี้แจงอย่างเป็นทางการภายในเที่ยงวันพรุ่งนี้
+อีเมลของเขาคือ prawit.k@example.com เบอร์เลขานุการ 093-777-8888` },
+   output: {
+    zh: `- 問題：〔客戶A〕的〔人員A〕抱怨同一個問題已回報三次仍未解決，要求正式說明。
+- 期限：明天中午前提供正式說明。
+- 下一步：整理三次回報的處理紀錄與目前進度，由主管確認後把正式說明寄到〔Email A〕，必要時先透過秘書電話〔電話A〕聯繫。`,
+    en: `- Issue: [Person A] from [Client A] complains the same issue has been reported three times and is still unresolved, and wants a formal explanation.
+- Deadline: noon tomorrow.
+- Next step: compile the handling record and current status for all three reports, have a manager review it, send the formal explanation to [Email A], and if needed call the assistant at [Phone A] first.`,
+    th: `- ปัญหา: [บุคคล A] จาก [ลูกค้า A] ร้องเรียนว่าปัญหาเดิมแจ้งไปสามครั้งแล้วยังไม่ได้แก้ และต้องการคำชี้แจงอย่างเป็นทางการ
+- กำหนดเวลา: ภายในเที่ยงวันพรุ่งนี้
+- ขั้นตอนถัดไป: รวบรวมบันทึกการดำเนินการและสถานะปัจจุบันของทั้งสามครั้ง ให้หัวหน้าตรวจ แล้วส่งคำชี้แจงไปที่ [อีเมล A] หากจำเป็นให้โทรหาเลขานุการที่ [โทรศัพท์ A] ก่อน` } }
+);
+
+window.PRESETS.kb.items.push(
+ { q: { zh: "儀表板跑很慢，要怎麼改善？", en: "The dashboard is slow. How can we speed it up?", th: "แดชบอร์ดช้า ต้องแก้อย่างไร" },
+   a: { zh: "先確認是不是即時連線【FAQ-064】。資料量大的話改用萃取並設定排程更新，同時減少單頁的圖表數量【FAQ-064】。",
+        en: "First check whether it uses a live connection [FAQ-064]. For large data, switch to an extract with a scheduled refresh and reduce the number of charts per page [FAQ-064].",
+        th: "ให้ตรวจก่อนว่าใช้การเชื่อมต่อแบบสดหรือไม่ [FAQ-064] ถ้าข้อมูลเยอะให้เปลี่ยนเป็น Extract พร้อมตั้งเวลารีเฟรช และลดจำนวนกราฟต่อหน้า [FAQ-064]" } },
+ { q: { zh: "要怎麼幫客戶開新帳號？", en: "How do we create a new account for the client?", th: "จะสร้างบัญชีใหม่ให้ลูกค้าอย่างไร" },
+   a: { zh: "新帳號由客戶自己的系統管理員在管理頁新增【FAQ-048】。授權數不夠的話，要先購買授權，由業務窗口報價【FAQ-048】。",
+        en: "New accounts are added by the client's own system administrator on the admin page [FAQ-048]. If there aren't enough licences, they need to buy more first, quoted by the sales contact [FAQ-048].",
+        th: "บัญชีใหม่ให้ผู้ดูแลระบบของลูกค้าเพิ่มเองในหน้าผู้ดูแล [FAQ-048] ถ้าไลเซนส์ไม่พอ ต้องซื้อเพิ่มก่อน โดยฝ่ายขายเป็นผู้เสนอราคา [FAQ-048]" } },
+ { q: { zh: "授權數不夠，還能再加人嗎？", en: "We're out of licences. Can we still add people?", th: "ไลเซนส์ไม่พอ ยังเพิ่มคนได้ไหม" },
+   a: { zh: "授權數不足時，要先購買授權才能新增使用者，報價由業務窗口提供【FAQ-048】。",
+        en: "When licences run short, more must be bought before adding users; the sales contact provides the quote [FAQ-048].",
+        th: "เมื่อไลเซนส์ไม่พอ ต้องซื้อไลเซนส์เพิ่มก่อนจึงจะเพิ่มผู้ใช้ได้ โดยฝ่ายขายเป็นผู้เสนอราคา [FAQ-048]" } },
+ { q: { zh: "升級前要提前多久通知使用者？", en: "How far ahead should users be told about an upgrade?", th: "ต้องแจ้งผู้ใช้ล่วงหน้านานเท่าไรก่อนอัปเกรด" },
+   a: { zh: "建議提前一週通知使用者，並把升級安排在非上班時段【FAQ-052】。",
+        en: "Notify users a week ahead and schedule the upgrade outside working hours [FAQ-052].",
+        th: "ควรแจ้งผู้ใช้ล่วงหน้าหนึ่งสัปดาห์ และจัดการอัปเกรดนอกเวลาทำงาน [FAQ-052]" } },
+ { q: { zh: "使用者帳號被鎖住了怎麼辦？", en: "A user's account is locked. What do we do?", th: "บัญชีผู้ใช้ถูกล็อก ต้องทำอย่างไร" },
+   a: { zh: "部門 FAQ 目前沒有這筆記錄。建議到 FAQ 總表新增這個問題，由負責的同事補上解鎖的處理方式。",
+        en: "The department FAQ has no record of this yet. Please add the question to the FAQ list so the responsible colleague can fill in the unlock procedure.",
+        th: "FAQ ของแผนกยังไม่มีบันทึกเรื่องนี้ แนะนำให้เพิ่มคำถามนี้ในรายการ FAQ เพื่อให้ผู้รับผิดชอบเติมวิธีปลดล็อก" }, none: true }
 );

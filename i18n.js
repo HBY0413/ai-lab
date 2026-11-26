@@ -130,6 +130,8 @@ const D={
 "note.quota":{zh:"今日的免費 AI 用量已用完，先顯示預先產生的範例結果，明天會自動恢復。",en:"Today's free AI usage is used up, so this shows the pre-generated sample. It resets tomorrow.",th:"โควตา AI ฟรีของวันนี้หมดแล้ว จึงแสดงผลลัพธ์ตัวอย่างที่เตรียมไว้ จะกลับมาใช้ได้พรุ่งนี้"},
 "note.quotaMine":{zh:"你今天的免費 AI 試用次數已用完，先顯示範例結果，明天會自動恢復。",en:"You've used today's free AI tries, so this shows the sample result. It resets tomorrow.",th:"คุณใช้สิทธิ์ทดลอง AI ฟรีของวันนี้ครบแล้ว จึงแสดงผลลัพธ์ตัวอย่าง จะกลับมาใช้ได้พรุ่งนี้"},
 "lab.presets":{zh:"範例資料（點選切換）",en:"Sample inputs (click to switch)",th:"ข้อมูลตัวอย่าง (คลิกเพื่อสลับ)"},
+"lab.more":{zh:"顯示全部 {n} 組",en:"Show all {n}",th:"แสดงทั้งหมด {n} รายการ"},
+"lab.less":{zh:"收合",en:"Show fewer",th:"ย่อรายการ"},
 "lab.presetQ":{zh:"範例問題（點選，或自己打一個問題）",en:"Sample questions (pick one, or type your own)",th:"คำถามตัวอย่าง (เลือก หรือพิมพ์คำถามเอง)"},
 "tag.prerun":{zh:"預跑結果（事先用 Claude 跑好）",en:"Pre-run result (generated in advance by Claude)",th:"ผลลัพธ์ที่รันไว้ล่วงหน้าด้วย Claude"},
 "note.prerun":{zh:"這組資料的結果，是事先用 Claude 依同一份提示詞跑好的。",en:"This result was generated in advance by Claude, using the same prompt as the bench.",th:"ผลลัพธ์นี้สร้างไว้ล่วงหน้าโดย Claude ด้วยพรอมต์เดียวกับสถานีทดลองนี้"},
@@ -460,7 +462,7 @@ X.en.gov={facet:"AI governance",title:"De-identification Gate",gain:"<strong>Mas
   effect:{type:"kpi",items:[["5 layers","of governance"],["0 records","of raw personal data sent"]]},
   tech:["De-identification","Read-only principle","Human sign-off","Audit log"],
   lab:{hint:"The masking happens in your browser. When you press \"Summarize with AI\", only the masked text is sent.",
-    input:`Mr. David Wang from Lianfeng Precision Co., Ltd. called: report export stopped working after last week's upgrade.
+    input:`Mr. David Wang from Chengyi Precision Co., Ltd. called: report export stopped working after last week's upgrade.
 Phone 0912-345-678, email daming.wang@example.com.
 Applicant ID A123456789. Please reply by Friday.`,
     btn:"Summarize with AI",
@@ -473,7 +475,7 @@ X.th.gov={facet:"การกำกับดูแล AI",title:"ด่านป
   effect:{type:"kpi",items:[["5 ชั้น","แผนการกำกับดูแล"],["0 รายการ","ข้อมูลส่วนบุคคลดิบที่ส่งออก"]]},
   tech:["ปกปิดข้อมูล","หลักการอ่านอย่างเดียว","ยืนยันโดยคน","บันทึกตรวจสอบ"],
   lab:{hint:"การปกปิดทำในเบราว์เซอร์ของคุณ เมื่อกด \"ให้ AI สรุป\" จะส่งเฉพาะข้อความที่ปกปิดแล้ว",
-    input:`คุณสมชาย ใจดี จากบริษัท สยามพรีซิชั่น จำกัด โทรมาแจ้งว่าหลังอัปเกรดสัปดาห์ที่แล้ว ส่งออกรายงานไม่ได้
+    input:`คุณสมชาย ใจดี จากบริษัท เฉิงอี้พรีซิชั่น จำกัด โทรมาแจ้งว่าหลังอัปเกรดสัปดาห์ที่แล้ว ส่งออกรายงานไม่ได้
 เบอร์ติดต่อ 081-234-5678 อีเมล somchai.j@example.com
 เลขประจำตัวผู้ยื่นคำขอ 1-2345-67890-12-3 กรุณาตอบกลับภายในวันศุกร์`,
     btn:"ให้ AI สรุป",

@@ -51,7 +51,7 @@ h1 em{font-style:normal;color:var(--accent)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--warn)}
 .status.on .dot{background:var(--good)}
 .status.quota .dot{background:#F0A060}
-.presets{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}.presets button{font:inherit;font-size:var(--fs-s);line-height:1.35;padding:6px 12px;border:1px solid var(--line);background:transparent;color:inherit;border-radius:999px;cursor:pointer;text-align:left}.presets button:hover{border-color:#F0A060}.presets button.on{border-color:#F0A060;color:#F0A060;background:rgba(240,160,96,.08)}.status.quota{border-color:rgba(240,160,96,.55)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}.presets button{font:inherit;font-size:var(--fs-s);line-height:1.35;padding:6px 12px;border:1px solid var(--line);background:transparent;color:inherit;border-radius:999px;cursor:pointer;text-align:left}.presets button:hover{border-color:#F0A060}.presets.fold button.extra{display:none}.presets button.more{border-style:dashed;opacity:.85}.presets button.on{border-color:#F0A060;color:#F0A060;background:rgba(240,160,96,.08)}.status.quota{border-color:rgba(240,160,96,.55)}
 
 /* index */
 .index{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:26px 0 10px}
@@ -569,7 +569,7 @@ ${i}`,
   tech:["去識別化","只讀原則","人工確認","稽核紀錄"],
   lab:{
     kind:"gov",hint:"左邊的遮罩在你的瀏覽器裡完成；按「交給 AI 摘要」時，送出去的只有遮罩後的文字。",
-    input:`客戶聯成精密股份有限公司的王大明先生來電，反映上週升級後報表無法匯出。
+    input:`客戶澄邑精密股份有限公司的王大明先生來電，反映上週升級後報表無法匯出。
 聯絡電話 0912-345-678，Email：daming.wang@example.com。
 另附申請人身分證字號 A123456789，請於週五前回覆。`,
     btn:"交給 AI 摘要",
@@ -734,7 +734,8 @@ function buildLab(x,el){
   const P=!PR?[{label:"",input:L.input,output:L.example}]:isKB?[{label:L.input,input:L.input,output:L.example},...PR.items.map(i=>({label:pk(i.q),input:pk(i.q),output:pk(i.a)}))]
     :[{label:pk(PR.firstLabel),input:L.input,output:L.example},...PR.items.map(i=>({label:pk(i.label),input:pk(i.input),output:pk(i.output)}))];
   let cur=0;
-  const chips=PR?`<div class="label">${I18N.t(isKB?"lab.presetQ":"lab.presets")}</div><div class="presets">${P.map((p,i)=>`<button type="button" data-p="${i}" class="${i?"":"on"}">${esc(p.label)}</button>`).join("")}</div>`:"";
+  const FOLD=6,fold=P.length>FOLD+2;
+  const chips=PR?`<div class="label">${I18N.t(isKB?"lab.presetQ":"lab.presets")}</div><div class="presets${fold?" fold":""}">${P.map((p,i)=>`<button type="button" data-p="${i}" class="${i?"":"on"}${i>=FOLD?" extra":""}">${esc(p.label)}</button>`).join("")}${fold?`<button type="button" class="more">${I18N.t("lab.more",{n:P.length})}</button>`:""}</div>`:"";
   b.innerHTML=`<div class="hint">${L.hint}</div>${docsHtml}${chips}
     <label class="label" for="in-${x.id}">${I18N.t(L.single?"lab.question":"lab.input")}</label>
     ${L.single?`<input type="text" id="in-${x.id}" value="${esc(L.input)}">`:`<textarea id="in-${x.id}" rows="${Math.min(9,L.input.split("\n").length+1)}">${esc(L.input)}</textarea>`}
@@ -743,11 +744,12 @@ function buildLab(x,el){
     <div class="out" id="out-${x.id}"></div>`;
   const inp=b.querySelector("#in-"+x.id),out=b.querySelector("#out-"+x.id),btn=b.querySelector("#run-"+x.id),note=b.querySelector("#note-"+x.id);
   const showExample=()=>{out.innerHTML=`<span class="tag">${I18N.t(PR?"tag.prerun":"tag.example")}</span>`+md(P[cur].output)};
-  const markChip=()=>b.querySelectorAll(".presets button").forEach((z,i)=>z.classList.toggle("on",i===cur));
+  const markChip=()=>{const pz=b.querySelector(".presets");if(pz&&cur>=FOLD)pz.classList.remove("fold");b.querySelectorAll(".presets button[data-p]").forEach((z,i)=>z.classList.toggle("on",i===cur))};
   let maskEl=null;
   if(isGov){maskEl=b.querySelector("#mask-"+x.id);const upd=()=>{maskEl.innerHTML=renderMask(inp.value)};inp.addEventListener("input",upd);upd()}
   b.querySelector("#ex-"+x.id).addEventListener("click",showExample);
-  b.querySelectorAll(".presets button").forEach(bt=>bt.addEventListener("click",()=>{cur=+bt.dataset.p;inp.value=P[cur].input;
+  {const mb=b.querySelector(".presets .more");if(mb)mb.addEventListener("click",()=>{const pz=b.querySelector(".presets");pz.classList.toggle("fold");mb.textContent=I18N.t(pz.classList.contains("fold")?"lab.more":"lab.less",{n:P.length})})}
+  b.querySelectorAll(".presets button[data-p]").forEach(bt=>bt.addEventListener("click",()=>{cur=+bt.dataset.p;inp.value=P[cur].input;
     if(inp.tagName==="TEXTAREA")inp.rows=Math.min(9,P[cur].input.split("\n").length+1);inp.dispatchEvent(new Event("input"));markChip();note.textContent="";showExample()}));
   showExample();
   let ctrl=null;
